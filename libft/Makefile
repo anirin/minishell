@@ -49,6 +49,9 @@ ft_lstnew.c\
 ft_lstsize.c\
 ft_lstmap.c
 
+%.o : %.c
+	@$(CC) -c $< $(CFLAGS) -o $@
+
 $(NAME): $(OBJCS)
 	@$(AR) $@ $^
 

@@ -7,18 +7,21 @@ CFLAGS = -lreadline -Llibft -lft
 INCLUDES = -I ./includes
 
 %.o : %.c
-	$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
+	@$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
-	$(CC) $^ $(CFLAGS) $(INCLUDES) -o $@
+	@make -C ./libft
+	@$(CC) $^ $(CFLAGS) $(INCLUDES) -o $@
+
+all : $(NAME)
 
 clean : 
-	make clean -C ./libft
-	rm -rf $(OBJS)
+	@make clean -C ./libft
+	@rm -rf $(OBJS)
 
 fclean : clean
-	make fclean -C ./libft
-	rm -rf $(NAME)
+	@make fclean -C ./libft
+	@rm -rf $(NAME)
 
 re : fclean all
 
