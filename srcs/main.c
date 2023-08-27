@@ -1,8 +1,10 @@
+#include "libft.h"
 #include "main.h"
 
 //コマンドを受けて返すだけのshell
 int	minishell(void)
 {
+	t_list	*tokens;
 	char	*line;
 
 	line = NULL;
@@ -14,6 +16,8 @@ int	minishell(void)
 			printf("bye!\n");
 			exit(0);
 		}
+		tokens = lexer(line);
+		print_list(tokens);
 		add_history(line);
 		free(line);
 	}

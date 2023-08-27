@@ -49,21 +49,21 @@ ft_lstnew.c\
 ft_lstsize.c\
 ft_lstmap.c
 
+ifdef WITH_BONUS
+	SRCS+=$(BSRCS)
+endif
+
 %.o : %.c
 	@$(CC) -c $< $(CFLAGS) -o $@
 
 $(NAME): $(OBJCS)
 	@$(AR) $@ $^
 
-ifdef WITH_BONUS
-SRCS+=$(BSRCS)
-endif
-
 all: $(NAME)
 	@echo "libft all"
 
 bonus:
-	make WITH_BONUS=1 ${NAME}
+	make WITH_BONUS=1 $(NAME)
 
 clean:
 	@$(RM) $(BOBJCS) $(OBJCS) 
