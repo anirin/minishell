@@ -17,6 +17,7 @@ int	minishell(void)
 			exit(0);
 		}
 		tokens = lexer(line);
+		perxer(tokens);
 		print_list(tokens);
 		add_history(line);
 		free(line);

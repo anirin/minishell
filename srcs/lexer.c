@@ -26,7 +26,7 @@ int		add_token_to_list(t_list **list, char *line, int i, char c)
 			if(line[i] == c)
 			{
 				help_add_token_to_list(list, line, i, word_num);
-				return (word_num + 1);
+				return (word_num);
 			}
 		}
 	}
@@ -54,6 +54,33 @@ int		add_space_token_to_list(t_list **list, char *line, int i)
 	return (space_num);
 }
 
+int		add_pipe_redirect_token_to_list(t_list **list, char *line, int i)
+{
+	int word_num;
+	t_list *new;
+	char *token;
+	char c;
+
+	word_num = 0;
+	if (line[i] == '|')
+	{
+		token = strdup("|");
+		new = ft_lstnew(token);
+		ft_lstadd_back(list, new);
+		return (1);
+	}
+	c = line[i];
+	while(line[i] == c)
+	{
+		i++;
+		word_num++;
+	}
+	token = ft_substr(line, i - word_num, word_num);
+	new = ft_lstnew(token);
+	ft_lstadd_back(list, new);
+	return (word_num);
+}
+
 int		add_word_token_to_list(t_list **list, char *line, int i)
 {
 	int word_num;
@@ -61,8 +88,11 @@ int		add_word_token_to_list(t_list **list, char *line, int i)
 	char *token;
 
 	word_num = 0;
+	if (line[i] == '|' || line[i] == '>' || line[i] == '<')
+		return(add_pipe_redirect_token_to_list(list, line, i));
 	while (line[i] != '\'' && line[i] != '\"' 
-		&& line[i] != '{' && line[i] != '(' && line[i] != '\0' && isspace(line[i]) == 0)
+		&& line[i] != '{' && line[i] != '(' && line[i] != '\0'
+		&& isspace(line[i]) == 0 && line[i] != '|' && line[i] != '>' && line[i] != '<')
 	{
 		i++;
 		word_num++;
