@@ -1,24 +1,28 @@
 NAME = minishell
 SRCDIR = ./srcs/
-FILES = main.c
+FILES = main.c lexer.c print_list.c print_arr.c perxer.c exec.c
 SRCS = $(addprefix $(SRCDIR),$(FILES)) 
 OBJS = ${SRCS:.c=.o}
-CFLAGS = -lreadline -Llibft -lft 
-INCLUDES = -I ./includes
+CFLAGS = -lreadline -Llibft -lft
+INCLUDES = -I ./includes -I ./libft
+DEBUG = -g -fsanitize=address
 
 %.o : %.c
-	$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
+	@$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
-	$(CC) $^ $(CFLAGS) $(INCLUDES) -o $@
+	@make bonus -C ./libft
+	@$(CC) $^ $(CFLAGS) $(DEBUG) $(INCLUDES) -o $@
+
+all : $(NAME)
 
 clean : 
-	make clean -C ./libft
-	rm -rf $(OBJS)
+	@make clean -C ./libft
+	@rm -rf $(OBJS)
 
 fclean : clean
-	make fclean -C ./libft
-	rm -rf $(NAME)
+	@make fclean -C ./libft
+	@rm -rf $(NAME)
 
 re : fclean all
 

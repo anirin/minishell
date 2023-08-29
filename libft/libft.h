@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 13:27:49 by atokamot          #+#    #+#             */
-/*   Updated: 2023/08/12 11:32:17 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/08/28 11:51:39 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 typedef struct s_list
 {
 	void			*content;
+	int				status;
 	struct s_list	*next;
 }					t_list;
 
