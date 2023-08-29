@@ -11,10 +11,10 @@ void print_list(t_list *list)
 	{
 		if (list->next == NULL)
 		{
-			printf("i = %d: [%s]\n", i, (char *)list->content);
+			printf("%d : [%s]\n", i, (char *)list->content);
 			break;
 		}
-		printf("i = %d: [%s]\n", i, (char *)list->content);
+		printf("%d : [%s]\n", i, (char *)list->content);
 		list = list->next;
 		i++;
 	}

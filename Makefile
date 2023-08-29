@@ -1,6 +1,6 @@
 NAME = minishell
 SRCDIR = ./srcs/
-FILES = main.c lexer.c print_list.c
+FILES = main.c lexer.c print_list.c print_arr.c perxer.c exec.c
 SRCS = $(addprefix $(SRCDIR),$(FILES)) 
 OBJS = ${SRCS:.c=.o}
 CFLAGS = -lreadline -Llibft -lft
