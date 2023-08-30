@@ -28,7 +28,3 @@ re : fclean all
 
 add :
 	git add srcs/*.c includes/*.h libft/* Makefile README
-
-echo :
-	echo $(OBJS)
-	echo $(SRCS)
