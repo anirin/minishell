@@ -36,5 +36,13 @@ void	close_pipefds(int **pipefds);
 char	*get_path(char *cmd);
 
 
+void wait_for_last_two_exec(int *pid, int exec_num, int sataus);
+void close_for_last_two_pipefds(int **pipefds, int exec_num);
+
+
+void free_pipefds(int **pipefds, int exec_num);
+void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num);
+
+
 
 #endif
