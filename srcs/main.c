@@ -36,8 +36,7 @@ int	minishell(void)
 			if (head == NULL)
 				break ;
 		}
-		close_for_last_two_pipefds(pipefds, exec_num);
-		wait_for_last_two_exec(pid, exec_num, sataus);
+		wait_exec_and_close_all_pipefds(pipefds, exec_num, &sataus, pid);
 		add_history(line);
 		free(line);
 		ft_lstclear(&tokens, free);

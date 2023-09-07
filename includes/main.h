@@ -42,6 +42,7 @@ void close_for_last_two_pipefds(int **pipefds, int exec_num);
 
 void free_pipefds(int **pipefds, int exec_num);
 void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num);
+void wait_exec_and_close_all_pipefds(int **pipefds, int exec_num ,int *sataus, int *pid);
 
 
 

@@ -24,12 +24,6 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 		pipe(pipefds[exec_num]);
 		// printf("pipe ok\n");
 	}
-	if (exec_num >= 2) //２つ前のpipeと実行を終了
-	{
-		close(pipefds[exec_num - 2][0]);
-		close(pipefds[exec_num - 2][1]);
-		// waitpid(pid[exec_num - 2], &sataus, 0);
-	}
 	pid[exec_num] = fork();
 	if (pid[exec_num] == 0) //child
 	{
@@ -43,4 +37,30 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 		exit(1);
 	}
 	move_head(head);
+}
+
+void wait_exec_and_close_all_pipefds(int **pipefds, int exec_num ,int *sataus, int *pid)
+{
+	int count = 0;
+
+	while (count < exec_num) //２つ前のpipeと実行を終了
+	{
+		char c;
+		int finished_pid;
+		int finished_exec_num;
+
+		finished_exec_num = 0;
+		finished_pid = wait(sataus);
+		while(finished_pid != pid[finished_exec_num])
+		{
+			finished_exec_num++;;
+		}
+		c = finished_exec_num + '0';
+		if (finished_exec_num - 1 >= 0)
+		{
+			close(pipefds[finished_exec_num - 1][0]);
+			close(pipefds[finished_exec_num - 1][1]);
+		}
+		count++;
+	}
 }
