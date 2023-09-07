@@ -57,41 +57,6 @@ void	redirect_pipe_stdio(int **pipefds, int exec_num)
 	}
 }
 
-void	redirect_stdout(t_list *head)
-{
-	int fd;
-
-	while(head != NULL && (!(head->status == SPECIAL && ft_strncmp(head->content, "|", 1) == 0)))
-	{
-		if (head->status == SPECIAL && ft_strncmp(head->content, ">", 1) == 0)
-		{
-			head = head->next;
-			fd = open(head->content, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-			// printf("out changed fd = %d\n", fd);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		head = head->next;
-	}
-}
-
-void	redirect_stdin(t_list *head)
-{
-	int fd;
-
-	while(head != NULL && (!(head->status == SPECIAL && ft_strncmp(head->content, "|", 1) == 0)))
-	{
-		if (head->status == SPECIAL && ft_strncmp(head->content, "<", 1) == 0)
-		{
-			head = head->next;
-			fd = open(head->content, O_RDONLY);
-			// printf("in changed fd = %d\n", fd);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-		head = head->next;
-	}
-}
 
 int		count_cmd(t_list *head)
 {

@@ -28,8 +28,8 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 	if (pid[exec_num] == 0) //child
 	{
 		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
-		redirect_stdout(*head); // < を見つける
-		redirect_stdin(*head); // > を見つける
+		find_grater_than_sign_and_redirect(head); // < を見つける
+		find_less_than_sign_and_redirect(head); // < を見つける
 		cmd = set_cmd(*head); // コマンドをみつける
 		path = get_path(cmd[0]); // コマンドのパスを探す
 		execve(path, cmd, NULL);
