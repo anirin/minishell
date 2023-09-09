@@ -32,6 +32,7 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 		find_less_than_sign_and_redirect(head); // < を見つける
 		cmd = set_cmd(*head); // コマンドをみつける
 		path = get_path(cmd[0]); // コマンドのパスを探す
+		//biltin 分岐
 		execve(path, cmd, NULL);
 		perror(cmd[0]);
 		exit(1);

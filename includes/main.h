@@ -20,7 +20,7 @@
 
 //lexer
 t_list	*lexer(char *line);
-t_list	*perxer(t_list *tokens);
+t_list	*parser(t_list *tokens);
 
 //print
 void	print_list(t_list *list);
