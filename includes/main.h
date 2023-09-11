@@ -37,7 +37,7 @@ void	wait_for_last_two_exec(int *pid, int exec_num, int sataus);
 void	close_for_last_two_pipefds(int **pipefds, int exec_num);
 void	free_pipefds(int **pipefds, int exec_num);
 void	exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus,
-			int exec_num);
+			int exec_num, t_list **env_list);
 void	wait_exec_and_close_all_pipefds(int **pipefds, int exec_num,
 			int *sataus, int *pid);
 
@@ -50,5 +50,9 @@ void	append_redirect_stdout(t_list *head);
 //in
 void	redirect_stdin(t_list *head);
 void	heardocument(t_list *head);
+
+//env
+void export(t_list **env_list, char **cmd);
+t_list	*envp_convert_to_linearlist(char **envp);
 
 #endif

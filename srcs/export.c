@@ -21,11 +21,13 @@ int is_added_env(char *cmd, t_list *env_list)
 	t_list *tmp;
 	int		count;
 
-	count++;
+	count = 1;
 	tmp = env_list;
 	while(tmp != NULL)
 	{
-		if (ft_strncmp(cmd, tmp->content, ft_strlen(cmd)) == 0)
+		printf("cmd:%s\n", cmd);
+		printf("tmp->content:%s\n", tmp->content);
+		if (ft_strncmp(cmd, tmp->content, ft_strlen(cmd) + 1) == 0)
 			return (count);
 		tmp = tmp->next;
 		count++;
@@ -41,23 +43,25 @@ t_list *parse_cmd(char *cmd)
 
 	i = 0;
 	cmd_list = NULL;
-	while(cmd[i] != NULL)
+	count = 0;
+	while(cmd[i] != '\0')
 	{
-		if (strncmp(&cmd[i], "+=", 2) == 0)
+		if (strncmp(&cmd[i], "+=", 2) == 0 && count != 0)
 		{
-			if (count != 0)
-				ft_listadd_back(&cmd_list, ft_lstnew(ft_substr(cmd, i - count, count)));
+			ft_lstadd_back(&cmd_list, ft_lstnew(ft_substr(cmd, 0, count)));
 			//例外処理してない
 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_strdup("+=")));
 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_strdup(&cmd[i + 2])));
+			break;
 		}
-		else if (strncmp(&cmd[i], "=", 1) == 0)
+		else if (strncmp(&cmd[i], "=", 1) == 0 && count != 0)
 		{
-			if (count != 0)
-				ft_listadd_back(&cmd_list, ft_lstnew(ft_substr(cmd, i - count, count)));
+			ft_lstadd_back(&cmd_list, ft_lstnew(ft_substr(cmd, 0, count)));
 			//例外処理してない aa= 的なやつ
+			printf("count:%d\n", count);
 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_strdup("=")));
 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_strdup(&cmd[i + 1])));
+			break;
 		}
 		count++;
 		i++;
@@ -75,7 +79,7 @@ void append_env(int env_index, char *env_content, t_list *env_list)
 		env_index--;
 	}
 	tmp = env_list->content;
-	env_list->content = strjoin(tmp, env_content);
+	env_list->content = ft_strjoin(tmp, env_content);
 	free(tmp);
 }
 
@@ -99,8 +103,12 @@ void add_env(t_list *parsed_cmd, t_list **env_list)
 	new_env = ft_strdup(parsed_cmd->content);
 	new_env = ft_strjoin(new_env, "=");
 	new_env = ft_strjoin(new_env, parsed_cmd->next->next->content);
+	printf("new_env:%s\n", new_env);
 	new_lst = ft_lstnew(new_env);
 	ft_lstadd_back(env_list, new_lst);
+	printf("------\n");
+	print_list(*env_list);
+	//freeしろ
 }
 
 void export(t_list **env_list, char **cmd)
@@ -115,7 +123,8 @@ void export(t_list **env_list, char **cmd)
 	while(cmd[i] != NULL)
 	{
 		parsed_cmd = parse_cmd(cmd[i]);
-		env_index = is_added_env;
+		env_index = is_added_env(parsed_cmd->content, *env_list);
+		printf("env_index:%d\n", env_index);
 		if (env_index != 0) //既存環境変数
 		{
 			if (strncmp(parsed_cmd->next->content, "+=", 2))
@@ -128,6 +137,9 @@ void export(t_list **env_list, char **cmd)
 			add_env(parsed_cmd, env_list);
 		}
 		i++;
-		ft_lstclear(parse_cmd, free);
+		// ft_lstclear(&parse_cmd, free);
 	}
+	//ここは消す
+	if (cmd[1] == NULL)
+		print_list(*env_list);
 }

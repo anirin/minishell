@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "main.h"
 
-void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num)
+void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num, t_list **env_list)
 {
 	char	*path;
 	char	**cmd;
@@ -24,15 +24,25 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 		pipe(pipefds[exec_num]);
 		// printf("pipe ok\n");
 	}
-	pid[exec_num] = fork();
-	if (pid[exec_num] == 0) //child
+	//biltin 分岐
+	cmd = set_cmd(*head); // コマンドをみつける
+	if (is_biltin(cmd[0]) == 1) //exportの場合
 	{
 		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
 		find_grater_than_sign_and_redirect(head); // < を見つける
 		find_less_than_sign_and_redirect(head); // < を見つける
-		cmd = set_cmd(*head); // コマンドをみつける
+		export(env_list, cmd);
+		move_head(head);
+		//close pipe??
+		return ;
+	}
+	pid[exec_num] = fork();
+	if(pid[exec_num] == 0) //child
+	{
+		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
+		find_grater_than_sign_and_redirect(head); // < を見つける
+		find_less_than_sign_and_redirect(head); // < を見つける
 		path = get_path(cmd[0]); // コマンドのパスを探す
-		//biltin 分岐
 		execve(path, cmd, NULL);
 		perror(cmd[0]);
 		exit(1);

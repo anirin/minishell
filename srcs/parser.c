@@ -109,7 +109,7 @@ t_list *parser(t_list *tokens)
 
 	ret = NULL;
 	lst_trim_quote_iter(tokens);
-	expand_envvariable(tokens); //$（環境変数）の展開
+	// expand_envvariable(tokens); //$（環境変数）の展開
 	preproc_tokens = preprocess_tokens(tokens);
 	// printf("--preproc tokens--\n");
 	// print_list(preproc_tokens);
