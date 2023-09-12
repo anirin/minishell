@@ -13,8 +13,10 @@ int	minishell(char **envp)
 	int		sataus;
 	int		**pipefds;
 	int		exec_num;
+	int		flag;
 
 	line = NULL;
+	env_list = envp_convert_to_linearlist(envp);
 	while (1) //二つのコマンドと二つのパイプのみを実行する
 	{
 		exec_num = 0;
@@ -24,7 +26,6 @@ int	minishell(char **envp)
 			printf("bye!\n");
 			exit(0);
 		}
-		env_list = envp_convert_to_linearlist(envp);
 		tokens = lexer(line);
 		parsed_tokens = parser(tokens);
 		if (parsed_tokens == NULL)
@@ -33,8 +34,9 @@ int	minishell(char **envp)
 		pipefds = count_and_exec_pipe(head);
 		while (1)
 		{
-			exec_one_readline(&head, pipefds, pid, sataus, exec_num, &env_list);
-			exec_num++;
+			flag = exec_one_readline(&head, pipefds, pid, sataus, exec_num, &env_list);
+			if (flag == 0)
+				exec_num++;
 			if (head == NULL)
 				break ;
 		}
@@ -44,6 +46,7 @@ int	minishell(char **envp)
 		ft_lstclear(&tokens, free);
 		ft_lstclear(&parsed_tokens, free);
 	}
+	ft_lstclear(&env_list, free);
 	return (0);
 }
 

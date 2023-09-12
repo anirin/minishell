@@ -13,7 +13,26 @@
 #include "libft.h"
 #include "main.h"
 
-void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num, t_list **env_list)
+int	is_biltin(char *cmd)
+{
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (EXPORT);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (ECHO);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (CD);
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (PWD);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (UNSET);
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (ENV);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (EXIT);
+	return (-1);
+}
+
+int exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num, t_list **env_list)
 {
 	char	*path;
 	char	**cmd;
@@ -26,15 +45,19 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 	}
 	//biltin 分岐
 	cmd = set_cmd(*head); // コマンドをみつける
-	if (is_biltin(cmd[0]) == 1) //exportの場合
+	if (is_biltin(cmd[0]) == EXPORT) //exportの場合
 	{
 		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
-		find_grater_than_sign_and_redirect(head); // < を見つける
+		find_grater_than_sign_and_redirect(head); // > を見つける
 		find_less_than_sign_and_redirect(head); // < を見つける
 		export(env_list, cmd);
 		move_head(head);
-		//close pipe??
-		return ;
+		if (exec_num - 1 >= 0)
+		{
+			close (pipefds[exec_num - 1][0]);
+			close (pipefds[exec_num - 1][0]);
+		}
+		return (1);
 	}
 	pid[exec_num] = fork();
 	if(pid[exec_num] == 0) //child
@@ -48,6 +71,7 @@ void exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int e
 		exit(1);
 	}
 	move_head(head);
+	return (0);
 }
 
 void wait_exec_and_close_all_pipefds(int **pipefds, int exec_num ,int *sataus, int *pid)

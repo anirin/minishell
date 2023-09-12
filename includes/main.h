@@ -8,6 +8,14 @@
 # define FIND_CURLY_BRACKETS 4 //{
 # define SPECIAL 5             //|><
 
+# define EXPORT 0
+# define ECHO 1
+# define CD 2
+# define PWD 3
+# define UNSET 4
+# define ENV 5
+# define EXIT 6
+
 //readline
 # include "libft.h"
 # include <ctype.h>
@@ -36,7 +44,7 @@ char	*get_path(char *cmd);
 void	wait_for_last_two_exec(int *pid, int exec_num, int sataus);
 void	close_for_last_two_pipefds(int **pipefds, int exec_num);
 void	free_pipefds(int **pipefds, int exec_num);
-void	exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus,
+int		exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus,
 			int exec_num, t_list **env_list);
 void	wait_exec_and_close_all_pipefds(int **pipefds, int exec_num,
 			int *sataus, int *pid);
