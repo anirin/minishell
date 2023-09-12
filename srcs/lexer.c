@@ -137,7 +137,6 @@ t_list	*lexer(char *line)
 		else if (line[i] == '$')
 		{
 			i += add_token_to_list(&list, line, i, '$');
-			//2回環境変数を展開する 2回目はperserの後にする
 		}
 		else
 		{

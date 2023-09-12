@@ -27,8 +27,8 @@ int	minishell(char **envp)
 			exit(0);
 		}
 		tokens = lexer(line);
+		// env_expand_tokens = env_expand(parsed_tokens, env_list);//
 		parsed_tokens = parser(tokens);
-		env_expand_tokens = env_expand(parsed_tokens, env_list);
 		if (parsed_tokens == NULL)
 			continue ;
 		head = parsed_tokens;
