@@ -8,7 +8,7 @@ int	minishell(char **envp)
 	char	*line;
 	t_list	*parsed_tokens;
 	t_list	*head;
-	t_list	*env_list;
+	t_env_list	*env_list;
 	int		pid[100];
 	int		sataus;
 	int		**pipefds;
@@ -16,7 +16,7 @@ int	minishell(char **envp)
 	int		flag;
 
 	line = NULL;
-	env_list = envp_convert_to_linearlist(envp);
+	env_list = envp_convert_to_envlist(envp);
 	while (1) //二つのコマンドと二つのパイプのみを実行する
 	{
 		exec_num = 0;
@@ -28,6 +28,7 @@ int	minishell(char **envp)
 		}
 		tokens = lexer(line);
 		parsed_tokens = parser(tokens);
+		env_expand_tokens = env_expand(parsed_tokens, env_list);
 		if (parsed_tokens == NULL)
 			continue ;
 		head = parsed_tokens;
@@ -46,7 +47,7 @@ int	minishell(char **envp)
 		ft_lstclear(&tokens, free);
 		ft_lstclear(&parsed_tokens, free);
 	}
-	ft_lstclear(&env_list, free);
+	env_lstclear(&env_list, free);
 	return (0);
 }
 

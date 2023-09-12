@@ -1,7 +1,7 @@
 NAME = minishell
 SRCDIR = ./srcs
 OBJSDIR = ./objs
-FILES = main.c lexer.c print_list.c print_arr.c parser.c exec_utils.c exec_one_readline.c redirect.c export.c
+FILES = main.c lexer.c print_list.c print_arr.c parser.c exec_utils.c exec_one_readline.c redirect.c export.c env_lstadd_back.c env_lstclear.c env_lstdelone.c env_lstlast.c env_lstnew.c print_env_list.c
 SRCS = $(addprefix $(SRCDIR)/,$(FILES)) 
 OBJS = $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
 CFLAGS = -lreadline -Llibft -lft

@@ -23,7 +23,7 @@ int		add_token_to_list(t_list **list, char *line, int i, char c)
 			i++;
 			if (line[i] == '\0')
 				break;
-			if(line[i] == c)
+			if(line[i] == c || (c == '$' && (line[i] == '\"' && line[i] == '\'' && isspace(line[i]) == 0 && line[i] == '|' && line[i] == '>' && line[i] == '<')))
 			{
 				help_add_token_to_list(list, line, i, word_num);
 				return (word_num);
@@ -133,6 +133,11 @@ t_list	*lexer(char *line)
 		else if (line[i] == '(')
 		{
 			i += add_token_to_list(&list, line, i, ')');
+		}
+		else if (line[i] == '$')
+		{
+			i += add_token_to_list(&list, line, i, '$');
+			//2回環境変数を展開する 2回目はperserの後にする
 		}
 		else
 		{
