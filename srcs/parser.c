@@ -12,7 +12,7 @@ void	lst_trim_quote_iter(t_list *tokens)
 		{
 			tokens->content = ft_strtrim((const char *)tmp, "\"");
 			free(tmp);
-			tokens->status = DOUBLE_QUOTE; //$は即座に展開
+			tokens->status = DOUBLE_QUOTE;
 		}
 		else if (tmp[0] == '\'' && tmp[ft_strlen(tmp) - 1] == '\'')
 		{
@@ -101,7 +101,7 @@ t_list	*get_ret_tokens(t_list *tokens)
 	return (ret_tokens);
 }
 
-t_list *parser(t_list *tokens)
+t_list *parser(t_list *tokens, t_env_list *env_list)
 {
 	char **ret;
 	t_list *preproc_tokens;
@@ -109,15 +109,11 @@ t_list *parser(t_list *tokens)
 
 	ret = NULL;
 	lst_trim_quote_iter(tokens);
-	expand_envvariable(tokens); //$（環境変数）の展開 <-ここから！！！！！！！！！！！！！
+	// print_list(tokens);
+	expand_env(tokens, env_list);
 	preproc_tokens = preprocess_tokens(tokens);
-	// printf("--preproc tokens--\n");
-	// print_list(preproc_tokens);
 	//free tokens
 	ret_tokens = get_ret_tokens(preproc_tokens);
-	// print_arr(ret);
 	//free prepro_tokens
-	// printf("--ret tokens--\n");
-	// print_list(ret_tokens);
 	return (ret_tokens);
 }

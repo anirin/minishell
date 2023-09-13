@@ -15,22 +15,22 @@ int		add_token_to_list(t_list **list, char *line, int i, char c)
 	int word_num;
 
 	word_num = 1;
-	if(line[i] == c)
+	while(1)
 	{
-		while(1)
+		word_num++;
+		i++;
+		if(line[i] == c || (c == '$' && (line[i] == '\"' || line[i] == '\'' || ft_isspace(line[i]) == 1 || line[i] == '|' || line[i] == '>' || line[i] == '<' || line[i] == '\0')))
 		{
-			word_num++;
-			i++;
-			if (line[i] == '\0')
-				break;
-			if(line[i] == c || (c == '$' && (line[i] == '\"' && line[i] == '\'' && isspace(line[i]) == 0 && line[i] == '|' && line[i] == '>' && line[i] == '<')))
+			if (c == '$')
 			{
-				help_add_token_to_list(list, line, i, word_num);
-				return (word_num);
+				word_num--;
+				i--;
 			}
+			help_add_token_to_list(list, line, i, word_num);
+			return (word_num);
 		}
 	}
-	return (1);
+	return (-1);
 }
 
 int		add_space_token_to_list(t_list **list, char *line, int i)
@@ -40,7 +40,7 @@ int		add_space_token_to_list(t_list **list, char *line, int i)
 	int		space_num;
 
 	space_num = 0;
-	while(isspace(line[i]) && line[i] != '\0')
+	while(ft_isspace(line[i]) == 1 && line[i] != '\0')
 	{
 		space_num++;
 		i++;
@@ -92,7 +92,7 @@ int		add_word_token_to_list(t_list **list, char *line, int i)
 		return(add_pipe_redirect_token_to_list(list, line, i));
 	while (line[i] != '\'' && line[i] != '\"' 
 		&& line[i] != '{' && line[i] != '(' && line[i] != '\0'
-		&& isspace(line[i]) == 0 && line[i] != '|' && line[i] != '>' && line[i] != '<')
+		&& isspace(line[i]) == 0 && line[i] != '|' && line[i] != '>' && line[i] != '<' && line[i] != '$')
 	{
 		i++;
 		word_num++;

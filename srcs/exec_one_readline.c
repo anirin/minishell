@@ -32,8 +32,9 @@ int	is_biltin(char *cmd)
 	return (-1);
 }
 
-int exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num, t_list **env_list)
+int exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int exec_num, t_env_list **env_list)
 {
+	//パイプがない時には親で実行それ以外はこで実行
 	char	*path;
 	char	**cmd;
 	
@@ -48,7 +49,7 @@ int exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int ex
 	if (is_biltin(cmd[0]) == EXPORT) //exportの場合
 	{
 		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
-		find_grater_than_sign_and_redirect(head); // > を見つける
+		find_grater_than_sign_and_redirect(head, *env_list); // > を見つける
 		find_less_than_sign_and_redirect(head); // < を見つける
 		export(env_list, cmd);
 		move_head(head);
@@ -63,7 +64,7 @@ int exec_one_readline(t_list **head, int **pipefds, int *pid, int sataus, int ex
 	if(pid[exec_num] == 0) //child
 	{
 		redirect_pipe_stdio(pipefds, exec_num); // パイプを表中ん入力と出力につなぐ
-		find_grater_than_sign_and_redirect(head); // < を見つける
+		find_grater_than_sign_and_redirect(head, *env_list); // < を見つける
 		find_less_than_sign_and_redirect(head); // < を見つける
 		path = get_path(cmd[0]); // コマンドのパスを探す
 		execve(path, cmd, NULL);
@@ -78,7 +79,7 @@ void wait_exec_and_close_all_pipefds(int **pipefds, int exec_num ,int *sataus, i
 {
 	int count = 0;
 
-	while (count < exec_num) //２つ前のpipeと実行を終了
+	while (count < exec_num)
 	{
 		char c;
 		int finished_pid;
@@ -96,6 +97,11 @@ void wait_exec_and_close_all_pipefds(int **pipefds, int exec_num ,int *sataus, i
 			close(pipefds[finished_exec_num - 1][0]);
 			close(pipefds[finished_exec_num - 1][1]);
 		}
+		// if (finished_exec_num  < exec_num) //close 後でやる ls | cat の対処
+		// {
+		// 	close(pipefds[finished_exec_num][0]);
+		// 	close(pipefds[finished_exec_num][1]);
+		// }
 		count++;
 	}
 }

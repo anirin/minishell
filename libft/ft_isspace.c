@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_lstadd_back.c                                  :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 14:45:39 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/13 17:02:53 by atsu             ###   ########.fr       */
+/*   Created: 2023/09/13 16:40:31 by atsu              #+#    #+#             */
+/*   Updated: 2023/09/13 16:41:33 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "main.h"
+#include "./libft.h"
 
-void	env_lstadd_back(t_env_list **lst, t_env_list *new)
+int	ft_isspace(int c)
 {
-	t_env_list	*last;
-
-	if (lst == NULL || new == NULL)
-		return ;
-	if (*lst == NULL)
-	{
-		*lst = new;
-		return ;
-	}
-	last = env_lstlast(*lst);
-	if (last == NULL)
-		return ;
-	last->next = new;
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f')
+		return (1);
+	else
+		return (0);
 }

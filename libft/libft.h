@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 13:27:49 by atokamot          #+#    #+#             */
-/*   Updated: 2023/08/28 11:51:39 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/13 16:47:25 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isdigit(int c);
 int					ft_isprint(int c);
+int					ft_isspace(int c);
 void				*ft_memchr(const void *buf, int ch, size_t n);
 int					ft_memcmp(const void *buf1, const void *buf2, size_t n);
 void				*ft_memcpy(void *buf1, const void *buf2, size_t n);
