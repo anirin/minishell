@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:53:38 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/14 11:25:17 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/14 13:04:40 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_list	*find_dollar_and_parse(char *token)
 		{
 			i++;
 			count++;
-			while(token[i] != '\0' && ft_isspace(token[i]) == 0)
+			while(token[i] != '\0' && ft_isspace(token[i]) == 0 && token[i] != '\'' && token[i] != '\"')
 			{
 				count++;
 				i++;
@@ -129,15 +129,36 @@ t_list	*find_dollar_and_parse(char *token)
 	return (parsed_tokens);
 }
 
+char	*expand_env_in_str(char *token, t_env_list *env_list)
+{
+	t_list *head;
+	t_list *parsed_tokens;
+	char *tmp;
+	char *ret;
+
+	parsed_tokens = find_dollar_and_parse(token);
+	head = parsed_tokens;
+	while (parsed_tokens != NULL)
+	{
+		if (ft_strchr(parsed_tokens->content, '$') != NULL)
+		{
+			tmp = parsed_tokens->content;
+			parsed_tokens->content = find_env_name(tmp, env_list);
+			free(tmp);
+		}
+		parsed_tokens = parsed_tokens->next;
+	}
+	ret = parsed_tokens_to_str(head);
+	// ft_lstclear(&head, free);
+	return (ret);
+}
+
 void	expand_env(t_list *token, t_env_list *env_list)
 {
 	int i;
 	char *env_value;
-	char *tmp;
 	t_list *splited_env;
-	t_list *head;
 	t_list *lst_tmp;
-	t_list *parsed_tokens;
 
 	i = 0;
 	while (token != NULL)
@@ -165,20 +186,7 @@ void	expand_env(t_list *token, t_env_list *env_list)
 		}
 		else if (ft_strchr(token->content, '$') && token->status == DOUBLE_QUOTE) //ここなんかおかしい<-!!
 		{
-			parsed_tokens = find_dollar_and_parse(token->content);
-			head = parsed_tokens;
-			while (parsed_tokens != NULL)
-			{
-				if (ft_strchr(parsed_tokens->content, '$') != NULL)
-				{
-					tmp = parsed_tokens->content;
-					parsed_tokens->content = find_env_name(tmp, env_list);
-					free(tmp);
-				}
-				parsed_tokens = parsed_tokens->next;
-			}
-			token->content = parsed_tokens_to_str(head);
-			// ft_lstclear(&head, free);
+			token->content = expand_env_in_str(token->content, env_list);
 		}
 		token = token->next;
 	}

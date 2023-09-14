@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 21:46:34 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/13 20:29:29 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/14 12:58:08by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,23 @@ void	redirect_stdin(t_list *head, t_env_list *env_list)
 			while (line != NULL)
 			{
 				line = readline("heredoc> ");
-				// if (ft_strncmp(line, head->content, ft_strlen(head->content)) == 0)
-				// 	break ;
-				// if (ft_strchr(line, '\'') == NULL && ft_strchr(line, '\"') == NULL)
-				// {
-				// 	tmp = line;
-				// 	line = expand_env_and_make_str_by_join(env_list, tmp);
-				// 	free(tmp);
-				// }
+				if (ft_strncmp(line, head->content, ft_strlen(head->content)) == 0)
+					break ;
+				if (ft_strchr(head->content, '\'') == NULL && ft_strchr(head->content, '\"') == NULL)
+				{
+					tmp = line;
+					line = expand_env_in_str(tmp, env_list);
+					free(tmp);
+				}
 				ft_putendl_fd(line, fd);
 				free(line);
 				//もしheardocが何個もでできたならtmpファイルは別名にする必要がある
 			}
+			close(fd); //この２行はなんとかしたいな
+			open(".heardoc_tmp", O_RDONLY);
 			dup2(fd, STDIN_FILENO);
 			close(fd);
+			unlink(".heardoc_tmp");
 		}
 		else if (head->status == SPECIAL && ft_strncmp(head->content, "<<<",
 					3) == 0)

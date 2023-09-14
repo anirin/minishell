@@ -87,6 +87,7 @@ char *parsed_tokens_to_str(t_list *parsed_tokens);
 t_list	*find_dollar_and_parse(char *token);
 void	expand_env(t_list *token, t_env_list *env_list);
 char	*expand_env_and_make_str_by_join(t_env_list *env_list, char *str);
+char	*expand_env_in_str(char *token, t_env_list *env_list);
 
 
 #endif

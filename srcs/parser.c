@@ -111,7 +111,6 @@ t_list *parser(t_list *tokens, t_env_list *env_list)
 	lst_trim_quote_iter(tokens);
 	expand_env(tokens, env_list);
 	preproc_tokens = preprocess_tokens(tokens);
-	printf("preproc\n");
 	//free tokens
 	ret_tokens = get_ret_tokens(preproc_tokens);
 	//free prepro_tokens
