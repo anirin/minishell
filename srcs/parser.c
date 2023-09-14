@@ -40,7 +40,7 @@ t_list	*preprocess_tokens(t_list *tokens)
 	while (tokens != NULL)
 	{
 		new_token = NULL;
-		if ((ft_strchr(tokens->content, ' ') != NULL
+		if ((ft_strncmp(tokens->content, " ", 2) == 0
 				|| ft_strchr(tokens->content, '|') != NULL
 				|| ft_strchr(tokens->content, '>') != NULL
 				|| ft_strchr(tokens->content, '<') != NULL)
@@ -56,7 +56,7 @@ t_list	*preprocess_tokens(t_list *tokens)
 		{
 			new_token = ft_strdup(tokens->content);
 			tokens = tokens->next;
-			while (tokens != NULL && ((ft_strchr(tokens->content, ' ') == NULL
+			while (tokens != NULL && ((ft_strncmp(tokens->content, " ", 2) != 0
 						&& ft_strchr(tokens->content, '|') == NULL
 						&& ft_strchr(tokens->content, '>') == NULL
 						&& ft_strchr(tokens->content, '<') == NULL)
@@ -88,7 +88,7 @@ t_list	*get_ret_tokens(t_list *tokens)
 	ret_tokens = NULL;
 	while (tokens != NULL)
 	{
-		if (ft_strncmp(tokens->content, " ", 1) != 0)
+		if (ft_strncmp(tokens->content, " ", 2) != 0)
 		{
 			new_token = strdup(tokens->content);
 			new = ft_lstnew(new_token);
@@ -109,9 +109,9 @@ t_list *parser(t_list *tokens, t_env_list *env_list)
 
 	ret = NULL;
 	lst_trim_quote_iter(tokens);
-	// print_list(tokens);
 	expand_env(tokens, env_list);
 	preproc_tokens = preprocess_tokens(tokens);
+	printf("preproc\n");
 	//free tokens
 	ret_tokens = get_ret_tokens(preproc_tokens);
 	//free prepro_tokens
