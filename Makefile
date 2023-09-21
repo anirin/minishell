@@ -1,22 +1,23 @@
 NAME = minishell
 SRCDIR = ./srcs
 OBJSDIR = ./objs
-FILES = main.c lexer.c print_list.c print_arr.c parser.c\
-exec_utils.c exec_one_readline.c redirect.c export.c\
-env_lstadd_back.c env_lstclear.c env_lstdelone.c\
-env_lstlast.c env_lstnew.c print_env_list.c expand_env.c
+FILES = \
+	env_lst.c expand_env.c export.c lexer.c \
+	main.c parser.c parser_utils.c print_arr.c \
+	print_list.c token_lst.c help_main.c parsed_lst.c
 SRCS = $(addprefix $(SRCDIR)/,$(FILES)) 
 OBJS = $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
-CFLAGS = -lreadline -Llibft -lft
+LDFLAGS = -lreadline -Llibft -lft
 INCLUDES = -I ./includes -I ./libft
-DEBUG = -g -fsanitize=address
+# DEBUG = -g -fsanitize=address
+DEBUG = -g
 
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
-	@$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
+	@$(CC) -c $< $(DEBUG) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
 	@make bonus -C ./libft
-	@$(CC) $^ $(CFLAGS) $(DEBUG) $(INCLUDES) -o $@
+	@$(CC) $^ $(LDFLAGS) $(DEBUG) $(INCLUDES) -o $@
 
 all : $(NAME)
 

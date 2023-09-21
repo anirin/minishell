@@ -4,11 +4,10 @@
 //コマンドを受けて返すだけのshell
 int	minishell(char **envp)
 {
-	t_list	*tokens;
 	char	*line;
+	t_list	*tokens;
 	t_list	*parsed_tokens;
-	t_list	*head;
-	t_env_list	*env_list;
+	t_list	*env_list;
 	int		pid[100];
 	int		sataus;
 	int		**pipefds;
@@ -21,30 +20,22 @@ int	minishell(char **envp)
 	{
 		exec_num = 0;
 		line = readline("$> ");
-		if (strncmp("exit", line, 4) == 0)
-		{
-			printf("bye!\n");
-			exit(0);
-		}
 		tokens = lexer(line);
+		print_list(tokens);
 		parsed_tokens = parser(tokens, env_list);
+		print_list(parsed_tokens);
 		if (parsed_tokens == NULL)
 			continue ;
-		head = parsed_tokens;
-		pipefds = count_and_exec_pipe(head);
+		pipefds = count_and_exec_pipe(parsed_tokens);
 		while (1)
 		{
-			flag = exec_one_readline(&head, pipefds, pid, sataus, exec_num, &env_list);
-			if (flag == 0)
-				exec_num++;
-			if (head == NULL)
-				break ;
+			break ;
 		}
-		wait_exec_and_close_all_pipefds(pipefds, exec_num, &sataus, pid);
 		add_history(line);
 		free(line);
-		ft_lstclear(&tokens, free);
-		ft_lstclear(&parsed_tokens, free);
+		//free tokens
+		//free parsed_tokens
+		//free pipefds
 	}
 	env_lstclear(&env_list, free);
 	return (0);

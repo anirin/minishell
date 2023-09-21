@@ -6,22 +6,25 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:53:38 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/14 13:04:40 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/21 22:05:54 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
 
-char	*find_env_name(char *doller_token, t_env_list *env_list)
+char	*find_env_name(char *doller_token, t_list *env_list) //ok
 {
+	t_env *env;
+
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
 	while(env_list != NULL)
 	{
-		if (env_list->env_value != NULL && ft_strncmp(&doller_token[1], env_list->env_name, ft_strlen(env_list->env_name)+ 1) == 0) //[0] は $
+		env = (t_env *)env_list->content;
+		if (env->env_value != NULL && ft_strncmp(&doller_token[1], env->env_name, ft_strlen(env->env_name)+ 1) == 0) //[0] は $
 		{
-				return (ft_strdup(env_list->env_value));
+				return (ft_strdup(env->env_value));
 		}
 		env_list = env_list->next;
 	}
@@ -32,6 +35,7 @@ t_list	*split_by_isspace(char *str)
 {
 	t_list *splited_env;
 	t_list *new;
+	t_token *token;
 	char **splited_env_arr;
 	int i;
 	int count;
@@ -43,14 +47,16 @@ t_list	*split_by_isspace(char *str)
 		if (str[i] == '\0')
 			break ;
 		count = 0;
-		while (str[i] != '\0' && ft_isspace(str[i]) != 0)
+		while (str[i] != '\0' && ft_isspace(str[i]) == UT_SPACE)
 		{
 			count++;
 			i++;
 		}
 		if (count > 0)
 		{
-			new = ft_lstnew(ft_strdup(" "));
+			token->token_content = ft_strdup(" ");
+			token->status = TK_SPACE;
+			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
 		}
 		count = 0;
@@ -61,7 +67,9 @@ t_list	*split_by_isspace(char *str)
 		}
 		if (count > 0)
 		{
-			new = ft_lstnew(ft_substr(str, i - count, count));
+			token->token_content = ft_substr(str, i - count, count);
+			token->status = TK_NORMAL;
+			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
 		}
 	}
@@ -129,7 +137,7 @@ t_list	*find_dollar_and_parse(char *token)
 	return (parsed_tokens);
 }
 
-char	*expand_env_in_str(char *token, t_env_list *env_list)
+char	*expand_env_in_str(char *token, t_list *env_list) //ok
 {
 	t_list *head;
 	t_list *parsed_tokens;
@@ -153,40 +161,28 @@ char	*expand_env_in_str(char *token, t_env_list *env_list)
 	return (ret);
 }
 
-void	expand_env(t_list *token, t_env_list *env_list)
+void	expand_env(t_list *token, t_list *env_list) //ok
 {
 	int i;
 	char *env_value;
 	t_list *splited_env;
-	t_list *lst_tmp;
+	t_token *tmp;
 
 	i = 0;
 	while (token != NULL)
 	{
-		if (ft_strchr(token->content, '$') && token->status == NORMAL)
+		tmp = (t_token *)token->content;
+		if (tmp->status == TK_DOLL)
 		{
-			lst_tmp = token->next;
-			env_value = find_env_name(token->content, env_list);
+			env_value = find_env_name(tmp->token_content, env_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
-			if (splited_env == NULL)
-			{
-				token->content = ft_strdup(" ");
-				token->status = NORMAL;
-				token->next = lst_tmp;
-			}
-			while (splited_env != NULL)
-			{
-				token->content = ft_strdup(splited_env->content);
-				token->status = NORMAL; // | を単なる文字として認識させたい
-				token->next = lst_tmp;
-				splited_env = splited_env->next;
-			}
-			ft_lstclear(&splited_env, free);
+			insort_list(&token, splited_env); //ok
 		}
-		else if (ft_strchr(token->content, '$') && token->status == DOUBLE_QUOTE) //ここなんかおかしい<-!!
+		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
 		{
-			token->content = expand_env_in_str(token->content, env_list);
+			tmp->token_content = expand_env_in_str(token->content, env_list); //ok
+			tmp->status = TK_NORMAL;
 		}
 		token = token->next;
 	}

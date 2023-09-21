@@ -50,12 +50,15 @@ ft_lstnew.c\
 ft_lstsize.c\
 ft_lstmap.c
 
+# DEBUG = -g -fsanitize=address
+DEBUG = -g
+
 ifdef WITH_BONUS
 	SRCS+=$(BSRCS)
 endif
 
 %.o : %.c
-	@$(CC) -c $< $(CFLAGS) -o $@
+	@$(CC) -c $< $(CFLAGS) $(DEBUG) -o $@
 
 $(NAME): $(OBJCS)
 	@$(AR) $@ $^

@@ -4,34 +4,33 @@
 void	lst_trim_quote_iter(t_list *tokens)
 {
 	char	*tmp;
+	t_token *token;
 
 	while (tokens != NULL)
 	{
-		tmp = tokens->content;
-		if (tmp[0] == '\"' && tmp[ft_strlen(tmp) - 1] == '\"')
+		token = (t_token *)tokens->content;
+		tmp = token->token_content;
+		if (token->status == TK_SINGLE_QUOTE)
 		{
-			tokens->content = ft_strtrim((const char *)tmp, "\"");
+			token->token_content = ft_strtrim((const char *)tmp, "\'");
+			token->status = TK_SINGLE_QUOTE;
 			free(tmp);
-			tokens->status = DOUBLE_QUOTE;
 		}
-		else if (tmp[0] == '\'' && tmp[ft_strlen(tmp) - 1] == '\'')
+		else if (token->status == TK_DOUBLE_QUOTE)
 		{
-			tokens->content = ft_strtrim((const char *)tmp, "\'");
+			token->token_content = ft_strtrim((const char *)tmp, "\"");
+			token->status = TK_DOUBLE_QUOTE;
 			free(tmp);
-			tokens->status = SINGL_QUOTE;
-		}
-		else
-		{
-			tokens->status = NORMAL;
 		}
 		tokens = tokens->next;
 	}
 }
 
-t_list	*preprocess_tokens(t_list *tokens)
+t_list	*preprocess_tokens(t_list *tokens) //ok
 {
 	t_list	*prepro_tokens;
 	t_list	*new;
+	t_token	*token;
 	char	*new_token;
 	char	*content;
 	char	*tmp;
@@ -39,69 +38,60 @@ t_list	*preprocess_tokens(t_list *tokens)
 	prepro_tokens = NULL;
 	while (tokens != NULL)
 	{
+		token = (t_token *)tokens->content;
 		new_token = NULL;
-		if ((ft_strncmp(tokens->content, " ", 2) == 0
-				|| ft_strchr(tokens->content, '|') != NULL
-				|| ft_strchr(tokens->content, '>') != NULL
-				|| ft_strchr(tokens->content, '<') != NULL)
-			&& tokens->status == NORMAL)
+		if (token->status != TK_NORMAL && token->status != TK_SPACE)
 		{
-			new_token = strdup(tokens->content);
-			new = ft_lstnew(new_token);
-			new->status = SPECIAL;
+			token->token_content = ft_strdup(token->token_content);
+			token->status = TK_NORMAL;
+			new = ft_lstnew(token);
 			ft_lstadd_back(&prepro_tokens, new);
 			tokens = tokens->next;
 		}
-		else
+		else if (token->status == TK_NORMAL)
 		{
-			new_token = ft_strdup(tokens->content);
-			tokens = tokens->next;
-			while (tokens != NULL && ((ft_strncmp(tokens->content, " ", 2) != 0
-						&& ft_strchr(tokens->content, '|') == NULL
-						&& ft_strchr(tokens->content, '>') == NULL
-						&& ft_strchr(tokens->content, '<') == NULL)
-					|| tokens->status != NORMAL))
+			new_token = ft_strdup("");
+			while (token != NULL && token->status == TK_NORMAL)
 			{
+				token = (t_token *)tokens->content;
 				tmp = new_token;
-				new_token = ft_strjoin(tmp, tokens->content);
+				new_token = ft_strjoin(tmp, token->token_content);
 				free(tmp);
 				tokens = tokens->next;
-				if (tokens == NULL)
-					break ;
 			}
-			new = ft_lstnew(new_token);
-			new->status = NORMAL;
+			token->token_content = ft_strdup(new_token);
+			token->status = TK_NORMAL;
+			new = ft_lstnew(token);
 			ft_lstadd_back(&prepro_tokens, new);
 		}
 	}
 	return (prepro_tokens);
 }
 
-t_list	*get_ret_tokens(t_list *tokens)
+t_list	*get_list(t_list *tokens)
 {
-	int		i;
-	char	*new_token;
+	t_list	*parsed_list;
 	t_list	*new;
-	t_list	*ret_tokens;
+	t_list	*greater_than_tokens;
+	t_list	*less_than_tokens;
+	t_list	*cmd_tokens;
+	t_list	*head;
 
-	i = 0;
-	ret_tokens = NULL;
+	parsed_list = NULL;
+	head = tokens;
 	while (tokens != NULL)
 	{
-		if (ft_strncmp(tokens->content, " ", 2) != 0)
-		{
-			new_token = strdup(tokens->content);
-			new = ft_lstnew(new_token);
-			new->status = tokens->status;
-			ft_lstadd_back(&ret_tokens, new);
-			i++;
-		}
-		tokens = tokens->next;
+		greater_than_tokens = get_greater_than_tokens(head);
+		less_than_tokens = get_less_than_tokens(head);
+		cmd_tokens = get_cmd_tokens(head);
+		new = parsed_lstnew(greater_than_tokens, less_than_tokens, cmd_tokens);
+		parsed_lstadd_back(&parsed_list, new);
+		move_head(&head);
 	}
-	return (ret_tokens);
+	return (parsed_list);
 }
 
-t_list *parser(t_list *tokens, t_env_list *env_list)
+t_list	*parser(t_list *tokens, t_list *env_list)
 {
 	char **ret;
 	t_list *preproc_tokens;
@@ -112,7 +102,7 @@ t_list *parser(t_list *tokens, t_env_list *env_list)
 	expand_env(tokens, env_list);
 	preproc_tokens = preprocess_tokens(tokens);
 	//free tokens
-	ret_tokens = get_ret_tokens(preproc_tokens);
+	ret_tokens = get_list(preproc_tokens);
 	//free prepro_tokens
 	return (ret_tokens);
 }

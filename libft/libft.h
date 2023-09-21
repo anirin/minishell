@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 13:27:49 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/13 16:47:25 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/15 11:00:03 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # define NOT_SEP 0
 # define HEAD 1
 # define NOT_HEAD 0
+//util
+# define SPACE 0
+# define NOT_SPACE 1
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1000

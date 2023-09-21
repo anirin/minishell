@@ -1,20 +1,43 @@
 #ifndef MAIN_H
 # define MAIN_H
 
-# define NORMAL 0              //space
-# define SINGL_QUOTE 1         //'
-# define DOUBLE_QUOTE 2        //"
-# define FIND_PARETHESES 3     //(
-# define FIND_CURLY_BRACKETS 4 //{
-# define SPECIAL 5             //|><
+//token
+enum e_token_status {
+	TK_NORMAL,
+	TK_SINGLE_QUOTE,
+	TK_DOUBLE_QUOTE,
+	TK_DOLL,
+	TK_PIPE,
+	TK_GREATER_THAN,
+	TK_LESS_THAN,
+	TK_SPACE,
+	TK_USED
+};
 
-# define EXPORT 0
-# define ECHO 1
-# define CD 2
-# define PWD 3
-# define UNSET 4
-# define ENV 5
-# define EXIT 6
+//builtin
+enum e_builtin_type {
+	BT_EXPORT,
+	BT_ECHO,
+	BT_CD,
+	BT_PWD,
+	BT_UNSET,
+	BT_ENV,
+	BT_EXIT
+};
+
+//util
+enum e_util {
+	UT_SPACE,
+	UT_NOT_SPACE,
+};
+
+enum e_redirect {
+	RD_ERROR,
+	RD_IN,
+	RD_OUT,
+	RD_HEAEDOC,
+	RD_APPEND,
+};
 
 //readline
 # include "libft.h"
@@ -26,68 +49,58 @@
 # include <stdlib.h>
 # include <string.h>
 
-typedef struct s_env_list
+typedef struct s_env
 {
-	char				*env_name;
-	char				*env_value;
-	struct s_env_list	*next;
-}						t_env_list;
+	char					*env_name;
+	char					*env_value;
+}							t_env;
+
+typedef struct s_token
+{
+	char					*token_content;
+	int						status;
+}							t_token;
+
+typedef struct s_parsed_token
+{
+	//リダイレクトを格納
+	t_list			*greater_than; // < <<とかはもう入れない 生のデータを入れない　使いやすい形
+	t_list			*less_than; 
+	//コマンドを格納
+	t_list			*cmd;
+}							t_parsed_token;
 
 //lexer
-t_list					*lexer(char *line);
-t_list					*parser(t_list *tokens, t_env_list *env_list);
+t_list				*lexer(char *line);
+t_list				*parser(t_list *tokens, t_list *env_list);
 
 //print
-void					print_list(t_list *list);
-void					print_arr(char **arr);
-
-//exec
-int						**count_and_exec_pipe(t_list *tokens);
-void					redirect_pipe_stdio(int **pipefds, int exec_num);
-char					**set_cmd(t_list *head);
-void					move_head(t_list **head);
-void					close_pipefds(int **pipefds);
-char					*get_path(char *cmd);
-void					wait_for_last_two_exec(int *pid, int exec_num,
-							int sataus);
-void					close_for_last_two_pipefds(int **pipefds, int exec_num);
-void					free_pipefds(int **pipefds, int exec_num);
-int						exec_one_readline(t_list **head, int **pipefds,
-							int *pid, int sataus, int exec_num,
-							t_env_list **env_list);
-void					wait_exec_and_close_all_pipefds(int **pipefds,
-										int exec_num,
-										int *sataus,
-										int *pid);
-
-//redirect
-void					find_grater_than_sign_and_redirect(t_list **head, t_env_list *env_list);
-void					find_less_than_sign_and_redirect(t_list **head);
-//out
-void					redirect_stdout(t_list *head);
-void					append_redirect_stdout(t_list *head);
-//in
-void					redirect_stdin(t_list *head, t_env_list *env_list);
-void					heardocument(t_list *head);
+void						print_list(t_list *list);
+void						print_arr(char **arr);
 
 //env
-void					export(t_env_list **env_list, char **cmd);
-t_env_list				*envp_convert_to_envlist(char **envp);
-void					env_lstadd_back(t_env_list **lst, t_env_list *new);
-t_env_list				*env_lstnew(char *env_name, char *env_value);
-void					env_lstdelone(t_env_list *lst, void (*del)(void *));
-void					env_lstclear(t_env_list **lst, void (*del)(void *));
-t_env_list				*env_lstlast(t_env_list *lst);
-void					print_env_list(t_env_list *list);
+void						export(t_list **env_list, char **cmd);
+t_list					*envp_convert_to_envlist(char **envp);
+void						print_list(t_list *list);
 
 //env expand
-char	*find_env_name(char *doller_token, t_env_list *env_list);
-t_list	*split_by_isspace(char *str);
-char *parsed_tokens_to_str(t_list *parsed_tokens);
-t_list	*find_dollar_and_parse(char *token);
-void	expand_env(t_list *token, t_env_list *env_list);
-char	*expand_env_and_make_str_by_join(t_env_list *env_list, char *str);
-char	*expand_env_in_str(char *token, t_env_list *env_list);
+char						*find_env_name(char *doller_token, t_list *env_list);
+t_list				*split_by_isspace(char *str);
+char						*parsed_tokens_to_str(t_list *parsed_tokens);
+t_list						*find_dollar_and_parse(char *token);
+void						expand_env(t_list *token, t_list *env_list);
+char						*expand_env_and_make_str_by_join(t_list *env_list, char *str);
+char						*expand_env_in_str(char *token, t_list *env_list);
+
+
+int							**count_and_exec_pipe(t_list *parsed_list);
+
+//perse 
+t_list				*get_greater_than_tokens(t_list *tokens);
+t_list				*get_less_than_tokens(t_list *tokens);
+t_list 				*get_cmd_tokens(t_list *tokens);
+void						move_head(t_list **head);
+
 
 
 #endif

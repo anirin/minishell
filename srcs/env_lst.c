@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   env_lst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/13 16:40:31 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/15 10:59:39 by atsu             ###   ########.fr       */
+/*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
+/*   Updated: 2023/09/21 17:56:06 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft.h"
+#include "libft.h"
+#include "main.h"
 
-int	ft_isspace(int c)
+void print_list(t_list *list)
 {
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f')
-		return (SPACE);
-	else
-		return (NOT_SPACE);
+	int i;
+
+	i = 1;
+	if (list == NULL)
+		return ;
+	while(1)
+	{
+		if (list->next == NULL)
+		{
+			printf("%d : [%s]=[%s]\n", i, (char *)list->env_name, (char *)list->env_value);
+			break;
+		}
+		printf("%d : [%s]=[%s]\n", i, (char *)list->env_name, (char *)list->env_value);
+		list = list->next;
+		i++;
+	}
 }
