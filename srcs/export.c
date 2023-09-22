@@ -59,6 +59,7 @@ t_list	*envp_convert_to_envlist(char **envp) //ok
 	env_list = NULL;
 	while(envp[i] != NULL)
 	{
+		env = malloc(sizeof(t_env));
 		parsed_env = parse_env(envp[i]);
 		env->env_name = ft_strdup(parsed_env[0]);
 		env->env_value = ft_strdup(parsed_env[2]);

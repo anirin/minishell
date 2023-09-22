@@ -101,6 +101,12 @@ t_list				*get_less_than_tokens(t_list *tokens);
 t_list 				*get_cmd_tokens(t_list *tokens);
 void						move_head(t_list **head);
 
+//util
+void print_env(t_env *env);
+void print_token(t_token *token);
+void print_parsed_token(t_parsed_token *parsed_token);
+
+void	insort_list(t_list **lst, t_list *add_lst);
 
 
 #endif

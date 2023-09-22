@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:53:38 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/21 22:05:54 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/22 23:45:04 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_list	*split_by_isspace(char *str)
 	int i;
 	int count;
 
+	printf("str = %s\n", str);
 	i = 0;
 	splited_env = NULL;
 	while(1)
@@ -54,20 +55,24 @@ t_list	*split_by_isspace(char *str)
 		}
 		if (count > 0)
 		{
+			token = malloc(sizeof(t_token));
 			token->token_content = ft_strdup(" ");
 			token->status = TK_SPACE;
 			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
 		}
 		count = 0;
-		while (str[i] != '\0' && ft_isspace(str[i]) == 0)
+		while (str[i] != '\0' && ft_isspace(str[i]) == UT_NOT_SPACE)
 		{
 			count++;
 			i++;
 		}
 		if (count > 0)
 		{
+			token = malloc(sizeof(t_token));
+			printf("str, i, count = %s, %d, %d\n", str, i, count);
 			token->token_content = ft_substr(str, i - count, count);
+			printf("token->token_content = %s\n", token->token_content);
 			token->status = TK_NORMAL;
 			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
@@ -101,6 +106,7 @@ t_list	*find_dollar_and_parse(char *token)
 	t_list *parsed_tokens;
 	t_list *new;
 	char *tmp;
+	char *str;
 
 	i = 0;
 	parsed_tokens = NULL;
@@ -114,7 +120,8 @@ t_list	*find_dollar_and_parse(char *token)
 		}
 		if (count > 0)
 		{
-			new = ft_lstnew(ft_substr(token, i - count, count));
+			str = ft_substr(token, i - count, count);
+			new = ft_lstnew(str);
 			ft_lstadd_back(&parsed_tokens, new);
 		}
 		count = 0;
@@ -122,7 +129,7 @@ t_list	*find_dollar_and_parse(char *token)
 		{
 			i++;
 			count++;
-			while(token[i] != '\0' && ft_isspace(token[i]) == 0 && token[i] != '\'' && token[i] != '\"')
+			while(token[i] != '\0' && ft_isspace(token[i]) == UT_NOT_SPACE && token[i] != '\'' && token[i] != '\"')
 			{
 				count++;
 				i++;
@@ -130,7 +137,8 @@ t_list	*find_dollar_and_parse(char *token)
 		}
 		if (count > 0)
 		{
-			new = ft_lstnew(ft_substr(token, i - count, count));
+			str = ft_substr(token, i - count, count);
+			new = ft_lstnew(str);
 			ft_lstadd_back(&parsed_tokens, new);
 		}
 	}
@@ -177,11 +185,12 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 			env_value = find_env_name(tmp->token_content, env_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
+			print_list(splited_env);
 			insort_list(&token, splited_env); //ok
 		}
 		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
 		{
-			tmp->token_content = expand_env_in_str(token->content, env_list); //ok
+			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
 			tmp->status = TK_NORMAL;
 		}
 		token = token->next;

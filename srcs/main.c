@@ -21,9 +21,9 @@ int	minishell(char **envp)
 		exec_num = 0;
 		line = readline("$> ");
 		tokens = lexer(line);
-		print_list(tokens);
+		ft_lstiter(tokens, (void *)print_token);
+		printf("--lexer done--\n");
 		parsed_tokens = parser(tokens, env_list);
-		print_list(parsed_tokens);
 		if (parsed_tokens == NULL)
 			continue ;
 		pipefds = count_and_exec_pipe(parsed_tokens);
@@ -37,7 +37,7 @@ int	minishell(char **envp)
 		//free parsed_tokens
 		//free pipefds
 	}
-	env_lstclear(&env_list, free);
+	//free env
 	return (0);
 }
 

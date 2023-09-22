@@ -18,6 +18,7 @@ int		add_quote_token_to_list(t_list **list, char *line, int i, char c)
 		i++;
 		if(line[i] == c)
 		{
+			token = (t_token *)malloc(sizeof(t_token));
 			token->token_content = ft_substr(line, i - word_num + 1, word_num);
 			token->status = status;
 			new = ft_lstnew(token);
@@ -39,9 +40,10 @@ int		add_dollar_token_to_list(t_list **list, char *line, int i)
 	{
 		word_num++;
 		i++;
-		if(line[i] == '\"' || line[i] == '\'' || ft_isspace(line[i]) == 1 || line[i] == '|' || line[i] == '>' || line[i] == '<' || line[i] == '\0')
+		if(line[i] == '\"' || line[i] == '\'' || ft_isspace(line[i]) == UT_SPACE || line[i] == '|' || line[i] == '>' || line[i] == '<' || line[i] == '\0')
 		{
-			token->token_content = ft_substr(line, i - word_num + 1, word_num);
+			token = (t_token *)malloc(sizeof(t_token));
+			token->token_content = ft_substr(line, i - word_num, word_num);
 			token->status = TK_DOLL;
 			new = ft_lstnew(token);
 			ft_lstadd_back(list, new);
@@ -65,6 +67,7 @@ int		add_space_token_to_list(t_list **list, char *line, int i)
 	}
 	if (space_num != 0)
 	{
+		token = (t_token *)malloc(sizeof(t_token));
 		token->token_content = ft_strdup(" ");
 		token->status = TK_SPACE;
 		new = ft_lstnew(token);
@@ -81,6 +84,7 @@ int		add_pipe_token_to_list(t_list **list, char *line, int i)
 	char c;
 
 	word_num = 0;
+	token = (t_token *)malloc(sizeof(t_token));
 	token->token_content = strdup("|");
 	token->status = TK_PIPE;
 	new = ft_lstnew(token);
@@ -107,6 +111,7 @@ int		add_redirect_token_to_list(t_list **list, char *line, int i)
 		i++;
 		word_num++;
 	}
+	token = (t_token *)malloc(sizeof(t_token));
 	token->token_content = ft_substr(line, i - word_num, word_num);
 	token->status = status;
 	new = ft_lstnew(token);
@@ -129,6 +134,7 @@ int		add_word_token_to_list(t_list **list, char *line, int i)
 	}
 	if (word_num != 0)
 	{
+		token = (t_token *)malloc(sizeof(t_token));
 		token->token_content = ft_substr(line, i - word_num, word_num);
 		token->status = TK_NORMAL; 
 		new = ft_lstnew(token);
