@@ -20,9 +20,11 @@ int	minishell(char **envp)
 	{
 		exec_num = 0;
 		line = readline("$> ");
+		if (strncmp(line, "exit", 4) == 0)
+			break ;
 		tokens = lexer(line);
-		ft_lstiter(tokens, (void *)print_token);
-		printf("--lexer done--\n");
+			ft_lstiter(tokens, (void *)print_token);
+			printf("--lexer done--\n");
 		parsed_tokens = parser(tokens, env_list);
 		if (parsed_tokens == NULL)
 			continue ;

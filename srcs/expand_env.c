@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 18:53:38 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/22 23:45:04 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/24 20:41:37by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@ char	*find_env_name(char *doller_token, t_list *env_list) //ok
 {
 	t_env *env;
 
+		// ft_lstiter(env_list, print_env);
+		// printf("lst size %d\n",ft_lstsize(env_list));
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
 	while(env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (env->env_value != NULL && ft_strncmp(&doller_token[1], env->env_name, ft_strlen(env->env_name)+ 1) == 0) //[0] は $
+			// printf("&doller_token[1]: [%s]\n", &doller_token[1]);
+			// printf("env->env_name: [%s]\n", env->env_name);
+			// printf("ft_strlen(env->env_name): [%zu]\n", ft_strlen(env->env_name));
+		if (env->env_value != NULL && ft_strncmp(&doller_token[1], env->env_name, ft_strlen(env->env_name) + 1) == 0) //[0] は $
 		{
 				return (ft_strdup(env->env_value));
 		}
@@ -40,7 +45,6 @@ t_list	*split_by_isspace(char *str)
 	int i;
 	int count;
 
-	printf("str = %s\n", str);
 	i = 0;
 	splited_env = NULL;
 	while(1)
@@ -70,9 +74,7 @@ t_list	*split_by_isspace(char *str)
 		if (count > 0)
 		{
 			token = malloc(sizeof(t_token));
-			printf("str, i, count = %s, %d, %d\n", str, i, count);
 			token->token_content = ft_substr(str, i - count, count);
-			printf("token->token_content = %s\n", token->token_content);
 			token->status = TK_NORMAL;
 			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
@@ -175,24 +177,30 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 	char *env_value;
 	t_list *splited_env;
 	t_token *tmp;
+	t_list *prev;
 
 	i = 0;
+	prev = NULL;
 	while (token != NULL)
 	{
 		tmp = (t_token *)token->content;
 		if (tmp->status == TK_DOLL)
 		{
+			// printf("token is DOLL\n");
 			env_value = find_env_name(tmp->token_content, env_list);
+				// printf("env_value: [%s]\n", env_value);
 			splited_env = split_by_isspace(env_value);
+				// ft_lstiter(splited_env, &print_token);
 			free(env_value);
-			print_list(splited_env);
-			insort_list(&token, splited_env); //ok
+			insort_list(token, splited_env); //ok
+				// ft_lstiter(splited_env, &print_token);
 		}
 		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
 		{
 			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
 			tmp->status = TK_NORMAL;
 		}
+		prev = token;
 		token = token->next;
 	}
 }

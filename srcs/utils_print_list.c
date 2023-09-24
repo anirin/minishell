@@ -3,25 +3,51 @@
 
 void print_env(t_env *env)
 {
-	printf("--------------------\n");
-	printf("env_name: [%s]\n", env->env_name);
-	printf("env_value: [%s]\n", env->env_value);
+	printf("env_name: [%s]\n", (char *)env->env_name);
+	printf("env_value: [%s]\n", (char *)env->env_value);
 }
 
 void print_token(t_token *token)
 {
-	printf("--------------------\n");
-	printf("content: [%s] ", token->token_content);
-	printf("status: [%d]\n", token->status);
+	printf("content: [%s] ", (char *)token->token_content);
+	if (token->status == TK_NORMAL)
+		printf("status: [NORMAL]\n");
+	if (token->status == TK_GREATER_THAN)
+		printf("status: [GREATER_THAN]\n");
+	if (token->status == TK_LESS_THAN)
+		printf("status: [LESS_THAN]\n");
+	if (token->status == TK_PIPE)
+		printf("status: [PIPE]\n");
+	if (token->status == TK_SPACE)
+		printf("status: [SPACE]\n");
+	if (token->status == TK_SINGLE_QUOTE)
+		printf("status: [SINGLE_QUOTE]\n");
+	if (token->status == TK_DOUBLE_QUOTE)
+		printf("status: [DOUBLE_QUOTE]\n");
+	if (token->status == TK_DOLL)
+		printf("status: [DOLL]\n");
+	if (token->status == TK_USED)
+		printf("status: [USED]\n");
+	//
+	if (token->status == RD_ERROR)
+		printf("status: [RD_ERROR]\n");
+	if (token->status == RD_IN)
+		printf("status: [RD_IN]\n");
+	if (token->status == RD_OUT)
+		printf("status: [RD_OUT]\n");
+	if (token->status == RD_HEAEDOC)
+		printf("status: [RD_HEAEDOC]\n");
+	if (token->status == RD_APPEND)
+		printf("status: [RD_APPEND]\n");
 }
 
 void print_parsed_token(t_parsed_token *parsed_token)
 {
-	printf("--------------------\n");
-	printf("greater_than:");
+	printf("------print_parsed_token------\n");
+	printf("greater_than:\n");
 	ft_lstiter(parsed_token->greater_than, (void *)print_token);
-	printf("less_than:");
+	printf("less_than:\n");
 	ft_lstiter(parsed_token->less_than, (void *)print_token);
-	printf("cmd:");
+	printf("cmd:\n");
 	ft_lstiter(parsed_token->cmd, (void *)print_token);
 }

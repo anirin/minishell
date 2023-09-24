@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 13:27:49 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/15 11:00:03 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/24 16:12:13 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 typedef struct s_list
 {
 	void			*content;
-	int				status;
 	struct s_list	*next;
 }					t_list;
 

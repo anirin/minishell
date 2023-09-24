@@ -32,7 +32,7 @@ enum e_util {
 };
 
 enum e_redirect {
-	RD_ERROR,
+	RD_ERROR = 10, //回避方法
 	RD_IN,
 	RD_OUT,
 	RD_HEAEDOC,
@@ -106,7 +106,7 @@ void print_env(t_env *env);
 void print_token(t_token *token);
 void print_parsed_token(t_parsed_token *parsed_token);
 
-void	insort_list(t_list **lst, t_list *add_lst);
+void	insort_list(t_list *token, t_list *add_list);
 
 
 #endif
