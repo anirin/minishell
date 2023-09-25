@@ -192,8 +192,10 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 			splited_env = split_by_isspace(env_value);
 				// ft_lstiter(splited_env, &print_token);
 			free(env_value);
-			insort_list(token, splited_env); //ok
-				// ft_lstiter(splited_env, &print_token);
+			insort_list(&token, splited_env); //ok
+				printf("insort_list done\n\n");
+				ft_lstiter(&token, &print_token);
+				printf("done \n");
 		}
 		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
 		{

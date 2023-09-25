@@ -92,7 +92,7 @@ t_list	*get_list(t_list *tokens)
 			// ft_lstiter(parsed_token->less_than, &print_token);
 			// printf("less_than_tokens done\n");
 			ft_lstiter(head, &print_token);
-			printf("head before cmd\n");
+			printf("token before cmd\n");
 		parsed_token->cmd = get_cmd_tokens(head);
 			// ft_lstiter(parsed_token->cmd, &print_token);
 			// printf("cmd_tokens done\n");

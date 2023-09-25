@@ -40,7 +40,16 @@ int		add_dollar_token_to_list(t_list **list, char *line, int i)
 	{
 		word_num++;
 		i++;
-		//$$ 対処
+		if (ft_strncmp(&line[i - 1], "$$", 2) == 0)
+		{
+			word_num++;
+			token = (t_token *)malloc(sizeof(t_token));
+			token->token_content = ft_strdup("$$");
+			token->status = TK_DOLL;
+			new = ft_lstnew(token);
+			ft_lstadd_back(list, new);
+			return (word_num);
+		}
 		if(line[i] == '$' || line[i] == '\"' || line[i] == '\'' || ft_isspace(line[i]) == UT_SPACE || line[i] == '|' || line[i] == '>' || line[i] == '<' || line[i] == '\0')
 		{
 			token = (t_token *)malloc(sizeof(t_token));
