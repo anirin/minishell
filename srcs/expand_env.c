@@ -190,12 +190,14 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 			env_value = find_env_name(tmp->token_content, env_list);
 				// printf("env_value: [%s]\n", env_value);
 			splited_env = split_by_isspace(env_value);
+				// printf("split\n");
 				// ft_lstiter(splited_env, &print_token);
+				// ft_lstiter(token, &print_token);
 			free(env_value);
-			insort_list(&token, splited_env); //ok
-				printf("insort_list done\n\n");
-				ft_lstiter(&token, &print_token);
-				printf("done \n");
+			insort_list(token, splited_env); //ok
+				// printf("insort_list done\n\n");
+				// ft_lstiter(token, &print_token);
+				// printf("done \n");
 		}
 		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
 		{

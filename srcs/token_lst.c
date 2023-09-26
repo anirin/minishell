@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/25 17:20:55 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/25 18:02:35 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
 
-void	insort_list(t_list **token, t_list *add_lst)
+void	insort_list(t_list *token, t_list *add_lst)
 {
 	t_list *next_list;
 	t_list *last;
@@ -22,12 +22,15 @@ void	insort_list(t_list **token, t_list *add_lst)
 
 	if (add_lst == NULL)
 		return ;
-	tmp = (t_token *)(*token)->content;
+	tmp = (t_token *)token->content;
 	add_tmp = (t_token *)add_lst->content;
+
+	free(tmp->token_content);
 	tmp->token_content = add_tmp->token_content;
 	tmp->status = add_tmp->status;
-	next_list = (*token)->next;
-	(*token)->next = add_lst->next;
-	last = ft_lstlast(add_lst);	
-	last->next = next_list;
+
+	next_list = token->next;
+	token->next = add_lst->next;
+	ft_lstadd_back(&token, next_list);
+	//free addlistの先頭
 }

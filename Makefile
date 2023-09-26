@@ -13,6 +13,7 @@ INCLUDES = -I ./includes -I ./libft
 DEBUG = -g
 
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
+	mkdir -p objs
 	@$(CC) -c $< $(DEBUG) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
