@@ -29,9 +29,10 @@ int	minishell(char **envp)
 			//一旦は test |などパイプで終わるケースは無視する
 		if (parsed_tokens == NULL)
 			continue ;
-		pipefds = count_and_exec_pipe(parsed_tokens);
+		pipefds = malloc_pipefds(parsed_tokens);
 		while (1)
 		{
+			// exec_one_cmd(pipefds, parsed_tokens);
 			break ;
 		}
 		add_history(line);

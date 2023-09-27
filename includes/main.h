@@ -68,6 +68,7 @@ typedef struct s_parsed_token
 	t_list			*less_than; 
 	//コマンドを格納
 	t_list			*cmd;
+	t_list			*args;
 }							t_parsed_token;
 
 //lexer
@@ -93,12 +94,13 @@ char						*expand_env_and_make_str_by_join(t_list *env_list, char *str);
 char						*expand_env_in_str(char *token, t_list *env_list);
 
 
-int							**count_and_exec_pipe(t_list *parsed_list);
+int							**malloc_pipefds(t_list *parsed_list);
 
 //perse 
 t_list				*get_greater_than_tokens(t_list *tokens);
 t_list				*get_less_than_tokens(t_list *tokens);
 t_list 				*get_cmd_tokens(t_list *tokens);
+t_list				*get_args_tokens(t_list *tokens);
 void						move_head(t_list **head);
 
 //util

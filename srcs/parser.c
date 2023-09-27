@@ -80,20 +80,21 @@ t_list	*get_list(t_list *tokens)
 
 	head = tokens;
 	parsed_list = NULL;
-		ft_lstiter(head, &print_token);
-		printf("is trimed token\n");
+		// ft_lstiter(head, &print_token);
+		// printf("is trimed token\n");
 	while (head != NULL)
 	{
 		parsed_token = malloc(sizeof(t_parsed_token));
 		parsed_token->less_than = get_less_than_tokens(head);
-			ft_lstiter(head, &print_token);
-			printf("less done\n");
+			// ft_lstiter(head, &print_token);
+			// printf("less done\n");
 		parsed_token->greater_than = get_greater_than_tokens(head);
-			ft_lstiter(parsed_token->greater_than, &print_token);
-			printf("greater done\n");
+			// ft_lstiter(parsed_token->greater_than, &print_token);
+			// printf("greater done\n");
 		parsed_token->cmd = get_cmd_tokens(head);
 			// ft_lstiter(parsed_token->cmd, &print_token);
 			// printf("cmd_tokens done\n");
+		parsed_token->args = get_args_tokens(head);
 		new = ft_lstnew(parsed_token);
 		ft_lstadd_back(&parsed_list, new);
 		move_head(&head);

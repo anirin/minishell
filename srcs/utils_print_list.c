@@ -50,4 +50,6 @@ void print_parsed_token(t_parsed_token *parsed_token)
 	ft_lstiter(parsed_token->less_than, (void *)print_token);
 	printf("cmd:\n");
 	ft_lstiter(parsed_token->cmd, (void *)print_token);
+	printf("args:\n");
+	ft_lstiter(parsed_token->args, (void *)print_token);
 }

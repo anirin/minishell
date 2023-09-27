@@ -122,8 +122,40 @@ t_list	*get_cmd_tokens(t_list *tokens)
 	t_list	*cmd_tokens;
 	t_token	*token;
 	t_token *new;
+	int		count;
 	
+	count = 0;
 	cmd_tokens = NULL;
+	while (tokens != NULL)
+	{
+		new = malloc(sizeof(t_token));
+		token = (t_token *)tokens->content;
+		if (token->status != TK_USED && token->status != TK_PIPE && (count == 0 || (count == 1 && token->token_content[0] == "-")))
+		{
+			new->token_content = ft_strdup(token->token_content);
+			new->status = TK_NORMAL;
+			ft_lstadd_back(&cmd_tokens, ft_lstnew(new));
+			token->status = TK_USED;
+			count++;
+		}
+		else if (token->status == TK_PIPE)
+		{
+			break ;
+		}
+		if (count == 2)
+			break;
+		tokens = tokens->next;
+	}
+	return (cmd_tokens);
+}
+
+t_list	*get_args_tokens(t_list *tokens)
+{
+	t_list	*args_tokens;
+	t_token	*token;
+	t_token *new;
+	
+	args_tokens = NULL;
 	while (tokens != NULL)
 	{
 		new = malloc(sizeof(t_token));
@@ -132,7 +164,7 @@ t_list	*get_cmd_tokens(t_list *tokens)
 		{
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;
-			ft_lstadd_back(&cmd_tokens, ft_lstnew(new));
+			ft_lstadd_back(&args_tokens, ft_lstnew(new));
 			token->status = TK_USED;
 		}
 		else if (token->status == TK_PIPE)
@@ -141,7 +173,7 @@ t_list	*get_cmd_tokens(t_list *tokens)
 		}
 		tokens = tokens->next;
 	}
-	return (cmd_tokens);
+	return (args_tokens);
 }
 
 void	move_head(t_list **head)
