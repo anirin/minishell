@@ -103,6 +103,10 @@ t_list 				*get_cmd_tokens(t_list *tokens);
 t_list				*get_args_tokens(t_list *tokens);
 void						move_head(t_list **head);
 
+//exec
+void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index, t_list *env_list);
+
+
 //util
 void print_env(t_env *env);
 void print_token(t_token *token);

@@ -130,7 +130,7 @@ t_list	*get_cmd_tokens(t_list *tokens)
 	{
 		new = malloc(sizeof(t_token));
 		token = (t_token *)tokens->content;
-		if (token->status != TK_USED && token->status != TK_PIPE && (count == 0 || (count == 1 && token->token_content[0] == "-")))
+		if (token->status != TK_USED && token->status != TK_PIPE && (count == 0 || (count == 1 && token != NULL && token->token_content[0] == '-')))
 		{
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;

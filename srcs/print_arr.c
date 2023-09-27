@@ -4,12 +4,15 @@
 void print_arr(char **arr)
 {
 	int i;
+	FILE *fd;
 
+	fd = fopen("outfile.txt", "a");
 	i = 0;
-	printf("--print arr--\n");
+	fprintf(fd, "--print arr--\n");
 	while(arr[i] != NULL)
 	{
-		printf("%d : [%s]\n", i, arr[i]);
+		fprintf(fd, "%d : [%s]\n", i, arr[i]);
 		i++;
 	}
+	fclose(fd);
 }

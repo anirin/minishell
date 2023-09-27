@@ -4,7 +4,7 @@ OBJSDIR = ./objs
 FILES = \
 	expand_env.c export.c help_main.c lexer.c \
 	main.c parser.c parser_utils.c print_arr.c \
-	print_list.c token_lst.c utils_print_list.c
+	print_list.c token_lst.c utils_print_list.c exec_one_cmd.c
 SRCS = $(addprefix $(SRCDIR)/,$(FILES)) 
 OBJS = $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
 LDFLAGS = -lreadline -Llibft -lft
@@ -36,8 +36,8 @@ echo :
 
 re : fclean all
 
-git-% :
-	git add srcs/*.c includes/*.h libft/* Makefile README
+oka_git-% :
+	git add srcs/*.c includes/*.h libft/*.c Makefile README
 	git commit -m "$(@:git-%=%)"
 	git push origin work
 

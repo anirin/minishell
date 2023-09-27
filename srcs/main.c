@@ -8,17 +8,19 @@ int	minishell(char **envp)
 	t_list	*tokens;
 	t_list	*parsed_tokens;
 	t_list	*env_list;
-	int		pid[100];
+	int		pids[100];
 	int		sataus;
 	int		**pipefds;
 	int		exec_num;
 	int		flag;
+	int		cmd_index;
 
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
 	while (1) //二つのコマンドと二つのパイプのみを実行する
 	{
 		exec_num = 0;
+		cmd_index = 0;
 		line = readline("$> ");
 		if (strncmp(line, "exit", 4) == 0)
 			break ;
@@ -27,13 +29,16 @@ int	minishell(char **envp)
 			// printf("--lexer done--\n");
 		parsed_tokens = parser(tokens, env_list);
 			//一旦は test |などパイプで終わるケースは無視する
+			ft_lstiter(parsed_tokens, (void *)print_parsed_token);
+			printf("--------\n");
 		if (parsed_tokens == NULL)
 			continue ;
 		pipefds = malloc_pipefds(parsed_tokens);
-		while (1)
+		while (parsed_tokens != NULL)
 		{
-			// exec_one_cmd(pipefds, parsed_tokens);
-			break ;
+			exec_one_cmd(pids, pipefds, parsed_tokens, cmd_index, env_list);
+			cmd_index++;
+			parsed_tokens = parsed_tokens->next;
 		}
 		add_history(line);
 		free(line);
