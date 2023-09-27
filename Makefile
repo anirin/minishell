@@ -36,5 +36,8 @@ echo :
 
 re : fclean all
 
-add :
+git-% :
 	git add srcs/*.c includes/*.h libft/* Makefile README
+	git commit -m "$(@:git-%=%)"
+	git push origin work
+

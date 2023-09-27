@@ -81,18 +81,16 @@ t_list	*get_list(t_list *tokens)
 	head = tokens;
 	parsed_list = NULL;
 		ft_lstiter(head, &print_token);
-		printf("test\n");
+		printf("is trimed token\n");
 	while (head != NULL)
 	{
 		parsed_token = malloc(sizeof(t_parsed_token));
-		parsed_token->greater_than = get_greater_than_tokens(head);
-			// ft_lstiter(parsed_token->greater_than, &print_token);
-			// printf("get_greater_than_tokens done\n");
 		parsed_token->less_than = get_less_than_tokens(head);
-			// ft_lstiter(parsed_token->less_than, &print_token);
-			// printf("less_than_tokens done\n");
 			ft_lstiter(head, &print_token);
-			printf("token before cmd\n");
+			printf("less done\n");
+		parsed_token->greater_than = get_greater_than_tokens(head);
+			ft_lstiter(parsed_token->greater_than, &print_token);
+			printf("greater done\n");
 		parsed_token->cmd = get_cmd_tokens(head);
 			// ft_lstiter(parsed_token->cmd, &print_token);
 			// printf("cmd_tokens done\n");
@@ -121,8 +119,8 @@ t_list	*parser(t_list *tokens, t_list *env_list)
 		// printf("process done\n\n");
 		//free tokens
 	ret_tokens = get_list(preproc_tokens);
-		ft_lstiter(ret_tokens, &print_parsed_token);
-		printf("get_list\n");
+		// ft_lstiter(ret_tokens, &print_parsed_token);
+		// printf("get_list\n");
 	//free prepro_tokens
 	return (ret_tokens);
 }

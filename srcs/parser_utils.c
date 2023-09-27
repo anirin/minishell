@@ -1,6 +1,66 @@
 #include "libft.h"
 #include "main.h"
 
+int		get_greater_than_status(char *str)
+{
+	if (ft_strlen(str) == 1)
+		return (RD_OUT);
+	else if (ft_strlen(str) == 2)
+		return (RD_APPEND);
+	else
+		return (RD_ERROR);
+}
+
+int		get_less_than_status(char *str)
+{
+	if (ft_strlen(str) == 1)
+		return (RD_IN);
+	else if (ft_strlen(str) == 2)
+		return (RD_HEAEDOC);
+	else
+		return (RD_ERROR);
+}
+
+char	*get_content(t_list *tokens)
+{
+	t_token	*token;
+	char *ret;
+
+	if (tokens == NULL)
+		return (NULL);
+	token = (t_token *)tokens->content;
+	if (token->status != TK_NORMAL)
+		ret = NULL;
+	else
+	{
+		token->status = TK_USED;
+		ret = ft_strdup(token->token_content);
+	}
+	return (ret);
+}
+
+void	move_tokens_and_change_status_used(t_list **tokens)
+{
+	t_token	*token;
+
+	token = (t_token *)(*tokens)->content;
+	token->status = TK_USED;
+	// printf("	token->token_content: [%s]\n", token->token_content);
+	*tokens = (*tokens)->next;
+	if (*tokens == NULL)
+		return ;
+	else
+	{
+		token = (t_token *)(*tokens)->content;
+		if (token->status == TK_NORMAL)
+		{
+			token->status = TK_USED;
+			// printf("	token->token_content: [%s]\n", token->token_content);
+			*tokens = (*tokens)->next;
+		}
+	}
+}
+
 t_list	*get_greater_than_tokens(t_list *tokens)
 {
 	t_list	*greater_than_tokens;
@@ -14,33 +74,17 @@ t_list	*get_greater_than_tokens(t_list *tokens)
 		token = (t_token *)tokens->content;
 		if (token->status == TK_GREATER_THAN)
 		{
-			if (ft_strlen(token->token_content) == 1)
-				new->status = RD_OUT;
-			else if (ft_strlen(token->token_content) == 2)
-				new->status = RD_APPEND;
-			else
-				new->status = RD_ERROR;
-			token->status = TK_USED;
+			new->status = get_greater_than_status(token->token_content);
+			new->token_content = get_content(tokens->next);
+			ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
+			move_tokens_and_change_status_used(&tokens);
+		}
+		else
+		{
 			tokens = tokens->next;
-			if (tokens == NULL)
-				token = NULL;
-			else
-				token = (t_token *)tokens->content;
-			if (token == NULL || token->status != TK_NORMAL)
-			{
-				new->token_content = NULL;
-				ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
-			}
-			else
-			{
-				token->status = TK_USED;
-				new->token_content = ft_strdup(token->token_content);
-				ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
-			}
 		}
 		if (token->status == TK_PIPE)
-			break ;
-		tokens = tokens->next;
+			break;
 	}
 	return (greater_than_tokens);
 }
@@ -58,33 +102,17 @@ t_list	*get_less_than_tokens(t_list *tokens)
 		token = (t_token *)tokens->content;
 		if (token->status == TK_LESS_THAN)
 		{
-			if (ft_strlen(token->token_content) == 1)
-				new->status = RD_IN;
-			else if (ft_strlen(token->token_content) == 2)
-				new->status = RD_HEAEDOC;
-			else
-				new->status = RD_ERROR;
-			token->status = TK_USED;
+			new->status = get_less_than_status(token->token_content);
+			new->token_content = get_content(tokens->next);
+			ft_lstadd_back(&less_than_tokens, ft_lstnew(new));
+			move_tokens_and_change_status_used(&tokens);
+		}
+		else
+		{
 			tokens = tokens->next;
-			if (tokens == NULL)
-				token = NULL;
-			else
-				token = (t_token *)tokens->content;
-			if (token == NULL || token->status != TK_NORMAL)
-			{
-				new->token_content = NULL;
-				ft_lstadd_back(&less_than_tokens, ft_lstnew(new));
-			}
-			else
-			{
-				token->status = TK_USED;
-				new->token_content = ft_strdup(token->token_content);
-				ft_lstadd_back(&less_than_tokens, ft_lstnew(new));
-			}
 		}
 		if (token->status == TK_PIPE)
-			break ;
-		tokens = tokens->next;
+			break;
 	}
 	return (less_than_tokens);
 }

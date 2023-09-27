@@ -9,7 +9,7 @@ void print_env(t_env *env)
 
 void print_token(t_token *token)
 {
-	printf("content: [%s] ", (char *)token->token_content);
+	printf("	content: [%s] ", (char *)token->token_content);
 	if (token->status == TK_NORMAL)
 		printf("status: [NORMAL]\n");
 	if (token->status == TK_GREATER_THAN)

@@ -26,6 +26,7 @@ int	minishell(char **envp)
 			// ft_lstiter(tokens, (void *)print_token);
 			// printf("--lexer done--\n");
 		parsed_tokens = parser(tokens, env_list);
+			//一旦は test |などパイプで終わるケースは無視する
 		if (parsed_tokens == NULL)
 			continue ;
 		pipefds = count_and_exec_pipe(parsed_tokens);
