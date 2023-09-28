@@ -9,8 +9,8 @@ int	**malloc_pipefds(t_list *list)
 
 	i = 0;
 	count = ft_lstsize(list);
-	pipefds = malloc(sizeof(int *) * (count + 1));
-	while(i < count + 1)
+	pipefds = malloc(sizeof(int *) * count);
+	while(i < count - 1)
 	{
 		pipefds[i] = malloc(sizeof(int) * 2);
 		i++;

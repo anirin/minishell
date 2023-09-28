@@ -21,7 +21,7 @@ int	minishell(char **envp)
 	{
 		exec_num = 0;
 		cmd_index = 0;
-		line = readline("$> ");
+		line = readline("$> "); //２回目失敗
 		if (strncmp(line, "exit", 4) == 0)
 			break ;
 		tokens = lexer(line);
@@ -29,8 +29,8 @@ int	minishell(char **envp)
 			// printf("--lexer done--\n");
 		parsed_tokens = parser(tokens, env_list);
 			//一旦は test |などパイプで終わるケースは無視する
-			ft_lstiter(parsed_tokens, (void *)print_parsed_token);
-			printf("--------\n");
+			// ft_lstiter(parsed_tokens, (void *)print_parsed_token);
+			// printf("--------\n");
 		if (parsed_tokens == NULL)
 			continue ;
 		pipefds = malloc_pipefds(parsed_tokens);
@@ -40,8 +40,16 @@ int	minishell(char **envp)
 			cmd_index++;
 			parsed_tokens = parsed_tokens->next;
 		}
+		// printf("cmd_index : %d\n", cmd_index);
+		while (cmd_index > 0)
+		{
+			// printf("pid = %d\n", wait(&sataus));
+			wait(&sataus);
+			cmd_index--;
+		}
 		add_history(line);
 		free(line);
+		line = NULL;
 		//free tokens
 		//free parsed_tokens
 		//free pipefds

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/28 02:19:40 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/09/28 16:45:54 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ void	redirect_pipe(int **pipefds, int cmd_index)
 	if (pipefds[cmd_index] != NULL)
 	{
 		close(pipefds[cmd_index][0]);
-		dup2(STDOUT_FILENO, pipefds[cmd_index][1]);
+		dup2(pipefds[cmd_index][1], STDOUT_FILENO);
 	}
 	if (cmd_index - 1 >= 0)
-		dup2(STDIN_FILENO, pipefds[cmd_index - 1][0]);
+		dup2(pipefds[cmd_index - 1][0], STDIN_FILENO);
 }
 
 void	close_pipefds(int **pipefds, int cmd_index)
 {
 	if (pipefds[cmd_index] != NULL)
+	{
 		close(pipefds[cmd_index][1]);
+	}
 	if (cmd_index - 1 >= 0)
+	{
 		close(pipefds[cmd_index - 1][0]);
+	}
 }
 
 void	redirect_in(t_list *tokens)
@@ -136,6 +140,7 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 		return (ft_strdup(cmd));
 	else
 	{
+		// print_arr(paths);
 		while(paths[i] != NULL)
 		{
 			ret = ft_strjoin(paths[i], "/");
@@ -145,7 +150,6 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 			i++;
 			if (access(ret, X_OK) == 0)
 			{
-				//arryfree(paths);
 				return (ret);
 			}
 		}
@@ -188,21 +192,20 @@ void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index
 	else
 	{
 		if (parsed_tokens->next != NULL)
+		{
 			pipe(pipefds[cmd_index]);
+				// printf("	pipe() done\n");
+		}
 		//parsed が null の時の対処してない
 		pids[cmd_index] = fork();
 		if (pids[cmd_index] == 0)
 		{
-			// redirect_pipe(pipefds, cmd_index);
-			// redirect_in(token->less_than);
-			// redirect_out(token->greater_than);
-				FILE *fd;
-				fd = fopen("outfile.txt", "w");
+			redirect_pipe(pipefds, cmd_index);
+			redirect_in(token->less_than);
+			redirect_out(token->greater_than);
 			path = get_path(token->cmd, env_list);
 			argv = get_argv(token->cmd, token->args);
-				fprintf(fd, "path [%s]\n", path);
-				fclose(fd);
-				print_arr(argv);
+				// print_arr(argv);
 			execve(path, argv, NULL);
 			perror("execve");
 			exit(1);
