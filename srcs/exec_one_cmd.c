@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/28 16:45:54 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/28 22:27:03 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 	int		i;
 	char *tmp;
 
+	i = 0;
 	token = (t_token *)cmd_list->content;
 	cmd = token->token_content;
 	paths = split_path(env_list);
@@ -182,30 +183,30 @@ void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index
 	t_parsed_token *token;
 	char			*path;
 	char			**argv;
+	int				check;
 
 	token = (t_parsed_token *)parsed_tokens->content;
-	// if (is_builtin(token->cmd))
-	if (1 == 2)
+	check = is_builtin(token->cmd);
+	if (check != BT_NOTBUILTIN)
 	{
-		// my_execve();
+		printf("my execve\n");
+		my_execve(&env_list, check, token->cmd ,token->args);
 	}
 	else
 	{
 		if (parsed_tokens->next != NULL)
 		{
 			pipe(pipefds[cmd_index]);
-				// printf("	pipe() done\n");
 		}
 		//parsed が null の時の対処してない
 		pids[cmd_index] = fork();
 		if (pids[cmd_index] == 0)
 		{
+			path = get_path(token->cmd, env_list);
+			argv = get_argv(token->cmd, token->args);
 			redirect_pipe(pipefds, cmd_index);
 			redirect_in(token->less_than);
 			redirect_out(token->greater_than);
-			path = get_path(token->cmd, env_list);
-			argv = get_argv(token->cmd, token->args);
-				// print_arr(argv);
 			execve(path, argv, NULL);
 			perror("execve");
 			exit(1);

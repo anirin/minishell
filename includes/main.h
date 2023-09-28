@@ -22,7 +22,8 @@ enum e_builtin_type {
 	BT_PWD,
 	BT_UNSET,
 	BT_ENV,
-	BT_EXIT
+	BT_EXIT,
+	BT_NOTBUILTIN
 };
 
 //util
@@ -64,7 +65,7 @@ typedef struct s_token
 typedef struct s_parsed_token
 {
 	//リダイレクトを格納
-	t_list			*greater_than; // < <<とかはもう入れない 生のデータを入れない　使いやすい形
+	t_list			*greater_than;
 	t_list			*less_than; 
 	//コマンドを格納
 	t_list			*cmd;
@@ -80,7 +81,7 @@ void						print_list(t_list *list);
 void						print_arr(char **arr);
 
 //env
-void						export(t_list **env_list, char **cmd);
+void						export(t_list **env_list, t_list *args);
 t_list					*envp_convert_to_envlist(char **envp);
 void						print_list(t_list *list);
 
@@ -114,6 +115,12 @@ void print_parsed_token(t_parsed_token *parsed_token);
 
 // void	insort_list(t_list **token, t_list *add_list);
 void	insort_list(t_list *token, t_list *add_list);
+
+//builtin
+int		is_builtin(t_list *cmd_and_option);
+
+//my_execve
+void	my_execve(t_list **env_list, int check, t_list *cmd , t_list *args);
 
 
 #endif

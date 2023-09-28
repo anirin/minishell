@@ -128,6 +128,7 @@ void add_env(char **parsed_env, t_list **env_list) //ok
 	t_list *new_lst;
 	t_env *new_env;
 
+	new_env = malloc(sizeof(t_env));
 	if (parsed_env[1] != NULL)
 		new_env_value = ft_strdup(parsed_env[2]);
 	else
@@ -139,18 +140,24 @@ void add_env(char **parsed_env, t_list **env_list) //ok
 	//freeしろ
 }
 
-void export(t_list **env_list, char **cmd)
+void export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
 {
 	int i;
 	int env_index;
 	char **parsed_env;
+	t_token *str_arg;
 
 
 	env_index = 0;
-	i = 1; //cmd[0]はexportなので飛ばす
-	while(cmd[i] != NULL)
+	if (args == NULL)
 	{
-		parsed_env = parse_env(cmd[i]);
+		ft_lstiter(*env_list, (void *)print_env);
+		return ;
+	}
+	while(args != NULL)
+	{
+		str_arg = (t_token *)args->content;
+		parsed_env = parse_env(str_arg->token_content);
 		env_index = is_added_env(parsed_env[0], *env_list);
 		printf("env_index = %d\n", env_index);
 		if (env_index != 0) //既存環境変数
@@ -165,8 +172,6 @@ void export(t_list **env_list, char **cmd)
 			add_env(parsed_env, env_list);
 		}
 		i++;
+		args = args->next;
 	}
-	//ここは消す
-	if (cmd[1] == NULL)
-		print_list(*env_list);
 }

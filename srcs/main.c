@@ -17,17 +17,17 @@ int	minishell(char **envp)
 
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
-	while (1) //二つのコマンドと二つのパイプのみを実行する
+	while (1)
 	{
 		exec_num = 0;
 		cmd_index = 0;
 		line = readline("$> "); //２回目失敗
 		if (strncmp(line, "exit", 4) == 0)
 			break ;
-		tokens = lexer(line);
+		tokens = lexer(line); 
 			// ft_lstiter(tokens, (void *)print_token);
 			// printf("--lexer done--\n");
-		parsed_tokens = parser(tokens, env_list);
+		parsed_tokens = parser(tokens, env_list); //ここでsyntax error出したい
 			//一旦は test |などパイプで終わるケースは無視する
 			// ft_lstiter(parsed_tokens, (void *)print_parsed_token);
 			// printf("--------\n");
@@ -40,21 +40,19 @@ int	minishell(char **envp)
 			cmd_index++;
 			parsed_tokens = parsed_tokens->next;
 		}
-		// printf("cmd_index : %d\n", cmd_index);
 		while (cmd_index > 0)
 		{
-			// printf("pid = %d\n", wait(&sataus));
 			wait(&sataus);
 			cmd_index--;
 		}
 		add_history(line);
 		free(line);
 		line = NULL;
-		//free tokens
-		//free parsed_tokens
-		//free pipefds
+			//free tokens
+			//free parsed_tokens
+			//free pipefds
 	}
-	//free env
+		//free env
 	return (0);
 }
 

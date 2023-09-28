@@ -3,8 +3,8 @@
 
 void print_env(t_env *env)
 {
-	printf("env_name: [%s]\n", (char *)env->env_name);
-	printf("env_value: [%s]\n", (char *)env->env_value);
+	printf("name: [%s] ", (char *)env->env_name);
+	printf("value: [%s]\n", (char *)env->env_value);
 }
 
 void print_token(t_token *token)
