@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/28 22:27:03 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/09/29 23:08:26 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	redirect_in(t_list *tokens)
 void	redirect_out(t_list *tokens)
 {
 	t_token *token;
-	char	*line;
 	int		fd;
 
 	while(tokens != NULL)
@@ -141,7 +140,6 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 		return (ft_strdup(cmd));
 	else
 	{
-		// print_arr(paths);
 		while(paths[i] != NULL)
 		{
 			ret = ft_strjoin(paths[i], "/");
@@ -153,9 +151,10 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 			{
 				return (ret);
 			}
+			free(ret);
 		}
 	}
-	//arryfree(paths);
+	free_array(paths);
 	return (NULL);
 }
 
@@ -189,7 +188,6 @@ void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index
 	check = is_builtin(token->cmd);
 	if (check != BT_NOTBUILTIN)
 	{
-		printf("my execve\n");
 		my_execve(&env_list, check, token->cmd ,token->args);
 	}
 	else

@@ -1,45 +1,44 @@
 #include "libft.h"
 #include "main.h"
 
-//コマンドを受けて返すだけのshell
 int	minishell(char **envp)
 {
 	char	*line;
 	t_list	*tokens;
 	t_list	*parsed_tokens;
+	t_list	*tmp;
 	t_list	*env_list;
-	int		pids[100];
+	int		*pids;
 	int		sataus;
 	int		**pipefds;
-	int		exec_num;
-	int		flag;
 	int		cmd_index;
 
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
 	while (1)
 	{
-		exec_num = 0;
 		cmd_index = 0;
-		line = readline("$> "); //２回目失敗
-		if (strncmp(line, "exit", 4) == 0)
+		line = readline("$> ");
+		if (strncmp(line, "exit", 4) == 0) //いらないbuiltin後
 			break ;
-		tokens = lexer(line); 
-			// ft_lstiter(tokens, (void *)print_token);
-			// printf("--lexer done--\n");
+		tokens = lexer(line); //free ok
 		parsed_tokens = parser(tokens, env_list); //ここでsyntax error出したい
 			//一旦は test |などパイプで終わるケースは無視する
-			// ft_lstiter(parsed_tokens, (void *)print_parsed_token);
-			// printf("--------\n");
+		while(1)
+		{}
 		if (parsed_tokens == NULL)
 			continue ;
+		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
 		pipefds = malloc_pipefds(parsed_tokens);
-		while (parsed_tokens != NULL)
+		tmp = parsed_tokens;
+		while (tmp != NULL)
 		{
-			exec_one_cmd(pids, pipefds, parsed_tokens, cmd_index, env_list);
+			exec_one_cmd(pids, pipefds, tmp, cmd_index, env_list);
 			cmd_index++;
-			parsed_tokens = parsed_tokens->next;
+			tmp = tmp->next;
 		}
+		while(1)
+		{}
 		while (cmd_index > 0)
 		{
 			wait(&sataus);
@@ -47,12 +46,12 @@ int	minishell(char **envp)
 		}
 		add_history(line);
 		free(line);
-		line = NULL;
-			//free tokens
-			//free parsed_tokens
-			//free pipefds
+		free(pids);
+		ft_lstclear(&tokens, (void *)free_token);
+		ft_lstclear(&parsed_tokens, (void *)free_parsed_token);
+		free_pipefds(pipefds);
 	}
-		//free env
+	ft_lstclear(&env_list, (void *)free_env);
 	return (0);
 }
 

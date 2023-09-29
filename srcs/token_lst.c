@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/25 18:02:35 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/09/29 22:24:09 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 void	insort_list(t_list *token, t_list *add_lst)
 {
 	t_list *next_list;
-	t_list *last;
 	t_token	*tmp;
 	t_token	*add_tmp;
 

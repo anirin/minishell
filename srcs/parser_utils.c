@@ -45,7 +45,6 @@ void	move_tokens_and_change_status_used(t_list **tokens)
 
 	token = (t_token *)(*tokens)->content;
 	token->status = TK_USED;
-	// printf("	token->token_content: [%s]\n", token->token_content);
 	*tokens = (*tokens)->next;
 	if (*tokens == NULL)
 		return ;
@@ -55,7 +54,6 @@ void	move_tokens_and_change_status_used(t_list **tokens)
 		if (token->status == TK_NORMAL)
 		{
 			token->status = TK_USED;
-			// printf("	token->token_content: [%s]\n", token->token_content);
 			*tokens = (*tokens)->next;
 		}
 	}
@@ -70,10 +68,10 @@ t_list	*get_greater_than_tokens(t_list *tokens)
 	greater_than_tokens = NULL;
 	while (tokens != NULL)
 	{
-		new = malloc(sizeof(t_token));
 		token = (t_token *)tokens->content;
 		if (token->status == TK_GREATER_THAN)
 		{
+			new = malloc(sizeof(t_token));
 			new->status = get_greater_than_status(token->token_content);
 			new->token_content = get_content(tokens->next);
 			ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
@@ -98,10 +96,10 @@ t_list	*get_less_than_tokens(t_list *tokens)
 	less_than_tokens = NULL;
 	while (tokens != NULL)
 	{
-		new = malloc(sizeof(t_token));
 		token = (t_token *)tokens->content;
 		if (token->status == TK_LESS_THAN)
 		{
+			new = malloc(sizeof(t_token));
 			new->status = get_less_than_status(token->token_content);
 			new->token_content = get_content(tokens->next);
 			ft_lstadd_back(&less_than_tokens, ft_lstnew(new));
@@ -128,10 +126,10 @@ t_list	*get_cmd_tokens(t_list *tokens)
 	cmd_tokens = NULL;
 	while (tokens != NULL)
 	{
-		new = malloc(sizeof(t_token));
 		token = (t_token *)tokens->content;
 		if (token->status != TK_USED && token->status != TK_PIPE && (count == 0 || (count == 1 && token != NULL && token->token_content[0] == '-')))
 		{
+			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;
 			ft_lstadd_back(&cmd_tokens, ft_lstnew(new));
@@ -158,10 +156,10 @@ t_list	*get_args_tokens(t_list *tokens)
 	args_tokens = NULL;
 	while (tokens != NULL)
 	{
-		new = malloc(sizeof(t_token));
 		token = (t_token *)tokens->content;
 		if (token->status != TK_USED && token->status != TK_PIPE)
 		{
+			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;
 			ft_lstadd_back(&args_tokens, ft_lstnew(new));

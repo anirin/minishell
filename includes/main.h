@@ -94,8 +94,9 @@ void						expand_env(t_list *token, t_list *env_list);
 char						*expand_env_and_make_str_by_join(t_list *env_list, char *str);
 char						*expand_env_in_str(char *token, t_list *env_list);
 
-
+//pipefds
 int							**malloc_pipefds(t_list *parsed_list);
+void						free_pipefds(int **pipefds);
 
 //perse 
 t_list				*get_greater_than_tokens(t_list *tokens);
@@ -122,5 +123,10 @@ int		is_builtin(t_list *cmd_and_option);
 //my_execve
 void	my_execve(t_list **env_list, int check, t_list *cmd , t_list *args);
 
+//free
+void	free_env(t_env *env);
+void	free_token(t_token *token);
+void	free_parsed_token(t_parsed_token *parsed_token);
+void	free_array(char **array);
 
 #endif

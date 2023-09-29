@@ -88,12 +88,11 @@ int		add_space_token_to_list(t_list **list, char *line, int i)
 
 int		add_pipe_token_to_list(t_list **list, char *line, int i)
 {
-	int word_num;
 	t_list *new;
 	t_token *token;
-	char c;
 
-	word_num = 0;
+	(void)line;
+	(void)i;
 	token = (t_token *)malloc(sizeof(t_token));
 	token->token_content = strdup("|");
 	token->status = TK_PIPE;
@@ -156,14 +155,10 @@ int		add_word_token_to_list(t_list **list, char *line, int i)
 t_list	*lexer(char *line)
 {
 	int i;
-	int word_num;
-	int status;
 	t_list *list;
 
 	i = 0;
-	word_num = 0;
 	list = NULL;
-
 	while (1)
 	{
 		if (line[i] == '\0')
