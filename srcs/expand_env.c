@@ -167,22 +167,25 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 	char *env_value;
 	t_list *splited_env;
 	t_token *tmp;
+	t_token *prev;
 
+	prev = NULL;
 	while (token != NULL)
 	{
 		tmp = (t_token *)token->content;
-		if (tmp->status == TK_DOLL)
+		if (tmp->status == TK_DOLL && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) == 0)))
 		{
 			env_value = find_env_name(tmp->token_content, env_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
 			insort_list(token, splited_env); //ok
 		}
-		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE)
+		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) == 0))) 
 		{
 			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
 			tmp->status = TK_NORMAL;
 		}
+		prev = (t_token *)token->content;
 		token = token->next;
 	}
 }

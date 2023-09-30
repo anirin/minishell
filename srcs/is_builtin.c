@@ -6,6 +6,8 @@ int		is_builtin(t_list *cmd_and_option)
 	t_token *token_cmd;
 	char *str;
 
+	if (cmd_and_option == NULL)
+		return (BT_NOTBUILTIN);
 	token_cmd = (t_token *)cmd_and_option->content;
 	str = token_cmd->token_content;
 	if (ft_strncmp(str, "export", 7) == 0)

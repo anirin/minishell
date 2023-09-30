@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/30 12:09:25 by atsu             ###   ########.fr       */
+/*   Updated: 2023/09/30 18:52:59 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	redirect_in(t_list *tokens)
 			open(".heardoc", O_RDONLY);
 			dup2(fd, STDIN_FILENO);
 			close(fd);
+			unlink(".heardoc");
 		}
 		else
 		{
@@ -132,6 +133,8 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 	int		i;
 	char *tmp;
 
+	if (cmd_list == NULL || env_list == NULL)
+		return (NULL);
 	i = 0;
 	token = (t_token *)cmd_list->content;
 	cmd = token->token_content;

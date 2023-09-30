@@ -29,7 +29,7 @@ char	*get_content(t_list *tokens)
 	if (tokens == NULL)
 		return (NULL);
 	token = (t_token *)tokens->content;
-	if (token->status != TK_NORMAL)
+	if (token->status != TK_NORMAL && token->status != TK_DOLL)
 		ret = NULL;
 	else
 	{

@@ -34,7 +34,7 @@ char	*get_new_content(t_list **tokens)
 			new_content = ft_strdup(token->token_content);
 			*tokens = (*tokens)->next;
 	}
-	else //if (token->status == TK_NORMAL)
+	else
 	{
 		new_content = ft_strdup("");
 		while ((*tokens) != NULL && token != NULL && token->status == TK_NORMAL)
@@ -71,7 +71,6 @@ t_list	*preprocess_tokens(t_list *tokens) //ok
 	prepro_tokens = NULL;
 	while (tokens != NULL)
 	{
-		// printf("test\n");
 		token = (t_token *)tokens->content;
 		if (token->status != TK_SPACE)
 		{
