@@ -19,7 +19,7 @@ FILES = \
 	ft_lstlast.c ft_lstnew.c ft_lstsize.c ft_lstmap.c
 
 # DEBUG = -g -fsanitize=address
-DEBUG = -g
+DEBUG = 
 
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEBUG) -c $< -o $@

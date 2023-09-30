@@ -3,10 +3,13 @@
 
 void	free_array(char **array)
 {
-	while(*array != NULL)
+	int i;
+
+	i = 0;
+	while(array[i] != NULL)
 	{
-		free(*array);
-		array++;
+		free(array[i]);
+		i++;
 	}
 	free(array);
 }
