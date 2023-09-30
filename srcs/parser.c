@@ -120,8 +120,5 @@ t_list	*parser(t_list *tokens, t_list *env_list)
 	preproc_tokens = preprocess_tokens(tokens);
 	ret_tokens = get_list(preproc_tokens);
 	ft_lstclear(&preproc_tokens, (void *)free_token);
-	free(preproc_tokens);
-	while(1)
-	{}
 	return (ret_tokens);
 }

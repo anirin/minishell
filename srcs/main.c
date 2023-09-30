@@ -24,8 +24,6 @@ int	minishell(char **envp)
 		tokens = lexer(line); //free ok
 		parsed_tokens = parser(tokens, env_list); //ここでsyntax error出したい
 			//一旦は test |などパイプで終わるケースは無視する
-		while(1)
-		{}
 		if (parsed_tokens == NULL)
 			continue ;
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
@@ -37,8 +35,6 @@ int	minishell(char **envp)
 			cmd_index++;
 			tmp = tmp->next;
 		}
-		while(1)
-		{}
 		while (cmd_index > 0)
 		{
 			wait(&sataus);
