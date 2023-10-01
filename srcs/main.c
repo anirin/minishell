@@ -18,14 +18,13 @@ int	minishell(char **envp)
 	while (1)
 	{
 		cmd_index = 0;
-		line = readline("$> ");
+		line = readline("\033[32m$>\033[0m ");
 		if (strncmp(line, "exit", 4) == 0) //いらないbuiltin後
 			break ;
 		tokens = lexer(line); //free ok
 		parsed_tokens = parser(tokens, env_list); //ここでsyntax error出したい
 			//一旦は test |などパイプで終わるケースは無視する
 		//check_syntax_error(parsed_tokens);
-		ft_lstiter(parsed_tokens, (void *)print_parsed_token);
 		if (parsed_tokens == NULL)
 			continue ;
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
