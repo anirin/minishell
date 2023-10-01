@@ -1,2 +1,4 @@
 頑張っていきましょや
 cat <> out1　謎挙動
+echo aa="test"
+export aa="test" ができていない
