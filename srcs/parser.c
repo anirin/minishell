@@ -37,7 +37,7 @@ char	*get_new_content(t_list **tokens)
 	else
 	{
 		new_content = ft_strdup("");
-		while ((*tokens) != NULL && token != NULL && token->status == TK_NORMAL)
+		while ((*tokens) != NULL && token != NULL && (token->status == TK_NORMAL || token->status == TK_DOUBLE_QUOTE || token->status == TK_SINGLE_QUOTE))
 		{
 			tmp = new_content;
 			new_content = ft_strjoin(tmp, token->token_content);
