@@ -42,7 +42,7 @@ echo :
 re : fclean all
 
 oka_git-% :
-	git add objs/ srcs/*.c includes/*.h libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile Makefile README
+	git add srcs/*.c includes/*.h libft/includes/*.h libft/srcs/*.c libft/Makefile Makefile README
 	git commit -m "$(@:git-%=%)"
 	git push origin work
 
