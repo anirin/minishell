@@ -42,7 +42,7 @@ echo :
 re : fclean all
 
 git-% :
-	git add objs/* srcs/*.c includes/*.h libft/includes/*.h libft/srcs/*.c libft/objs/* libft/Makefile Makefile README
+	git add objs/ srcs/*.c includes/*.h libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile Makefile README .gitignore
 	git commit -m "$(@:git-%=%)"
 	git push origin work
 
