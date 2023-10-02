@@ -31,7 +31,7 @@ all: $(NAME)
 	@echo "libft all"
 
 clean:
-	@$(RM) $(BOBJCS) $(OBJCS) 
+	@$(RM) $(OBJS) 
 
 fclean: clean
 	@$(RM) $(NAME)
