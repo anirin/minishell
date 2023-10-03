@@ -29,7 +29,7 @@ char	*get_new_content(t_list **tokens)
 	t_token	*token;
 
 	token = (t_token *)(*tokens)->content;
-	if (token->status != TK_NORMAL)
+	if (token->status != TK_NORMAL && token->status != TK_DOUBLE_QUOTE && token->status != TK_SINGLE_QUOTE)
 	{
 			new_content = ft_strdup(token->token_content);
 			*tokens = (*tokens)->next;
