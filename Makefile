@@ -5,7 +5,8 @@ FILES = \
 	expand_env.c export.c pipefds.c lexer.c \
 	main.c parser.c parser_utils.c print_arr.c \
 	print_list.c token_lst.c utils_print_list.c exec_one_cmd.c \
-	is_builtin.c my_execve.c free_lists.c free_array.c
+	is_builtin.c my_execve.c free_lists.c free_array.c\
+	terminate_program.c
 SRCS = $(addprefix $(SRCDIR)/,$(FILES)) 
 OBJS = $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
 LDFLAGS = -lreadline -Llibft -lft
