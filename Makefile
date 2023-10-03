@@ -41,8 +41,21 @@ echo :
 
 re : fclean all
 
-git-% :
-	git add objs/ srcs/*.c includes/*.h libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile Makefile README .gitignore
-	git commit -m "$(@:git-%=%)"
-	git push origin work
+ifndef branch
+	$(error branch is not defined.)
+endif
+
+ifndef message
+	$(error message is not defined.)
+endif
+
+#useage make git b=<branch_name> m=<commit_message>
+
+git:
+	git add .
+	git commit -m "$(m)"
+	git push origin $(b)
+
+.PHONY: git_commit_push
+
 
