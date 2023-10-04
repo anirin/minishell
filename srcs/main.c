@@ -20,7 +20,7 @@ int	minishell(char **envp)
 	while (1)
 	{
 		cmd_index = 0;
-		line = readline("\033[32m$>\033[0m ");
+		line = readline("\033[32m$>>>\033[0m ");
 		if (strncmp(line, "exit", 4) == 0) //いらないbuiltin後
 			break ;
 		tokens = lexer(line); // free ok
