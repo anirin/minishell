@@ -6,7 +6,7 @@
 /*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/03 22:40:38 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/04 22:16:41 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		}
 		// parsed が null の時の対処してない
 		pids[cmd_index] = fork();
-		printf("pids : %d\n", pids[cmd_index]);
+		// printf("pids : %d\n", pids[cmd_index]);
 		if (pids[cmd_index] == 0)
 		{
 			path = get_path(token->cmd, env_list);
