@@ -60,5 +60,3 @@ git:
 	git push origin $(b)
 
 .PHONY: git_commit_push
-
-

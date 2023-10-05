@@ -16,7 +16,7 @@ int	minishell(char **envp)
 	// struct sigaction	sa;
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
-	// ft_lstiter(env_list,(void *)print_env);
+	ft_lstiter(env_list,(void *)print_env);
 	while (1)
 	{
 		cmd_index = 0;
@@ -51,8 +51,6 @@ int	minishell(char **envp)
 		ft_lstclear(&tokens, (void *)free_token);
 		ft_lstclear(&parsed_tokens, (void *)free_parsed_token);
 		free_pipefds(pipefds);
-		//↓親プロセスが実行中にctrl+Cが入力された場合、終了させる関数
-		// sigaction(SIGINT,&sa,NULL);
 	}
 	ft_lstclear(&env_list, (void *)free_env);
 	return (0);
