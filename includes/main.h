@@ -44,6 +44,8 @@ enum		e_redirect
 	RD_APPEND,
 };
 
+# define PATH_SIZE 1024
+
 // readline
 # include "libft.h"
 # include <ctype.h>
@@ -123,6 +125,9 @@ void		insort_list(t_list *token, t_list *add_list);
 
 // builtin
 int			is_builtin(t_list *cmd_and_option);
+
+// builtin_utils.c
+void		my_pwd(void);
 
 // my_execve
 void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args);
