@@ -16,17 +16,19 @@ int	minishell(char **envp)
 	// struct sigaction	sa;
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
-	ft_lstiter(env_list,(void *)print_env);
+	ft_lstiter(env_list, (void *)print_env);
 	while (1)
 	{
 		cmd_index = 0;
 		line = readline("\033[32m$>>>\033[0m ");
+		check_signal();
 		if (strncmp(line, "exit", 4) == 0) //いらないbuiltin後
 			break ;
 		tokens = lexer(line); // free ok
 		// ft_lstiter(tokens,(void *)print_token);
 		parsed_tokens = parser(tokens, env_list); //ここでsyntax error出したい
-													//一旦は test |などパイプで終わるケースは無視する
+		//一旦は test |などパイプで終わるケースは無視する
+		ft_lstiter(tokens, (void *)print_token);
 		// check_syntax_error(parsed_tokens);
 		if (parsed_tokens == NULL)
 			continue ;
@@ -60,6 +62,5 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-
 	minishell(envp);
 }
