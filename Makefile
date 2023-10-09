@@ -68,9 +68,9 @@ endif
 #useage make git b=<branch_name> m=<commit_message>
 
 git:
-	git add objs/ srcs/*.c includes/*.h\
+	git add objs/ srcs/*.c includes/*.h srcs/*/*.c\
 			Makefile README .gitignore\
-			libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile
+			libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile 
 	git commit -m "$(m)"
 	git push origin $(b)
 
