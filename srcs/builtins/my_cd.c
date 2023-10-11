@@ -6,7 +6,7 @@
 /*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/09 23:02:45 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/11 21:06:05 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,38 +20,55 @@ void	my_cd(t_list *args)
 	char	*new_path;
 	t_token	*content;
 
+	if (args == NULL)
+		return ;
 	content = (t_token *)args->content;
 	input_path = content->token_content;
 	new_path = get_new_path(input_path);
-	if (is_directory(new_path) == false)
+	if (is_directory(new_path, input_path) == false)
 		return ;
-	if (is_accessible(new_path) == false)
+	if (is_accessible(new_path, input_path) == false)
 		return ;
 	chdir(new_path);
 }
 
-bool	is_accessible(char *new_path)
+bool	is_accessible(char *new_path, char *input_path)
 {
-	if (access(new_path, X_OK) != 0)
+	if (access(input_path, X_OK) != 0)
 	{
-		printf("cd : %s:Permission denied\n", new_path);
+		printf("minishell: cd : %s:Permission denied\n", input_path);
 		return (false);
 	}
 	else
 		return (true);
 }
 
-bool	is_directory(char *new_path)
+bool	is_directory(char *new_path, char *input_path)
 {
 	struct stat	*stat_info;
 
+	stat_info = (struct stat *)malloc(sizeof(struct stat) * 1);
+	if (stat_info == NULL)
+		exit(1);
 	if (stat(new_path, stat_info) != 0)
 	{
-		printf("cd: %s:no such file or directory\n", new_path);
+		if (errno == ENOENT)
+			printf("minishell: cd: %s: Not such file or directory\n",
+				input_path);
+		free((void *)stat_info);
+		return (false);
+	}
+	if ((stat_info->st_mode & S_IFMT) != S_IFDIR)
+	{
+		printf("minishell: cd: %s: Not a directory\n", input_path);
+		free((void *)stat_info);
 		return (false);
 	}
 	else
+	{
+		free((void *)stat_info);
 		return (true);
+	}
 }
 
 char	*get_new_path(char *input_path)
@@ -63,17 +80,21 @@ char	*get_new_path(char *input_path)
 
 	crt_path = getcwd(NULL, 0);
 	path_part = ft_split(input_path, '/');
+	if (*path_part == NULL)
+		new_path = input_path;
 	i = 0;
 	while (path_part[i] != NULL)
 	{
-		if (ft_strncmp(path_part[i], "..", ft_strlen(path_part[i])) == 0)
+		if ((ft_strlen(path_part[i]) == 2) && (ft_strncmp(path_part[i], "..",
+					ft_strlen(path_part[i])) == 0))
 			new_path = trim_last_segment(crt_path);
-		else if (ft_strncmp(path_part[i], ".", 1) == 0)
+		else if ((ft_strlen(path_part[i]) == 1) && (ft_strncmp(path_part[i],
+					".", 1) == 0))
 			new_path = crt_path;
 		else
 		{
+			new_path = ft_strjoin(crt_path, "/");
 			new_path = ft_strjoin(new_path, path_part[i]);
-			new_path = ft_strjoin(new_path, "/");
 		}
 		crt_path = new_path;
 		i++;
