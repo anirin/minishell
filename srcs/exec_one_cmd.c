@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/12 21:48:33 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/12 22:28:34 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,6 @@ void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index
 		pids[cmd_index] = fork();
 		if (pids[cmd_index] == 0)
 		{
-			check_syntax_error(parsed_tokens);
 			path = get_path(token->cmd, env_list);
 			argv = get_argv(token->cmd, token->args);
 			redirect_pipe(pipefds, cmd_index);

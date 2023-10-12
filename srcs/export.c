@@ -96,7 +96,6 @@ void append_env(int env_index, char *env_content, t_list *env_list) //ok
 	char *tmp;
 	t_env *env;
 
-	printf("append_env\n");
 	while(env_index != 0)
 	{
 		env_list = env_list->next;
@@ -112,7 +111,6 @@ void overwrite_env(int env_index, char *env_value, t_list *env_list) //ok
 {
 	t_env *env;
 
-	printf("overwrite_env\n");
 	while(env_index != 0)
 	{
 		env_list = env_list->next;
@@ -126,7 +124,6 @@ void overwrite_env(int env_index, char *env_value, t_list *env_list) //ok
 
 void add_env(char **parsed_env, t_list **env_list) //ok
 {
-	printf("add_env\n");
 	char *new_env_value;
 	t_list *new_lst;
 	t_env *new_env;
@@ -161,7 +158,6 @@ void export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
 		str_arg = (t_token *)args->content;
 		parsed_env = parse_env(str_arg->token_content);
 		env_index = is_added_env(parsed_env[0], *env_list);
-		printf("env_index = %d\n", env_index);
 		if (env_index != 0) //既存環境変数
 		{
 			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "+=", 3) == 0)

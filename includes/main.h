@@ -78,6 +78,9 @@ typedef struct s_parsed_token
 
 //lexer
 t_list		*lexer(char *line);
+
+//parser
+t_list	*preprocess_tokens(t_list *tokens);
 t_list		*parser(t_list *tokens, t_list *env_list, t_list *shell_list);
 
 //print
@@ -89,19 +92,14 @@ t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
 
 //env expand
-// char		*find_env_name(char *doller_token, t_list *env_list, t_list *shell_list);
-// t_list		*split_by_isspace(char *str);
-// char		*parsed_tokens_to_str(t_list *parsed_tokens);
-// t_list		*find_dollar_and_parse(char *token);
 void		expand_env(t_list *token, t_list *env_list, t_list *shell_list);
 char		*expand_env_and_make_str_by_join(t_list *env_list, char *str);
-// char		*expand_env_in_str(char *token, t_list *env_list);
 
 //pipefds
 int			**malloc_pipefds(t_list *parsed_list);
 void		free_pipefds(int **pipefds);
 
-//perse
+//parse
 t_list		*get_greater_than_tokens(t_list *tokens);
 t_list		*get_less_than_tokens(t_list *tokens);
 t_list		*get_cmd_tokens(t_list *tokens);
@@ -139,5 +137,8 @@ void		free_array(char **array);
 //wait
 void	init_shell_list(t_list **shell_list);
 void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_index);
+
+//
+int		check_syntax_error(t_list *parsed_tokens, t_list *tokens, t_list *shell_list);
 
 #endif

@@ -20,12 +20,12 @@ int	minishell(char **envp)
 	{
 		cmd_index = 0;
 		line = readline("\033[32m$>\033[0m ");
-		tokens = lexer(line); //free ok
+		tokens = lexer(line); //free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list); //ここでsyntax error出したい
-			//一旦は test |などパイプで終わるケースは無視する
-		//check_syntax_error(parsed_tokens);
 		if (parsed_tokens == NULL)
 			continue ;
+		if (check_syntax_error(parsed_tokens, tokens, shell_list) == NG)
+			continue;
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
 		pipefds = malloc_pipefds(parsed_tokens);
 		tmp = parsed_tokens;
@@ -36,7 +36,6 @@ int	minishell(char **envp)
 			tmp = tmp->next;
 		}
 		wait_for_child_and_store_status(shell_list, pids, cmd_index);
-			ft_lstiter(shell_list, (void *)print_env);
 		add_history(line);
 		free(line);
 		free(pids);
