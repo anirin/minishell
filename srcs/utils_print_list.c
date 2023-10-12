@@ -1,13 +1,13 @@
 #include "libft.h"
 #include "main.h"
 
-void print_env(t_env *env)
+void	print_env(t_env *env)
 {
-	printf("name: [%s] ", (char *)env->env_name);
-	printf("value: [%s]\n", (char *)env->env_value);
+	printf("name: [%s] ", (char *)env->name);
+	printf("value: [%s]\n", (char *)env->value);
 }
 
-void print_token(t_token *token)
+void	print_token(t_token *token)
 {
 	printf("	content: [%s] ", (char *)token->token_content);
 	if (token->status == TK_NORMAL)
@@ -41,7 +41,7 @@ void print_token(t_token *token)
 		printf("status: [RD_APPEND]\n");
 }
 
-void print_parsed_token(t_parsed_token *parsed_token)
+void	print_parsed_token(t_parsed_token *parsed_token)
 {
 	printf("------print_parsed_token------\n");
 	printf("   >:\n");

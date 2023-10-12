@@ -1,7 +1,6 @@
 #include "libft.h"
 #include "main.h"
 
-
 void	free_token(t_token *token)
 {
 	free(token->token_content);
@@ -10,8 +9,8 @@ void	free_token(t_token *token)
 
 void	free_env(t_env *env)
 {
-	free(env->env_name);
-	free(env->env_value);
+	free(env->name);
+	free(env->value);
 	free(env);
 }
 

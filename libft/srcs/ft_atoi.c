@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:15:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/09/30 09:13:40 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/12 16:33:36 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,3 @@ int	ft_atoi(const char *str)
 		result = get_min_result(&str[i]);
 	return (result);
 }
-
-/*
-int	main(void)
-{
-	char	str[];
-
-	str[] = "-9223372036854775808";
-	printf("ft : %d\n", ft_atoi(str));
-	printf("or : %d\n", atoi(str));
-}
-*/

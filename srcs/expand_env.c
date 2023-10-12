@@ -13,25 +13,35 @@
 #include "libft.h"
 #include "main.h"
 
-char	*find_env_name(char *doller_token, t_list *env_list) //ok
+static char	*find_env_name(char *doller_token, t_list *env_list, t_list *shell_list) //ok
 {
 	t_env *env;
+	t_env *shell;
 
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
+	while(shell_list != NULL)
+	{
+		shell = (t_env *)shell_list->content;
+		if (env->value != NULL && ft_strncmp(&doller_token[1], shell->name, ft_strlen(shell->name) + 1) == 0) //[0] は $
+		{
+			return (ft_strdup(shell->value));
+		}
+		shell_list = shell_list->next;
+	}
 	while(env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (env->env_value != NULL && ft_strncmp(&doller_token[1], env->env_name, ft_strlen(env->env_name) + 1) == 0) //[0] は $
+		if (env->value != NULL && ft_strncmp(&doller_token[1], env->name, ft_strlen(env->name) + 1) == 0) //[0] は $
 		{
-				return (ft_strdup(env->env_value));
+				return (ft_strdup(env->value));
 		}
 		env_list = env_list->next;
 	}
 	return (ft_strdup(""));
 }
 
-t_list	*split_by_isspace(char *str)
+static t_list	*split_by_isspace(char *str)
 {
 	t_list *splited_env;
 	t_list *new;
@@ -77,7 +87,7 @@ t_list	*split_by_isspace(char *str)
 	return (splited_env);
 }
 
-char *parsed_tokens_to_str(t_list *parsed_tokens)
+static char *parsed_tokens_to_str(t_list *parsed_tokens)
 {
 	char *ret;
 	char *tmp;
@@ -93,7 +103,7 @@ char *parsed_tokens_to_str(t_list *parsed_tokens)
 	return (ret);
 }
 
-t_list	*find_dollar_and_parse(char *token)
+static t_list	*find_dollar_and_parse(char *token)
 {
 	int i;
 	int count;
@@ -138,7 +148,7 @@ t_list	*find_dollar_and_parse(char *token)
 	return (parsed_tokens);
 }
 
-char	*expand_env_in_str(char *token, t_list *env_list) //ok
+static char	*expand_env_in_str(char *token, t_list *env_list, t_list *shell_list) //ok
 {
 	t_list *head;
 	t_list *parsed_tokens;
@@ -152,7 +162,7 @@ char	*expand_env_in_str(char *token, t_list *env_list) //ok
 		if (ft_strchr(parsed_tokens->content, '$') != NULL)
 		{
 			tmp = parsed_tokens->content;
-			parsed_tokens->content = find_env_name(tmp, env_list);
+			parsed_tokens->content = find_env_name(tmp, env_list, shell_list);
 			free(tmp);
 		}
 		parsed_tokens = parsed_tokens->next;
@@ -162,7 +172,7 @@ char	*expand_env_in_str(char *token, t_list *env_list) //ok
 	return (ret);
 }
 
-void	expand_env(t_list *token, t_list *env_list) //ok
+void	expand_env(t_list *token, t_list *env_list, t_list *shell_list) //ok
 {
 	char *env_value;
 	t_list *splited_env;
@@ -173,16 +183,16 @@ void	expand_env(t_list *token, t_list *env_list) //ok
 	while (token != NULL)
 	{
 		tmp = (t_token *)token->content;
-		if (tmp->status == TK_DOLL && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) == 0)))
+		if (tmp->status == TK_DOLL && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) != 0)))
 		{
-			env_value = find_env_name(tmp->token_content, env_list);
+			env_value = find_env_name(tmp->token_content, env_list, shell_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
 			insort_list(token, splited_env); //ok
 		}
-		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) == 0))) 
+		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) != 0))) 
 		{
-			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
+			tmp->token_content = expand_env_in_str(tmp->token_content, env_list, shell_list); //ok
 			tmp->status = TK_NORMAL;
 		}
 		prev = (t_token *)token->content;

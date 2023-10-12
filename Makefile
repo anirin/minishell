@@ -5,7 +5,8 @@ FILES = \
 	expand_env.c export.c pipefds.c lexer.c \
 	main.c parser.c parser_utils.c print_arr.c \
 	print_list.c token_lst.c utils_print_list.c exec_one_cmd.c \
-	is_builtin.c my_execve.c free_lists.c free_array.c
+	is_builtin.c my_execve.c free_lists.c free_array.c\
+	my_echo.c my_env.c my_exit.c control_shell_list.c
 SRCS = $(addprefix $(SRCDIR)/,$(FILES)) 
 OBJS = $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
 LDFLAGS = -lreadline -Llibft -lft
@@ -52,12 +53,12 @@ endif
 #useage make git b=<branch_name> m=<commit_message>
 
 git:
-	git add objs/ srcs/*.c includes/*.h\
+	@git add objs/ srcs/*.c includes/*.h\
 			Makefile README .gitignore\
 			libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile
-	git commit -m "$(m)"
-	git push origin $(b)
+	@git commit -m "$(m)"
+	@git push origin $(b)
 
-.PHONY: git_commit_push
+.PHONY: git
 
 
