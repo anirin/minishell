@@ -15,7 +15,9 @@ enum		e_token_status
 	TK_USED
 };
 
+
 // builtin
+
 enum		e_builtin_type
 {
 	BT_EXPORT,
@@ -28,7 +30,9 @@ enum		e_builtin_type
 	BT_NOTBUILTIN
 };
 
+
 // util
+
 enum		e_util
 {
 	UT_SPACE,
@@ -61,6 +65,7 @@ enum		e_redirect
 
 typedef struct s_env
 {
+
 	char	*env_name;
 	char	*env_value;
 }			t_env;
@@ -113,6 +118,7 @@ t_list		*get_less_than_tokens(t_list *tokens);
 t_list		*get_cmd_tokens(t_list *tokens);
 t_list		*get_args_tokens(t_list *tokens);
 void		move_head(t_list **head);
+
 
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,

@@ -1,18 +1,10 @@
 #include "libft.h"
 #include "main.h"
 
-void	print_lst(void *data)
-{
-	t_token	*content;
-
-	content = (t_token *)data;
-	printf("content : %s\n", content->token_content);
-}
-
 void	print_env(t_env *env)
 {
-	printf("name: [%s] ", (char *)env->env_name);
-	printf("value: [%s]\n", (char *)env->env_value);
+	printf("name: [%s] ", (char *)env->name);
+	printf("value: [%s]\n", (char *)env->value);
 }
 
 void	print_token(t_token *token)

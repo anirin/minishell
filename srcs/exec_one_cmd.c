@@ -118,10 +118,10 @@ char	**split_path(t_list *env_list)
 	while (env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (ft_strncmp(env->env_name, "PATH", 5) == 0)
+		if (ft_strncmp(env->name, "PATH", 5) == 0)
 		{
-			ret = ft_split(env->env_value, ':');
-		}
+			ret = ft_split(env->value, ':');
+		}	
 		env_list = env_list->next;
 	}
 	return (ret);

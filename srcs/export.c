@@ -61,8 +61,8 @@ t_list	*envp_convert_to_envlist(char **envp) //ok
 	{
 		env = malloc(sizeof(t_env));
 		parsed_env = parse_env(envp[i]);
-		env->env_name = ft_strdup(parsed_env[0]);
-		env->env_value = ft_strdup(parsed_env[2]);
+		env->name = ft_strdup(parsed_env[0]);
+		env->value = ft_strdup(parsed_env[2]);
 		new = ft_lstnew(env);
 		ft_lstadd_back(&env_list, new);
 		free(parsed_env[0]);
@@ -83,7 +83,7 @@ int is_added_env(char *env_name, t_list *env_list) //ok
 	while(env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (ft_strncmp(env->env_name, env_name, ft_strlen(env->env_name)) == 0)
+		if (ft_strncmp(env->name, env_name, ft_strlen(env->name)) == 0)
 			return (count);
 		env_list = env_list->next;
 		count++;
@@ -96,15 +96,14 @@ void append_env(int env_index, char *env_content, t_list *env_list) //ok
 	char *tmp;
 	t_env *env;
 
-	printf("append_env\n");
 	while(env_index != 0)
 	{
 		env_list = env_list->next;
 		env_index--;
 	}
 	env = (t_env *)env_list->content;
-	tmp = env->env_value;
-	env->env_value = ft_strjoin(tmp, env_content);
+	tmp = env->value;
+	env->value = ft_strjoin(tmp, env_content);
 	free(tmp);
 }
 
@@ -112,21 +111,19 @@ void overwrite_env(int env_index, char *env_value, t_list *env_list) //ok
 {
 	t_env *env;
 
-	printf("overwrite_env\n");
 	while(env_index != 0)
 	{
 		env_list = env_list->next;
 		env_index--;
 	}
 	env = (t_env *)env_list->content;
-	free(env->env_value);
-	env->env_value = NULL;
-	env->env_value = ft_strdup(env_value);
+	free(env->value);
+	env->value = NULL;
+	env->value = ft_strdup(env_value);
 }
 
 void add_env(char **parsed_env, t_list **env_list) //ok
 {
-	printf("add_env\n");
 	char *new_env_value;
 	t_list *new_lst;
 	t_env *new_env;
@@ -136,8 +133,8 @@ void add_env(char **parsed_env, t_list **env_list) //ok
 		new_env_value = ft_strdup(parsed_env[2]);
 	else
 		new_env_value = NULL;//ここは」かなり注意
-	new_env->env_name = ft_strdup(parsed_env[0]);
-	new_env->env_value = new_env_value;
+	new_env->name = ft_strdup(parsed_env[0]);
+	new_env->value = new_env_value;
 	new_lst = ft_lstnew(new_env);
 	ft_lstadd_back(env_list, new_lst);
 	//freeしろ
@@ -161,7 +158,6 @@ void export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
 		str_arg = (t_token *)args->content;
 		parsed_env = parse_env(str_arg->token_content);
 		env_index = is_added_env(parsed_env[0], *env_list);
-		printf("env_index = %d\n", env_index);
 		if (env_index != 0) //既存環境変数
 		{
 			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "+=", 3) == 0)
