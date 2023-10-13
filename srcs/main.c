@@ -13,6 +13,7 @@ int	minishell(char **envp)
 	int		**pipefds;
 	int		cmd_index;
 
+	// struct sigaction	sa;
 	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
 	init_shell_list(&shell_list);
@@ -52,6 +53,5 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-
 	minishell(envp);
 }

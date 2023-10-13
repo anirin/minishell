@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/12 22:28:34 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/09 16:15:13 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	close_pipefds(int **pipefds, int cmd_index)
 
 void	redirect_in(t_list *tokens)
 {
-	t_token *token;
+	t_token	*token;
 	char	*line;
 	int		fd;
 
-	while(tokens != NULL)
+	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
 		if (token->status == RD_IN && token->token_content != NULL)
@@ -58,7 +58,8 @@ void	redirect_in(t_list *tokens)
 			while (line != NULL)
 			{
 				line = readline("heredoc> ");
-				if (ft_strncmp(line, token->token_content, ft_strlen(token->token_content)) == 0)
+				if (ft_strncmp(line, token->token_content,
+						ft_strlen(token->token_content)) == 0)
 					break ;
 				ft_putendl_fd(line, fd);
 				free(line);
@@ -80,21 +81,23 @@ void	redirect_in(t_list *tokens)
 
 void	redirect_out(t_list *tokens)
 {
-	t_token *token;
+	t_token	*token;
 	int		fd;
 
-	while(tokens != NULL)
+	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
 		if (token->status == RD_OUT && token->token_content != NULL)
 		{
-			fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+			fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
+					S_IRWXU | S_IRWXG | S_IRWXO);
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
 		else if (token->status == RD_APPEND && token->token_content != NULL)
 		{
-			fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+			fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
+					S_IRWXU | S_IRWXG | S_IRWXO);
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
@@ -108,11 +111,11 @@ void	redirect_out(t_list *tokens)
 
 char	**split_path(t_list *env_list)
 {
-	t_env *env;
-	char **ret;
+	t_env	*env;
+	char	**ret;
 
 	ret = NULL;
-	while(env_list != NULL)
+	while (env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
 		if (ft_strncmp(env->name, "PATH", 5) == 0)
@@ -126,12 +129,12 @@ char	**split_path(t_list *env_list)
 
 char	*get_path(t_list *cmd_list, t_list *env_list)
 {
-	t_token *token;
-	char *cmd;
-	char *ret;
-	char **paths;
+	t_token	*token;
+	char	*cmd;
+	char	*ret;
+	char	**paths;
 	int		i;
-	char *tmp;
+	char	*tmp;
 
 	if (cmd_list == NULL || env_list == NULL)
 		return (NULL);
@@ -143,7 +146,7 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 		return (ft_strdup(cmd));
 	else
 	{
-		while(paths[i] != NULL)
+		while (paths[i] != NULL)
 		{
 			ret = ft_strjoin(paths[i], "/");
 			tmp = ret;
@@ -163,16 +166,16 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 
 char	**get_argv(t_list *cmd, t_list *args)
 {
-	t_token *token;
+	t_token	*token;
 	char	**ret;
 	int		i;
-	
+
 	i = 0;
 	ft_lstadd_back(&cmd, args);
 	ret = malloc(sizeof(char *) * (ft_lstsize(cmd) + 1));
 	while (cmd != NULL)
 	{
-		token = (t_token *)cmd->content; 
+		token = (t_token *)cmd->content;
 		ret[i++] = ft_strdup(token->token_content);
 		cmd = cmd->next;
 	}
@@ -180,18 +183,23 @@ char	**get_argv(t_list *cmd, t_list *args)
 	return (ret);
 }
 
-void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index, t_list *env_list)
+void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
+		int cmd_index, t_list *env_list)
 {
 	t_parsed_token *token;
-	char			*path;
-	char			**argv;
-	int				check;
+	char *path;
+	char **argv;
+	int check;
+	t_list *token_args_lst;
 
 	token = (t_parsed_token *)parsed_tokens->content;
+	token_args_lst = (t_list *)token->args;
+	// ft_lstiter(token_args_lst, print_lst);
 	check = is_builtin(token->cmd);
 	if (check != BT_NOTBUILTIN)
 	{
-		my_execve(&env_list, check, token->cmd ,token->args);
+		my_execve(&env_list, check, token->cmd, token->args);
+		// my_cd();
 	}
 	else
 	{
@@ -199,8 +207,9 @@ void	exec_one_cmd(int* pids, int **pipefds, t_list *parsed_tokens, int cmd_index
 		{
 			pipe(pipefds[cmd_index]);
 		}
-		//parsed が null の時の対処してない
+		// parsed が null の時の対処してない
 		pids[cmd_index] = fork();
+		// printf("pids : %d\n", pids[cmd_index]);
 		if (pids[cmd_index] == 0)
 		{
 			path = get_path(token->cmd, env_list);
