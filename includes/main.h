@@ -65,9 +65,8 @@ enum		e_redirect
 
 typedef struct s_env
 {
-
-	char	*env_name;
-	char	*env_value;
+	char	*name;
+	char	*value;
 }			t_env;
 
 typedef struct s_token
@@ -88,25 +87,21 @@ typedef struct s_parsed_token
 
 // lexer
 t_list		*lexer(char *line);
-t_list		*parser(t_list *tokens, t_list *env_list);
+
+//parser
+t_list		*preprocess_tokens(t_list *tokens);
+t_list		*parser(t_list *tokens, t_list *env_list, t_list *shell_list);
 
 // print
 void		print_list(t_list *list);
 void		print_arr(char **arr);
 
 // env
-void		export(t_list **env_list, t_list *args);
 t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
 
 // env expand
-char		*find_env_name(char *doller_token, t_list *env_list);
-t_list		*split_by_isspace(char *str);
-char		*parsed_tokens_to_str(t_list *parsed_tokens);
-t_list		*find_dollar_and_parse(char *token);
-void		expand_env(t_list *token, t_list *env_list);
-char		*expand_env_and_make_str_by_join(t_list *env_list, char *str);
-char		*expand_env_in_str(char *token, t_list *env_list);
+void		expand_env(t_list *token, t_list *env_list, t_list *shell_list);
 
 // pipefds
 int			**malloc_pipefds(t_list *parsed_list);
@@ -136,9 +131,6 @@ void		insort_list(t_list *token, t_list *add_list);
 // builtin
 int			is_builtin(t_list *cmd_and_option);
 
-// builtin_utils.c
-void		my_pwd(void);
-
 // my_execve
 void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args);
 
@@ -151,5 +143,12 @@ void		free_array(char **array);
 // terminate_program.c
 void		check_signal(void);
 void		terminate_program(int signum, siginfo_t *pid, void *context);
+
+//shell 
+void	init_shell_list(t_list **shell_list);
+void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_index);
+
+//syntax
+int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list);
 
 #endif

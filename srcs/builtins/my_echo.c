@@ -1,5 +1,6 @@
 #include "main.h"
 #include "libft.h"
+#include "builtins.h"
 
 static int	is_valid_option(char *option)
 {

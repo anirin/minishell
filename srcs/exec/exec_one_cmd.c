@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/09 16:15:13 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/13 16:46:01 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
+#include "builtins.h"
 
 void	redirect_pipe(int **pipefds, int cmd_index)
 {

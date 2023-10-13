@@ -1,5 +1,6 @@
 #include "main.h"
 #include "libft.h"
+#include "builtins.h"
 
 char **parse_env(char *token) //ok
 {
@@ -140,7 +141,7 @@ void add_env(char **parsed_env, t_list **env_list) //ok
 	//freeしろ
 }
 
-void export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
+void my_export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;

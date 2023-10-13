@@ -1,18 +1,11 @@
 NAME = minishell
-SRCDIR = ./srcs
-BLTINDIR = ./srcs/builtins
-OBJSDIR = ./objs
-SRC_FILES = \
-	expand_env.c export.c pipefds.c lexer.c \
-	main.c parser.c parser_utils.c print_arr.c \
-	print_list.c token_lst.c utils_print_list.c exec_one_cmd.c \
-	free_lists.c free_array.c terminate_program.c 
-BLTIN_FILES = \
-	is_builtin.c my_execve.c my_pwd.c my_cd.c
-SRCS := $(addprefix $(SRCDIR)/,$(SRC_FILES))
-SRCS += $(addprefix $(BLTINDIR)/,$(BLTIN_FILES))
-OBJS := $(patsubst ./srcs/%.c, ./objs/%.o, $(SRCS))
-# OBJS += $(addprefix $(OBJSDIR)/,$(notdir $(SRCS:.c=.o)))
+SRCDIR = srcs
+OBJSDIR = objs
+SRCS = \
+	srcs/builtins/is_builtin.c srcs/builtins/my_cd.c srcs/builtins/my_echo.c srcs/builtins/my_env.c srcs/builtins/my_execve.c srcs/builtins/my_exit.c srcs/builtins/my_export.c srcs/builtins/my_pwd.c\
+	srcs/env/expand_env.c srcs/env/token_lst.c srcs/error/check_syntax_error.c srcs/exec/exec_one_cmd.c srcs/exec/main.c srcs/exec/pipefds.c srcs/lexer/lexer.c srcs/parser/parser.c srcs/parser/parser_utils.c\
+	srcs/signal/terminate_program.c srcs/utils/control_shell_list.c srcs/utils/free_array.c srcs/utils/free_lists.c srcs/utils/print_arr.c srcs/utils/print_list.c srcs/utils/utils_print_list.c
+OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 LDFLAGS = -lreadline -Llibft -lft
 LDLIBS = -lft
 INCLUDES = -I ./includes -I ./libft/includes
@@ -23,19 +16,10 @@ RED=\033[31m
 GREEN=\033[32m
 RESET=\033[0m
 
-# srcs/builtin/a.o <- srcs/builtin/a.c
-# [.c.o:] = [%.o: %.c]
-
-# objs/[is_builtin].o <- src/[is_builtin].o
-# objs/[builtin/is_builtin].o <- src/[builtin/is_builtin].o
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(@D)
 	@$(CC) -c $< $(DEBUG) $(INCLUDES) -o $@
 
-# $(OBJSDIR)/%.o : $(BLTINDIR)/%.c
-# 	@$(CC) -c $< $(DEBUG) $(INCLUDES) -o $@
-
-# objs/builtin/is_builtin.o
 $(NAME) : $(OBJS)
 	@make -C ./libft
 	@$(CC) $^ $(LDFLAGS) $(DEBUG) $(INCLUDES) -o $@ 
@@ -68,9 +52,7 @@ endif
 #useage make git b=<branch_name> m=<commit_message>
 
 git:
-	git add objs/ srcs/*.c includes/*.h srcs/*/*.c\
-			Makefile README .gitignore\
-			libft/includes/*.h libft/srcs/*.c libft/Makefile 
+	git add .
 	git commit -m "$(m)"
 	git push origin $(b)
 

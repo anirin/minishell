@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   my_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 22:09:10 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/09 16:27:08 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/13 16:45:12 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+#include "builtins.h"
 
 void	my_pwd(void)
 {

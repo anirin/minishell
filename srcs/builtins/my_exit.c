@@ -1,5 +1,6 @@
 #include "main.h"
 #include "libft.h"
+#include "builtins.h"
 
 static int	get_min_result(const char *str)
 {
