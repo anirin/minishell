@@ -6,7 +6,7 @@
 /*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/05 22:07:15 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/09 16:15:13 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,12 +190,16 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	char *path;
 	char **argv;
 	int check;
+	t_list *token_args_lst;
 
 	token = (t_parsed_token *)parsed_tokens->content;
+	token_args_lst = (t_list *)token->args;
+	// ft_lstiter(token_args_lst, print_lst);
 	check = is_builtin(token->cmd);
 	if (check != BT_NOTBUILTIN)
 	{
 		my_execve(&env_list, check, token->cmd, token->args);
+		// my_cd();
 	}
 	else
 	{

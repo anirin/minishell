@@ -55,6 +55,9 @@ enum		e_redirect
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdbool.h>
+# include <sys/errno.h>
+# include <../includes/builtins.h>
 
 typedef struct s_env
 {
@@ -71,11 +74,11 @@ typedef struct s_token
 typedef struct s_parsed_token
 {
 	//リダイレクトを格納
-	t_list	*greater_than;
-	t_list	*less_than;
+	t_list *greater_than; // token
+	t_list *less_than;    // token
 	//コマンドを格納
-	t_list	*cmd;
-	t_list	*args;
+	t_list *cmd;  // token
+	t_list *args; // token
 }			t_parsed_token;
 
 // lexer
@@ -119,6 +122,7 @@ void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 void		print_env(t_env *env);
 void		print_token(t_token *token);
 void		print_parsed_token(t_parsed_token *parsed_token);
+void		print_lst(void *content);
 
 // void	insort_list(t_list **token, t_list *add_list);
 void		insort_list(t_list *token, t_list *add_list);
