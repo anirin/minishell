@@ -70,7 +70,7 @@ endif
 git:
 	git add objs/ srcs/*.c includes/*.h srcs/*/*.c\
 			Makefile README .gitignore\
-			libft/includes/*.h libft/srcs/*.c libft/objs/ libft/Makefile 
+			libft/includes/*.h libft/srcs/*.c libft/Makefile 
 	git commit -m "$(m)"
 	git push origin $(b)
 

@@ -48,7 +48,6 @@ enum		e_redirect
 
 // readline
 # include "libft.h"
-# include "../srcs/builtins/builtins.h" 
 # include <ctype.h>
 # include <libc.h>
 # include <readline/history.h>
@@ -56,6 +55,9 @@ enum		e_redirect
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdbool.h>
+# include <sys/errno.h>
+# include <../includes/builtins.h>
 
 typedef struct s_env
 {
@@ -143,9 +145,5 @@ void		free_array(char **array);
 // terminate_program.c
 void		check_signal(void);
 void		terminate_program(int signum, siginfo_t *pid, void *context);
-
-// builtins/my_cd.c
-void		my_cd(t_list *args);
-void		trim_path(char *new_path, char *crt_path);
 
 #endif

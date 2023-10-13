@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/11 21:06:05 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/13 02:39:41 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "main.h"
+#include "../../includes/builtins.h"
 
 // cd [input_path]
 void	my_cd(t_list *args)
