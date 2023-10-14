@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/13 16:46:01 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/14 15:20:59 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
 #include "libft.h"
 #include "main.h"
-#include "builtins.h"
 
 void	redirect_pipe(int **pipefds, int cmd_index)
 {
@@ -122,7 +122,7 @@ char	**split_path(t_list *env_list)
 		if (ft_strncmp(env->name, "PATH", 5) == 0)
 		{
 			ret = ft_split(env->value, ':');
-		}	
+		}
 		env_list = env_list->next;
 	}
 	return (ret);
@@ -185,13 +185,13 @@ char	**get_argv(t_list *cmd, t_list *args)
 }
 
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-		int cmd_index, t_list *env_list)
+		int cmd_index, t_list **env_list)
 {
-	t_parsed_token *token;
-	char *path;
-	char **argv;
-	int check;
-	t_list *token_args_lst;
+	t_parsed_token	*token;
+	char			*path;
+	char			**argv;
+	int				check;
+	t_list			*token_args_lst;
 
 	token = (t_parsed_token *)parsed_tokens->content;
 	token_args_lst = (t_list *)token->args;
@@ -199,8 +199,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	check = is_builtin(token->cmd);
 	if (check != BT_NOTBUILTIN)
 	{
-		my_execve(&env_list, check, token->cmd, token->args);
-		// my_cd();
+		my_execve(env_list, check, token->cmd, token->args);
 	}
 	else
 	{
@@ -213,7 +212,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		// printf("pids : %d\n", pids[cmd_index]);
 		if (pids[cmd_index] == 0)
 		{
-			path = get_path(token->cmd, env_list);
+			path = get_path(token->cmd, *env_list);
 			argv = get_argv(token->cmd, token->args);
 			redirect_pipe(pipefds, cmd_index);
 			redirect_in(token->less_than);

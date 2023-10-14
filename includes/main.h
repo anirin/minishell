@@ -15,7 +15,6 @@ enum		e_token_status
 	TK_USED
 };
 
-
 // builtin
 
 enum		e_builtin_type
@@ -29,7 +28,6 @@ enum		e_builtin_type
 	BT_EXIT,
 	BT_NOTBUILTIN
 };
-
 
 // util
 
@@ -52,16 +50,16 @@ enum		e_redirect
 
 // readline
 # include "libft.h"
+# include <builtins.h>
 # include <ctype.h>
 # include <libc.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stdbool.h>
 # include <sys/errno.h>
-# include <../includes/builtins.h>
 
 typedef struct s_env
 {
@@ -88,7 +86,7 @@ typedef struct s_parsed_token
 // lexer
 t_list		*lexer(char *line);
 
-//parser
+// parser
 t_list		*preprocess_tokens(t_list *tokens);
 t_list		*parser(t_list *tokens, t_list *env_list, t_list *shell_list);
 
@@ -114,10 +112,9 @@ t_list		*get_cmd_tokens(t_list *tokens);
 t_list		*get_args_tokens(t_list *tokens);
 void		move_head(t_list **head);
 
-
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-				int cmd_index, t_list *env_list);
+				int cmd_index, t_list **env_list);
 
 // util
 void		print_env(t_env *env);
@@ -144,11 +141,12 @@ void		free_array(char **array);
 void		check_signal(void);
 void		terminate_program(int signum, siginfo_t *pid, void *context);
 
-//shell 
-void	init_shell_list(t_list **shell_list);
-void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_index);
+// shell
+void		init_shell_list(t_list **shell_list);
+void		wait_for_child_and_store_status(t_list *shell_list, int *pids,
+				int cmd_index);
 
-//syntax
-int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list);
+// syntax
+int			check_syntax_error(t_list *list, t_list *token, t_list *shell_list);
 
 #endif
