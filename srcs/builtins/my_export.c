@@ -1,8 +1,8 @@
-#include "main.h"
-#include "libft.h"
 #include "builtins.h"
+#include "libft.h"
+#include "main.h"
 
-char **parse_env(char *token) //ok
+char	**parse_env(char *token) // ok
 {
 	char **parsed_env;
 	char *tmp;
@@ -12,7 +12,7 @@ char **parse_env(char *token) //ok
 	i = 0;
 	count = 0;
 	parsed_env = ft_calloc(3, sizeof(char *));
-	while(token[i] != '\0')
+	while (token[i] != '\0')
 	{
 		if (strncmp(&token[i], "+=", 2) == 0 && count != 0)
 		{
@@ -22,7 +22,7 @@ char **parse_env(char *token) //ok
 			{
 				tmp = ft_strdup(&token[i + 2]);
 				tmp = ft_strtrim(tmp, "\""); //ここはシビや
-				//free
+				// free
 				parsed_env[2] = tmp;
 			}
 			else
@@ -48,7 +48,7 @@ char **parse_env(char *token) //ok
 	return (parsed_env);
 }
 
-t_list	*envp_convert_to_envlist(char **envp) //ok
+t_list	*envp_convert_to_envlist(char **envp) // ok
 {
 	int i;
 	t_list *env_list;
@@ -58,7 +58,7 @@ t_list	*envp_convert_to_envlist(char **envp) //ok
 
 	i = 0;
 	env_list = NULL;
-	while(envp[i] != NULL)
+	while (envp[i] != NULL)
 	{
 		env = malloc(sizeof(t_env));
 		parsed_env = parse_env(envp[i]);
@@ -75,13 +75,13 @@ t_list	*envp_convert_to_envlist(char **envp) //ok
 	return (env_list);
 }
 
-int is_added_env(char *env_name, t_list *env_list) //ok
+int	is_added_env(char *env_name, t_list *env_list) // ok
 {
-	int		count;
-	t_env	*env;
+	int count;
+	t_env *env;
 
 	count = 0;
-	while(env_list != NULL)
+	while (env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
 		if (ft_strncmp(env->name, env_name, ft_strlen(env->name)) == 0)
@@ -92,12 +92,12 @@ int is_added_env(char *env_name, t_list *env_list) //ok
 	return (0);
 }
 
-void append_env(int env_index, char *env_content, t_list *env_list) //ok
+void	append_env(int env_index, char *env_content, t_list *env_list) // ok
 {
 	char *tmp;
 	t_env *env;
 
-	while(env_index != 0)
+	while (env_index != 0)
 	{
 		env_list = env_list->next;
 		env_index--;
@@ -108,11 +108,11 @@ void append_env(int env_index, char *env_content, t_list *env_list) //ok
 	free(tmp);
 }
 
-void overwrite_env(int env_index, char *env_value, t_list *env_list) //ok
+void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 {
 	t_env *env;
 
-	while(env_index != 0)
+	while (env_index != 0)
 	{
 		env_list = env_list->next;
 		env_index--;
@@ -123,7 +123,7 @@ void overwrite_env(int env_index, char *env_value, t_list *env_list) //ok
 	env->value = ft_strdup(env_value);
 }
 
-void add_env(char **parsed_env, t_list **env_list) //ok
+void	add_env(char **parsed_env, t_list **env_list) // ok
 {
 	char *new_env_value;
 	t_list *new_lst;
@@ -133,20 +133,19 @@ void add_env(char **parsed_env, t_list **env_list) //ok
 	if (parsed_env[1] != NULL)
 		new_env_value = ft_strdup(parsed_env[2]);
 	else
-		new_env_value = NULL;//ここは」かなり注意
+		new_env_value = NULL; //ここは」かなり注意
 	new_env->name = ft_strdup(parsed_env[0]);
 	new_env->value = new_env_value;
 	new_lst = ft_lstnew(new_env);
 	ft_lstadd_back(env_list, new_lst);
-	//freeしろ
+	// freeしろ
 }
 
-void my_export(t_list **env_list, t_list *args) //export TEST =CC エラー処理
+void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
 	t_token *str_arg;
-
 
 	env_index = 0;
 	if (args == NULL)
@@ -154,7 +153,7 @@ void my_export(t_list **env_list, t_list *args) //export TEST =CC エラー処�
 		ft_lstiter(*env_list, (void *)print_env);
 		return ;
 	}
-	while(args != NULL)
+	while (args != NULL)
 	{
 		str_arg = (t_token *)args->content;
 		parsed_env = parse_env(str_arg->token_content);

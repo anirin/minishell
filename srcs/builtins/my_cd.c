@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/13 16:44:46 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/14 15:20:05 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "builtins.h"
+#include "libft.h"
+#include "main.h"
+
+bool	is_accessible(char *new_path, char *input_path);
+bool	is_directory(char *new_path, char *input_path);
+char	*get_new_path(char *input_path);
+char	*trim_last_segment(char *crt_path);
 
 // cd [input_path]
 void	my_cd(t_list *args)
@@ -21,7 +27,10 @@ void	my_cd(t_list *args)
 	t_token	*content;
 
 	if (args == NULL)
+	{
+		chdir("-");
 		return ;
+	}
 	content = (t_token *)args->content;
 	input_path = content->token_content;
 	new_path = get_new_path(input_path);
@@ -29,7 +38,7 @@ void	my_cd(t_list *args)
 		return ;
 	if (is_accessible(new_path, input_path) == false)
 		return ;
-	chdir(new_path);
+	chdir(input_path);
 }
 
 bool	is_accessible(char *new_path, char *input_path)
@@ -50,6 +59,8 @@ bool	is_directory(char *new_path, char *input_path)
 	stat_info = (struct stat *)malloc(sizeof(struct stat) * 1);
 	if (stat_info == NULL)
 		exit(1);
+	if (ft_strncmp(new_path, "", 1) == 0)
+		return (true);
 	if (stat(new_path, stat_info) != 0)
 	{
 		if (errno == ENOENT)
@@ -85,11 +96,9 @@ char	*get_new_path(char *input_path)
 	i = 0;
 	while (path_part[i] != NULL)
 	{
-		if ((ft_strlen(path_part[i]) == 2) && (ft_strncmp(path_part[i], "..",
-					ft_strlen(path_part[i])) == 0))
+		if (ft_strncmp(path_part[i], "..", ft_strlen(path_part[i]) + 1) == 0)
 			new_path = trim_last_segment(crt_path);
-		else if ((ft_strlen(path_part[i]) == 1) && (ft_strncmp(path_part[i],
-					".", 1) == 0))
+		else if (ft_strncmp(path_part[i], ".", 2) == 0)
 			new_path = crt_path;
 		else
 		{

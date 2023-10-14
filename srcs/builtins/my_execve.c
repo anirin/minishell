@@ -1,6 +1,6 @@
+#include "builtins.h"
 #include "libft.h"
 #include "main.h"
-#include "builtins.h"
 
 void	my_execve(t_list **env_list, int check, t_list *cmd, t_list *args)
 {
@@ -28,6 +28,10 @@ void	my_execve(t_list **env_list, int check, t_list *cmd, t_list *args)
 	if (check == BT_CD)
 	{
 		my_cd(args);
+	}
+	if (check == BT_UNSET)
+	{
+		my_unset(env_list, args);
 	}
 	return ;
 }

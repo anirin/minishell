@@ -32,7 +32,7 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			exec_one_cmd(pids, pipefds, tmp, cmd_index, env_list);
+			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
 			cmd_index++;
 			tmp = tmp->next;
 		}
