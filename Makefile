@@ -6,9 +6,9 @@ SRCS = \
 	srcs/env/expand_env.c srcs/env/token_lst.c srcs/error/check_syntax_error.c srcs/exec/exec_one_cmd.c srcs/exec/main.c srcs/exec/pipefds.c srcs/lexer/lexer.c srcs/parser/parser.c srcs/parser/parser_utils.c\
 	srcs/signal/terminate_program.c srcs/utils/control_shell_list.c srcs/utils/free_array.c srcs/utils/free_lists.c srcs/utils/print_arr.c srcs/utils/print_list.c srcs/utils/utils_print_list.c
 OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
-LDFLAGS = -lreadline -Llibft -lft
+LDFLAGS = -lreadline -Llibft -lft -L $(shell brew --prefix readline)/lib
 LDLIBS = -lft
-INCLUDES = -I ./includes -I ./libft/includes
+INCLUDES = -I ./includes -I ./libft/includes -I $(shell brew --prefix readline)/include
 #DEBUG = -g -fsanitize=address
 DEBUG = -g
 CFLAGS = -Wall -Wextra -Werror
@@ -22,7 +22,7 @@ $(OBJSDIR)/%.o : $(SRCDIR)/%.c
 
 $(NAME) : $(OBJS)
 	@make -C ./libft
-	@$(CC) $^ $(LDFLAGS) $(DEBUG) $(INCLUDES) -o $@ 
+	@$(CC) $^ $(LDFLAGS) $(DEBUG) $(INCLUDES) -o $@
 	@echo "$(GREEN)	✅ $(NAME) created$(RESET)"
 
 all : $(NAME)
