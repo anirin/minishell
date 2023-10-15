@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:02:41 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/15 14:56:24 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/15 16:54:13 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	my_unset(t_list **env_list, t_list *args)
 	t_token	*str_arg;
 
 	if (args == NULL)
+	{
 		return ;
+	}
 	else
 	{
 		while (args != NULL)
@@ -54,7 +56,7 @@ bool	is_env_var(t_list *env_list, char *str_arg)
 void	delete_env_var(t_list **data, char *str_arg)
 {
 	t_env	*env;
-	void	*tmp;
+	t_list	*tmp;
 	t_list	*env_list;
 
 	env_list = *data;
@@ -65,6 +67,7 @@ void	delete_env_var(t_list **data, char *str_arg)
 	{
 		tmp = *data;
 		*data = (*data)->next;
+		free_env(env);
 		free(tmp);
 		return ;
 	}
@@ -75,6 +78,7 @@ void	delete_env_var(t_list **data, char *str_arg)
 		{
 			tmp = env_list->next;
 			env_list->next = env_list->next->next;
+			free_env(env);
 			free(tmp);
 			return ;
 		}
