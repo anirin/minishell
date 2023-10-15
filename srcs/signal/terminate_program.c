@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   terminate_program.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
 /*   Updated: 2023/10/15 20:27:02 by nakaiheizou      ###   ########.fr       */
@@ -29,6 +29,6 @@ void	signal_handler(int signum)
 	signal_received = true;
 	rl_on_new_line();
 	printf("\n");
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_redisplay();
 }
