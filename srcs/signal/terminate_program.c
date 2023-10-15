@@ -6,28 +6,28 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/15 16:24:36 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/15 19:59:15 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	check_signal(void)
-{
-	struct sigaction	sa;
+bool	signal_received = false;
 
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sa.sa_sigaction = terminate_program;
-	sa.sa_flags = SA_SIGINFO;
-	sigaction(SIGINT, &sa, NULL);
+void	signal_handler(int signum);
+
+bool	is_signal_received(void)
+{
+	signal_received = false;
+	signal(SIGINT, signal_handler);
+	return (signal_received);
 }
 
-void	terminate_program(int signum, siginfo_t *pid, void *context)
+void	signal_handler(int signum)
 {
-	(void)pid;
-	(void)context;
-
-	printf("%d : PASS\n", __LINE__);
+	signal_received = true;
+	rl_on_new_line();
 	printf("\n");
+	rl_replace_line("", 0);
+	rl_redisplay();
 }

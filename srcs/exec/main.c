@@ -21,10 +21,10 @@ int	minishell(char **envp)
 	{
 		cmd_index = 0;
 		line = readline("\033[32m$>\033[0m ");
-		check_signal();
+		if (is_signal_received() == true)
+			continue ;
 		if (line == NULL)
 		{
-			printf("%d : PASS\n", __LINE__);
 			exit(1);
 		}
 		tokens = lexer(line); // free ok)
@@ -39,7 +39,7 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			check_signal();
+			is_signal_received();
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
 			cmd_index++;
 			tmp = tmp->next;
