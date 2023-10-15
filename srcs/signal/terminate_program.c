@@ -6,11 +6,12 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/15 22:03:56 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/15 20:27:02 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+#include <readline/readline.h>
 
 bool	signal_received = false;
 
