@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/15 16:14:01 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/15 16:24:36 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ void	terminate_program(int signum, siginfo_t *pid, void *context)
 	(void)pid;
 	(void)context;
 
+	printf("%d : PASS\n", __LINE__);
 	printf("\n");
 }
