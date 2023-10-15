@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:02:41 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/14 22:01:54 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/15 14:56:24 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ void	my_unset(t_list **env_list, t_list *args)
 		return ;
 	else
 	{
-		str_arg = (t_token *)args->content;
-		if (is_env_var(*env_list, str_arg->token_content) == true)
+		while (args != NULL)
 		{
-			delete_env_var(env_list, str_arg->token_content);
+			str_arg = (t_token *)args->content;
+			if (is_env_var(*env_list, str_arg->token_content) == true)
+			{
+				delete_env_var(env_list, str_arg->token_content);
+			}
+			args = args->next;
 		}
-		else
-			return ;
 	}
 }
 

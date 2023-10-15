@@ -22,6 +22,11 @@ int	minishell(char **envp)
 		cmd_index = 0;
 		line = readline("\033[32m$>\033[0m ");
 		check_signal();
+		if (line == NULL)
+		{
+			printf("%d : PASS\n", __LINE__);
+			exit(1);
+		}
 		tokens = lexer(line); // free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list);
 		//ここでsyntax error出したい
