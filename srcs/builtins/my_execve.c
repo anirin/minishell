@@ -27,7 +27,7 @@ void	my_execve(t_list **env_list, int check, t_list *cmd, t_list *args)
 	}
 	if (check == BT_CD)
 	{
-		my_cd(args);
+		my_cd(*env_list, args);
 	}
 	if (check == BT_UNSET)
 	{

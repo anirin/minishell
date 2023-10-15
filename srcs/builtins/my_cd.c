@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/14 15:20:05 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/14 21:31:24 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@ char	*get_new_path(char *input_path);
 char	*trim_last_segment(char *crt_path);
 
 // cd [input_path]
-void	my_cd(t_list *args)
+void	my_cd(t_list *env_list, t_list *args)
 {
 	char	*input_path;
 	char	*new_path;
 	t_token	*content;
 
+	overwrite_oldpwd(env_list);
 	if (args == NULL)
 	{
-		chdir("-");
+		to_homedir(env_list);
 		return ;
 	}
 	content = (t_token *)args->content;
@@ -38,7 +39,8 @@ void	my_cd(t_list *args)
 		return ;
 	if (is_accessible(new_path, input_path) == false)
 		return ;
-	chdir(input_path);
+	chdir(new_path);
+	overwrite_pwd(new_path, env_list);
 }
 
 bool	is_accessible(char *new_path, char *input_path)
@@ -92,7 +94,9 @@ char	*get_new_path(char *input_path)
 	crt_path = getcwd(NULL, 0);
 	path_part = ft_split(input_path, '/');
 	if (*path_part == NULL)
+	{
 		new_path = input_path;
+	}
 	i = 0;
 	while (path_part[i] != NULL)
 	{
@@ -121,9 +125,15 @@ char	*trim_last_segment(char *crt_path)
 	int		len;
 	char	*new_path;
 
+	i = 0;
 	new_path = malloc(sizeof(char *) * (ft_strlen(crt_path) + 1));
 	if (new_path == NULL)
 		exit(1);
+	if (ft_strncmp(crt_path, "/", 2) == 0)
+	{
+		ft_strlcpy(new_path, crt_path, i + 1);
+		return (new_path);
+	}
 	len = ft_strlen(crt_path);
 	i = len - 1;
 	if (crt_path[i] == '/')

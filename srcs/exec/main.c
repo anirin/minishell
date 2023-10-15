@@ -21,17 +21,25 @@ int	minishell(char **envp)
 	{
 		cmd_index = 0;
 		line = readline("\033[32m$>\033[0m ");
-		tokens = lexer(line); //free ok)
-		parsed_tokens = parser(tokens, env_list, shell_list); //ここでsyntax error出したい
+		check_signal();
+		if (line == NULL)
+		{
+			printf("%d : PASS\n", __LINE__);
+			exit(1);
+		}
+		tokens = lexer(line); // free ok)
+		parsed_tokens = parser(tokens, env_list, shell_list);
+		//ここでsyntax error出したい
 		if (parsed_tokens == NULL)
 			continue ;
 		if (check_syntax_error(parsed_tokens, tokens, shell_list) == NG)
-			continue;
+			continue ;
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
 		pipefds = malloc_pipefds(parsed_tokens);
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
+			check_signal();
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
 			cmd_index++;
 			tmp = tmp->next;
