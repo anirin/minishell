@@ -73,10 +73,10 @@ int		check_last_pipe(t_list *tokens, t_list *shell_list)
 	{
 		printf("minishell : syntax error close pipe `|'\n");
 		modify_finish_status(shell_list, 258);
-		ft_lstclear(&preproc_tokens, free_token);
+		ft_lstclear(&preproc_tokens, (void *)free_token);
 		return (NG);
 	}
-	ft_lstclear(&preproc_tokens, free_token);
+	ft_lstclear(&preproc_tokens, (void *)free_token);
 	return (OK);
 }
 

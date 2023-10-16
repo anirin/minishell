@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/16 14:22:43 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/16 14:36:39 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0) //cd は親で実行させる必要がある
 	{
 		my_execve(env_list, check, token->cmd, token->args);
+	}
 	else
 	{
 		if (parsed_tokens->next != NULL) // parsed が null の時の対処してない
