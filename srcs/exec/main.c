@@ -23,6 +23,7 @@ int	minishell(char **envp)
 		check_signal();
 		// printf("[%d]PASS\n", __LINE__);
 		line = readline("\033[32m$>\033[0m ");
+		// printf("line : %s\n", line);
 		// printf("[%d]PASS\n", __LINE__);
 		if (line == NULL)
 		{
