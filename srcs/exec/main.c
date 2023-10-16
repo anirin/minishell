@@ -40,7 +40,7 @@ int	minishell(char **envp)
 		while (tmp != NULL)
 		{
 			is_signal_received();
-			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
+			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list, shell_list);
 			cmd_index++;
 			tmp = tmp->next;
 		}

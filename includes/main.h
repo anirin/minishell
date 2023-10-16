@@ -114,7 +114,7 @@ void		move_head(t_list **head);
 
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-				int cmd_index, t_list **env_list);
+				int cmd_index, t_list **env_list, t_list *shell_list);
 
 // util
 void		print_env(t_env *env);
@@ -129,7 +129,7 @@ void		insort_list(t_list *token, t_list *add_list);
 int			is_builtin(t_list *cmd_and_option);
 
 // my_execve
-void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args);
+void		my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd, t_list *args);
 
 // free
 void		free_env(t_env *env);
@@ -147,5 +147,8 @@ void		wait_for_child_and_store_status(t_list *shell_list, int *pids,
 
 // syntax
 int			check_syntax_error(t_list *list, t_list *token, t_list *shell_list);
+
+// 
+void		modify_finish_status(t_list *shell_list, int status);
 
 #endif

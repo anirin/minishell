@@ -23,7 +23,7 @@ static char	*find_env_name(char *doller_token, t_list *env_list, t_list *shell_l
 	while(shell_list != NULL)
 	{
 		shell = (t_env *)shell_list->content;
-		if (env->value != NULL && ft_strncmp(&doller_token[1], shell->name, ft_strlen(shell->name) + 1) == 0) //[0] は $
+		if (shell->value != NULL && ft_strncmp(&doller_token[1], shell->name, ft_strlen(shell->name) + 1) == 0) //[0] は $
 		{
 			return (ft_strdup(shell->value));
 		}
