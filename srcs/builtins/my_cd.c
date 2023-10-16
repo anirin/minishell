@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/16 18:43:30 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/16 20:07:46 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,13 @@ char	*get_new_path(char *input_path)
 	char	**path_part;
 	int		i;
 
+	crt_path = getcwd(NULL, 0);
+	path_part = ft_split(input_path, '/');
+	if (*path_part == NULL)
+	{
+		new_path = input_path;
+	}
+	i = 0;
 	if (ft_strncmp(path_part[i], "-", ft_strlen(path_part[i]) + 1) == 0)
 	{
 		if (getenv("OLDPWD") != NULL)
@@ -101,13 +108,6 @@ char	*get_new_path(char *input_path)
 		else
 			return (getenv("OLDPWD"));
 	}
-	crt_path = getcwd(NULL, 0);
-	path_part = ft_split(input_path, '/');
-	if (*path_part == NULL)
-	{
-		new_path = input_path;
-	}
-	i = 0;
 	while (path_part[i] != NULL)
 	{
 		if (ft_strncmp(path_part[i], "..", ft_strlen(path_part[i]) + 1) == 0)
