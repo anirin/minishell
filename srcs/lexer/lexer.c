@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "main.h"
 
 int		add_quote_token_to_list(t_list **list, char *line, int i, char c)
@@ -70,7 +71,7 @@ int		add_space_token_to_list(t_list **list, char *line, int i)
 	int		space_num;
 
 	space_num = 0;
-	while(ft_isspace(line[i]) == SPACE && line[i] != '\0')
+	while(ft_isspace(line[i]) == 0 && line[i] != '\0') //0 は　space
 	{
 		space_num++;
 		i++;
@@ -91,7 +92,7 @@ int		add_pipe_token_to_list(t_list **list, char *line, int i)
 	t_list *new;
 	t_token *token;
 
-	(void)line;
+	(void)line; 
 	(void)i;
 	token = (t_token *)malloc(sizeof(t_token));
 	token->token_content = strdup("|");
