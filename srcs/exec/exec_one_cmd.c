@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/14 15:20:59 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/16 14:22:43 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,42 +184,57 @@ char	**get_argv(t_list *cmd, t_list *args)
 	return (ret);
 }
 
+static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
+{
+	redirect_pipe(pipefds, cmd_index);
+	redirect_in(token->less_than);
+	redirect_out(token->greater_than);
+}
+
+static void	exec_builtin_in_child_process(t_list **env_list, int check, t_parsed_token *token)
+{
+	my_execve(env_list, check, token->cmd, token->args);
+	exit(0);
+}
+
+static void	exec_notbuiltin_in_parent_process(t_parsed_token *token, t_list *env_list)
+{
+	char			*path;
+	char			**argv;
+
+	path = get_path(token->cmd, env_list);
+	argv = get_argv(token->cmd, token->args);
+	execve(path, argv, NULL);
+	perror("execve");
+	exit(1);
+}
+
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		int cmd_index, t_list **env_list)
 {
 	t_parsed_token	*token;
-	char			*path;
-	char			**argv;
 	int				check;
-	t_list			*token_args_lst;
 
 	token = (t_parsed_token *)parsed_tokens->content;
-	token_args_lst = (t_list *)token->args;
-	// ft_lstiter(token_args_lst, print_lst);
 	check = is_builtin(token->cmd);
-	if (check != BT_NOTBUILTIN)
+	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0) //cd は親で実行させる必要がある
 	{
 		my_execve(env_list, check, token->cmd, token->args);
 	}
 	else
 	{
-		if (parsed_tokens->next != NULL)
+		if (parsed_tokens->next != NULL) // parsed が null の時の対処してない
 		{
 			pipe(pipefds[cmd_index]);
 		}
-		// parsed が null の時の対処してない
 		pids[cmd_index] = fork();
-		// printf("pids : %d\n", pids[cmd_index]);
 		if (pids[cmd_index] == 0)
 		{
-			path = get_path(token->cmd, *env_list);
-			argv = get_argv(token->cmd, token->args);
-			redirect_pipe(pipefds, cmd_index);
-			redirect_in(token->less_than);
-			redirect_out(token->greater_than);
-			execve(path, argv, NULL);
-			perror("execve");
-			exit(1);
+			redirect(pipefds, token, cmd_index);
+			if (check != BT_NOTBUILTIN)
+				exec_builtin_in_child_process(env_list, check, token);
+			else
+				exec_notbuiltin_in_parent_process(token, *env_list);
 		}
 		else
 			close_pipefds(pipefds, cmd_index);
