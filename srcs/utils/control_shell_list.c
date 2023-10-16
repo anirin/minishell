@@ -1,6 +1,15 @@
 #include "libft.h"
 #include "main.h"
 
+void	modify_finish_status(t_list *shell_list, int status)
+{
+	t_env	*shell;
+
+	shell = (t_env *)shell_list->content;
+	free(shell->value);
+	shell->value = ft_itoa(status);
+}
+
 void	init_shell_list(t_list **shell_list)
 {
 	t_env	*shell;

@@ -123,12 +123,20 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 	env->value = ft_strdup(env_value);
 }
 
-void	add_env(char **parsed_env, t_list **env_list) // ok
+void	add_env(char **parsed_env, t_list **env_list, t_list *shell_list) // ok
 {
 	char *new_env_value;
 	t_list *new_lst;
 	t_env *new_env;
 
+	if (ft_strncmp(parsed_env[0], "=", 1) == 0)
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(parsed_env[0], STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		modify_finish_status(shell_list, 1);
+		return ;
+	}
 	new_env = malloc(sizeof(t_env));
 	if (parsed_env[1] != NULL)
 		new_env_value = ft_strdup(parsed_env[2]);
@@ -141,11 +149,10 @@ void	add_env(char **parsed_env, t_list **env_list) // ok
 	// freeしろ
 }
 
-void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処理
+void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
-	t_token *str_arg;
 
 	env_index = 0;
 	if (args == NULL)
@@ -155,20 +162,17 @@ void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処�
 	}
 	while (args != NULL)
 	{
-		str_arg = (t_token *)args->content;
-		parsed_env = parse_env(str_arg->token_content);
+		parsed_env = parse_env(((t_token *)args->content)->token_content);
 		env_index = is_added_env(parsed_env[0], *env_list);
-		if (env_index != 0) //既存環境変数
+		if (env_index != 0)
 		{
 			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "+=", 3) == 0)
 				append_env(env_index, parsed_env[2], *env_list);
 			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "=", 2) == 0)
 				overwrite_env(env_index, parsed_env[2], *env_list);
 		}
-		else //新規環境変数
-		{
-			add_env(parsed_env, env_list);
-		}
+		else
+			add_env(parsed_env, env_list, shell_list);
 		args = args->next;
 	}
 }

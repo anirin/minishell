@@ -1,15 +1,6 @@
 #include "libft.h"
 #include "main.h"
 
-static void	modify_finish_status(t_list *shell_list, int status)
-{
-	t_env	*shell;
-
-	shell = (t_env *)shell_list->content;
-	free(shell->value);
-	shell->value = ft_itoa(status);
-}
-
 static int	check_greater_than_syntax_error(t_list *greater_than, t_list *shell_list)
 {
 	t_token *token;
