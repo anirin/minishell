@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/16 14:36:39 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/16 16:58:45 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,9 +191,9 @@ static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 	redirect_out(token->greater_than);
 }
 
-static void	exec_builtin_in_child_process(t_list **env_list, int check, t_parsed_token *token)
+static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list, int check, t_parsed_token *token)
 {
-	my_execve(env_list, check, token->cmd, token->args);
+	my_execve(env_list, shell_list, check, token->cmd, token->args);
 	exit(0);
 }
 
@@ -210,7 +210,7 @@ static void	exec_notbuiltin_in_parent_process(t_parsed_token *token, t_list *env
 }
 
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-		int cmd_index, t_list **env_list)
+		int cmd_index, t_list **env_list, t_list *shell_list)
 {
 	t_parsed_token	*token;
 	int				check;
@@ -219,7 +219,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	check = is_builtin(token->cmd);
 	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0) //cd は親で実行させる必要がある
 	{
-		my_execve(env_list, check, token->cmd, token->args);
+		my_execve(env_list, shell_list, check, token->cmd, token->args);
 	}
 	else
 	{
@@ -232,7 +232,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		{
 			redirect(pipefds, token, cmd_index);
 			if (check != BT_NOTBUILTIN)
-				exec_builtin_in_child_process(env_list, check, token);
+				exec_builtin_in_child_process(env_list, shell_list, check, token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}

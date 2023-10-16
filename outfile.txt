@@ -1,0 +1,5 @@
+--print arr--
+0 : [make]
+--print arr--
+0 : [echo]
+1 : [bb]
