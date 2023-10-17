@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/17 10:18:06 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/17 12:57:19 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "libft.h"
 #include "main.h"
 
-bool	is_accessible(char *new_path, char *input_path);
-bool	is_directory(char *new_path, char *input_path);
+bool	is_accessible(char *input_path);
+bool	is_directory(char *input_path);
 char	*get_new_path(char *input_path);
 char	*trim_last_segment(char *crt_path);
 
@@ -35,17 +35,16 @@ void	my_cd(t_list *env_list, t_list *args)
 	content = (t_token *)args->content;
 	input_path = content->token_content;
 	chdir(input_path);
-	return ;
-	new_path = get_new_path(input_path);
-	if (is_directory(new_path, input_path) == false)
+	// new_path = get_new_path(input_path);
+	if (is_directory(input_path) == false)
 		return ;
-	if (is_accessible(new_path, input_path) == false)
+	if (is_accessible(input_path) == false)
 		return ;
-	chdir(new_path);
-	overwrite_pwd(new_path, env_list);
+	// chdir(new_path);
+	// overwrite_pwd(new_path, env_list);
 }
 
-bool	is_accessible(char *new_path, char *input_path)
+bool	is_accessible(char *input_path)
 {
 	if (access(input_path, X_OK) != 0)
 	{
@@ -56,20 +55,24 @@ bool	is_accessible(char *new_path, char *input_path)
 		return (true);
 }
 
-bool	is_directory(char *new_path, char *input_path)
+bool	is_directory(char *input_path)
 {
 	struct stat	*stat_info;
 
 	stat_info = (struct stat *)malloc(sizeof(struct stat) * 1);
 	if (stat_info == NULL)
 		exit(1);
-	if (ft_strncmp(new_path, "", 1) == 0)
-		return (true);
-	if (stat(new_path, stat_info) != 0)
+	// if (ft_strncmp(new_path, "", 1) == 0)
+	// 	return (true);
+	if (stat(input_path, stat_info) != 0)
 	{
 		if (errno == ENOENT)
-			printf("minishell: cd: %s: Not such file or directory\n",
-				input_path);
+		{
+			printf("minishell : cd");
+			// fprintf(stderr, "エラーが発生しました");
+			// fflush(stdout);
+			perror(input_path);
+		}
 		free((void *)stat_info);
 		return (false);
 	}
