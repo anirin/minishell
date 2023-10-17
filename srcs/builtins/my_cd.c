@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/16 20:07:46 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/17 10:18:06 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	my_cd(t_list *env_list, t_list *args)
 	}
 	content = (t_token *)args->content;
 	input_path = content->token_content;
+	chdir(input_path);
+	return ;
 	new_path = get_new_path(input_path);
 	if (is_directory(new_path, input_path) == false)
 		return ;
