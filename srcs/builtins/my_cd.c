@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/18 22:13:47 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/18 23:14:31 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ bool	is_accessible(char *input_path);
 bool	is_directory(char *input_path);
 char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
 char	*get_oldpwd(t_list *env_list, t_list *cmd);
+char	*get_homedir(t_list *env_list);
 
 void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 {
@@ -27,21 +28,9 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	if (args == NULL)
 	{
 		if (cmd != NULL && cmd->next != NULL)
-		{
 			new_path = get_oldpwd(env_list, cmd);
-			if (new_path == NULL)
-				return ;
-		}
 		else
-		{
-			if (is_added_env("HOME", env_list) == -1)
-			{
-				perror("minishell: cd: HOME not set");
-				return ;
-			}
-			else
-				new_path = getenv("HOME");
-		}
+			new_path = get_homedir(env_list);
 	}
 	else
 	{
@@ -49,6 +38,8 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 		args_content = (t_token *)args->content;
 		new_path = args_content->token_content;
 	}
+	if (new_path == NULL)
+		return ;
 	if (is_directory(new_path) == false)
 		return ;
 	if (is_accessible(new_path) == false)
@@ -146,6 +137,23 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 		}
 		new_path = get_env_value(env_list, "OLDPWD", cmd_index);
 	}
+	return (new_path);
+}
+
+char	*get_homedir(t_list *env_list)
+{
+	t_token	*cmd_content;
+	int		cmd_index;
+	char	*new_path;
+
+	new_path = NULL;
+	cmd_index = is_added_env("HOME", env_list);
+	if (cmd_index == -1)
+	{
+		perror("minishell: cd: HOME not set");
+		return (NULL);
+	}
+	new_path = get_env_value(env_list, "HOME", cmd_index);
 	return (new_path);
 }
 
