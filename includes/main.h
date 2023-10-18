@@ -48,10 +48,9 @@ enum		e_redirect
 
 # define PATH_SIZE 1024
 
-
 // readline
 # include "libft.h"
-# include <builtins.h>
+# include "builtins.h"
 # include <ctype.h>
 # include <libc.h>
 # include <readline/history.h>
@@ -130,7 +129,8 @@ void		insort_list(t_list *token, t_list *add_list);
 int			is_builtin(t_list *cmd_and_option);
 
 // my_execve
-void		my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd, t_list *args);
+void		my_execve(t_list **env_list, t_list *shell_list, int check,
+				t_list *cmd, t_list *args);
 
 // free
 void		free_env(t_env *env);
@@ -149,7 +149,7 @@ void		wait_for_child_and_store_status(t_list *shell_list, int *pids,
 // syntax
 int			check_syntax_error(t_list *list, t_list *token, t_list *shell_list);
 
-// 
+//
 void		modify_finish_status(t_list *shell_list, int status);
 
 #endif

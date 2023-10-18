@@ -9,8 +9,8 @@ OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 LDFLAGS = -Llibft -lft -L $(shell brew --prefix readline)/lib -lreadline
 LDLIBS = -lft
 INCLUDES = -I ./includes -I ./libft/includes -I $(shell brew --prefix readline)/include
-#DEBUG = -g -fsanitize=address
-DEBUG = -g
+DEBUG = -g -fsanitize=address
+#DEBUG = -g
 CFLAGS = -Wall -Wextra -Werror
 RED=\033[31m
 GREEN=\033[32m

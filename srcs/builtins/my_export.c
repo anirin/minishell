@@ -89,7 +89,7 @@ int	is_added_env(char *env_name, t_list *env_list) // ok
 		env_list = env_list->next;
 		count++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	append_env(int env_index, char *env_content, t_list *env_list) // ok
@@ -149,7 +149,8 @@ void	add_env(char **parsed_env, t_list **env_list, t_list *shell_list) // ok
 	// freeしろ
 }
 
-void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TEST =CC エラー処理
+void	my_export(t_list **env_list, t_list *shell_list, t_list *args)
+		// export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
