@@ -27,7 +27,8 @@ int	minishell(char **envp)
 		// printf("[%d]PASS\n", __LINE__);
 		if (line == NULL)
 		{
-			exit(1);
+			line = ft_strdup("exit");
+			// exit(1);
 		}
 		tokens = lexer(line); // free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list);
