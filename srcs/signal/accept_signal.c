@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminate_program.c                                :+:      :+:    :+:   */
+/*   accept_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/19 23:41:57 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/20 02:37:55 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	put_new_prompt(int signum);
 void	nothing_to_do(int signum);
 void	nothing_to_do_for_child(int signum);
 
-void	check_signal(void)
+void	handle_signal(void)
 {
 	signal(SIGINT, put_new_prompt);
 	signal(SIGQUIT, nothing_to_do_for_child);

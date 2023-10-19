@@ -22,7 +22,7 @@ int	minishell(char **envp)
 	{
 		i = 0;
 		cmd_index = 0;
-		check_signal();
+		handle_signal();
 		line = readline("\033[32m$>\033[0m ");
 		if (line == NULL)
 		{
@@ -41,7 +41,7 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			check_signal_for_child(pids[i]);
+			handle_signal_for_child(pids[i]);
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list, shell_list);
 			cmd_index++;
 			tmp = tmp->next;
