@@ -75,10 +75,7 @@ typedef struct s_token
 
 typedef struct s_parsed_token
 {
-	//リダイレクトを格納
-	t_list *greater_than; // token
-	t_list *less_than;    // token
-	//コマンドを格納
+	t_list *redirect;
 	t_list *cmd;  // token
 	t_list *args; // token
 }			t_parsed_token;

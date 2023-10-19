@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/16 16:58:45 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/19 22:04:27 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,74 +37,85 @@ void	close_pipefds(int **pipefds, int cmd_index)
 	}
 }
 
-void	redirect_in(t_list *tokens)
+void	redirect_in(t_token *token)
 {
-	t_token	*token;
 	char	*line;
 	int		fd;
 
-	while (tokens != NULL)
+	if (token->status == RD_IN && token->token_content != NULL)
 	{
-		token = (t_token *)tokens->content;
-		if (token->status == RD_IN && token->token_content != NULL)
+		fd = open(token->token_content, O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	else if (token->status == RD_HEAEDOC && token->token_content != NULL)
+	{
+		fd = open(".heardoc", O_RDWR | O_CREAT | O_TRUNC,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		while (line != NULL)
 		{
-			fd = open(token->token_content, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			line = readline("heredoc> ");
+			if (ft_strncmp(line, token->token_content,
+					ft_strlen(token->token_content)) == 0)
+				break ;
+			ft_putendl_fd(line, fd);
+			free(line);
+			//もしheardocが何個もでできたならtmpファイルは別名にする必要がある
 		}
-		else if (token->status == RD_HEAEDOC && token->token_content != NULL)
-		{
-			fd = open(".heardoc", O_RDWR | O_CREAT | O_TRUNC,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			while (line != NULL)
-			{
-				line = readline("heredoc> ");
-				if (ft_strncmp(line, token->token_content,
-						ft_strlen(token->token_content)) == 0)
-					break ;
-				ft_putendl_fd(line, fd);
-				free(line);
-				//もしheardocが何個もでできたならtmpファイルは別名にする必要がある
-			}
-			close(fd);
-			open(".heardoc", O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			unlink(".heardoc");
-		}
-		else
-		{
-			ft_putendl_fd("syntax error '<' \n", STDERR_FILENO);
-		}
-		tokens = tokens->next;
+		close(fd);
+		open(".heardoc", O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		unlink(".heardoc");
+	}
+	else
+	{
+		ft_putendl_fd("syntax error '<' \n", STDERR_FILENO);
 	}
 }
 
-void	redirect_out(t_list *tokens)
+void	redirect_out(t_token *token)
 {
-	t_token	*token;
 	int		fd;
 
-	while (tokens != NULL)
+	if (token->status == RD_OUT && token->token_content != NULL)
 	{
-		token = (t_token *)tokens->content;
-		if (token->status == RD_OUT && token->token_content != NULL)
+		fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else if (token->status == RD_APPEND && token->token_content != NULL)
+	{
+		fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else
+	{
+		ft_putendl_fd("syntax error '>' \n", STDERR_FILENO);
+	}
+}
+
+void	redirect_in_out(t_list *tokens)
+{
+	t_token	*token;
+
+	token = (t_token *)tokens->content;
+	while(tokens != NULL)
+	{
+		if (token->status == RD_IN || token->status == RD_HEAEDOC)
 		{
-			fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			redirect_in(token);
 		}
-		else if (token->status == RD_APPEND && token->token_content != NULL)
+		else if (token->status == RD_OUT || token->status == RD_APPEND)
 		{
-			fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			redirect_out(token);
 		}
-		else
+		else if (token->status == RD_ERROR)
 		{
-			ft_putendl_fd("syntax error '>' \n", STDERR_FILENO);
+			redirect_error(token); //あとで
 		}
 		tokens = tokens->next;
 	}
@@ -187,8 +198,8 @@ char	**get_argv(t_list *cmd, t_list *args)
 static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 {
 	redirect_pipe(pipefds, cmd_index);
-	redirect_in(token->less_than);
-	redirect_out(token->greater_than);
+	redirect_in_out(token->redirect);
+	// redirect_out(token->greater_than);
 }
 
 static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list, int check, t_parsed_token *token)
