@@ -6,30 +6,27 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/19 21:35:42 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/19 23:41:57 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-#include <readline/history.h>
-#include <readline/readline.h>
 
-bool	signal_received = false;
+// #include <readline/history.h>
+// #include <readline/readline.h>
 
 void	put_new_prompt(int signum);
 void	nothing_to_do(int signum);
+void	nothing_to_do_for_child(int signum);
 
-bool	check_signal(void)
+void	check_signal(void)
 {
-	signal_received = false;
 	signal(SIGINT, put_new_prompt);
-	signal(SIGQUIT, nothing_to_do);
-	return (signal_received);
+	signal(SIGQUIT, nothing_to_do_for_child);
 }
 
 void	put_new_prompt(int signum)
 {
-	signal_received = true;
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
@@ -38,5 +35,17 @@ void	put_new_prompt(int signum)
 
 void	nothing_to_do(int signum)
 {
-	;
+	ft_putstr_fd("Quit: 3\n", STDERR_FILENO);
+}
+
+void	check_signal_for_child(int pids)
+{
+	kill(pids, SIGINT);
+	signal(SIGINT, nothing_to_do_for_child);
+	signal(SIGQUIT,  nothing_to_do);
+}
+
+void	nothing_to_do_for_child(int signum)
+{
+	printf("\n");
 }
