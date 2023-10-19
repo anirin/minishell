@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/18 23:14:31 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/19 20:49:33 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,16 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	}
 	else
 	{
-		overwrite_oldpwd(env_list);
 		args_content = (t_token *)args->content;
-		new_path = args_content->token_content;
+		new_path = ft_strdup(args_content->token_content);
 	}
-	if (new_path == NULL)
+	overwrite_oldpwd(env_list);
+	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
 		return ;
-	if (is_directory(new_path) == false)
-		return ;
-	if (is_accessible(new_path) == false)
+	if (is_directory(new_path) == false || is_accessible(new_path) == false)
 		return ;
 	chdir(new_path);
+	free(new_path);
 	overwrite_pwd(env_list);
 	return ;
 }
@@ -91,16 +90,11 @@ bool	is_directory(char *input_path)
 	stat_info = (struct stat *)malloc(sizeof(struct stat) * 1);
 	if (stat_info == NULL)
 		exit(1);
-	// if (ft_strncmp(new_path, "", 1) == 0)
-	// 	return (true);
 	if (stat(input_path, stat_info) != 0)
 	{
 		if (errno == ENOENT)
 		{
-			printf("minishell : cd");
-			// fprintf(stderr, "エラーが発生しました");
-			// fflush(stdout);
-			perror(input_path);
+			printf("minishell : cd : %s\n", strerror(errno));
 		}
 		free((void *)stat_info);
 		return (false);
@@ -132,7 +126,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 		cmd_index = is_added_env("OLDPWD", env_list);
 		if (cmd_index == -1)
 		{
-			perror("minishell: cd: OLDPWD not set");
+			printf("minishell: cd: OLDPWD not set\n");
 			return (NULL);
 		}
 		new_path = get_env_value(env_list, "OLDPWD", cmd_index);
@@ -150,7 +144,7 @@ char	*get_homedir(t_list *env_list)
 	cmd_index = is_added_env("HOME", env_list);
 	if (cmd_index == -1)
 	{
-		perror("minishell: cd: HOME not set");
+		printf("minishell: cd: HOME not set\n");
 		return (NULL);
 	}
 	new_path = get_env_value(env_list, "HOME", cmd_index);
@@ -159,7 +153,8 @@ char	*get_homedir(t_list *env_list)
 
 char	*get_env_value(t_list *env_list, char *value_name, int cmd_index)
 {
-	t_env *env;
+	t_env	*env;
+	char	*env_value;
 
 	while (cmd_index > 0)
 	{
@@ -167,5 +162,6 @@ char	*get_env_value(t_list *env_list, char *value_name, int cmd_index)
 		cmd_index--;
 	}
 	env = (t_env *)env_list->content;
-	return (env->value);
+	env_value = ft_strdup(env->value);
+	return (env_value);
 }
