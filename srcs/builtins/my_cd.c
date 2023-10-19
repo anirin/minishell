@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/19 20:49:33 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/19 21:14:38 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ bool	is_accessible(char *input_path)
 {
 	if (access(input_path, X_OK) != 0)
 	{
-		printf("minishell: cd : %s:Permission denied\n", input_path);
+		ft_putstr_fd("minishell: cd", STDERR_FILENO);
+		perror("");
 		return (false);
 	}
 	else
@@ -94,15 +95,17 @@ bool	is_directory(char *input_path)
 	{
 		if (errno == ENOENT)
 		{
-			printf("minishell : cd : %s\n", strerror(errno));
+			ft_putstr_fd("minishell: cd:", STDERR_FILENO);
+			perror("");
+			// printf("minishell : cd : %s\n", strerror(errno));
 		}
 		free((void *)stat_info);
 		return (false);
 	}
 	if ((stat_info->st_mode & S_IFMT) != S_IFDIR)
 	{
-		printf("minishell: cd: %s: Not a directory\n", input_path);
-		free((void *)stat_info);
+		ft_putstr_fd("minishell: cd:", STDERR_FILENO);
+		perror("");
 		return (false);
 	}
 	else
