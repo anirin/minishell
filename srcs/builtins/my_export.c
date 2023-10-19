@@ -90,7 +90,7 @@ int	is_added_env(char *env_name, t_list *env_list) // ok
 		env_list = env_list->next;
 		count++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	append_env(int env_index, char *env_content, t_list *env_list) // ok

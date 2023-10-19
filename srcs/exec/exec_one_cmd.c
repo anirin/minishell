@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/16 16:58:45 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/18 19:31:33 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,16 +191,18 @@ static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 	redirect_out(token->greater_than);
 }
 
-static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list, int check, t_parsed_token *token)
+static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list,
+		int check, t_parsed_token *token)
 {
 	my_execve(env_list, shell_list, check, token->cmd, token->args);
 	exit(0);
 }
 
-static void	exec_notbuiltin_in_parent_process(t_parsed_token *token, t_list *env_list)
+static void	exec_notbuiltin_in_parent_process(t_parsed_token *token,
+		t_list *env_list)
 {
-	char			*path;
-	char			**argv;
+	char	*path;
+	char	**argv;
 
 	path = get_path(token->cmd, env_list);
 	argv = get_argv(token->cmd, token->args);
@@ -212,12 +214,13 @@ static void	exec_notbuiltin_in_parent_process(t_parsed_token *token, t_list *env
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		int cmd_index, t_list **env_list, t_list *shell_list)
 {
-	t_parsed_token	*token;
-	int				check;
+	t_parsed_token *token;
+	int check;
 
 	token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(token->cmd);
-	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0) //cd は親で実行させる必要がある
+	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0)
+	// cd は親で実行させる必要がある
 	{
 		my_execve(env_list, shell_list, check, token->cmd, token->args);
 	}
@@ -232,7 +235,8 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		{
 			redirect(pipefds, token, cmd_index);
 			if (check != BT_NOTBUILTIN)
-				exec_builtin_in_child_process(env_list, shell_list, check, token);
+				exec_builtin_in_child_process(env_list, shell_list, check,
+					token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}

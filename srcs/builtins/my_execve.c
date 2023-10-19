@@ -2,7 +2,8 @@
 #include "libft.h"
 #include "main.h"
 
-void	my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd, t_list *args)
+void	my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd,
+		t_list *args)
 {
 	(void)cmd;
 	if (check == BT_EXPORT)
@@ -27,7 +28,7 @@ void	my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd, t_
 	}
 	if (check == BT_CD)
 	{
-		my_cd(*env_list, args);
+		my_cd(*env_list, cmd, args);
 	}
 	if (check == BT_UNSET)
 	{

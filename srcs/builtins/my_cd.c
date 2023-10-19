@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/18 15:56:59 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/19 21:48:24 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,68 @@
 
 bool	is_accessible(char *input_path);
 bool	is_directory(char *input_path);
-char	*get_new_path(char *input_path);
-char	*trim_last_segment(char *crt_path);
+char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
+char	*get_oldpwd(t_list *env_list, t_list *cmd);
+char	*get_homedir(t_list *env_list);
 
-// cd [input_path]
-void	my_cd(t_list *env_list, t_list *args)
+void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 {
-	char	*input_path;
 	char	*new_path;
-	t_token	*content;
+	t_token	*args_content;
 
-	overwrite_oldpwd(env_list);
 	if (args == NULL)
 	{
-		to_homedir(env_list);
-		return ;
+		if (cmd != NULL && cmd->next != NULL)
+			new_path = get_oldpwd(env_list, cmd);
+		else
+			new_path = get_homedir(env_list);
 	}
-	content = (t_token *)args->content;
-	input_path = content->token_content;
-	chdir(input_path);
-	// new_path = get_new_path(input_path);
-	if (is_directory(input_path) == false)
+	else
+	{
+		args_content = (t_token *)args->content;
+		new_path = ft_strdup(args_content->token_content);
+	}
+	overwrite_oldpwd(env_list);
+	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
 		return ;
-	if (is_accessible(input_path) == false)
+	if (is_directory(new_path) == false || is_accessible(new_path) == false)
 		return ;
-	// chdir(new_path);
-	// overwrite_pwd(new_path, env_list);
+	chdir(new_path);
+	free(new_path);
+	overwrite_pwd(env_list);
+	return ;
+}
+
+void	overwrite_pwd(t_list *env_list)
+{
+	int		env_index;
+	char	*crt_path;
+
+	crt_path = getcwd(NULL, 0);
+	env_index = is_added_env("PWD", env_list);
+	if (env_index == -1)
+		return ;
+	overwrite_env(env_index, crt_path, env_list);
+}
+
+void	overwrite_oldpwd(t_list *env_list)
+{
+	int		env_index;
+	char	*crt_path;
+
+	crt_path = getcwd(NULL, 0);
+	env_index = is_added_env("OLDPWD", env_list);
+	if (env_index == -1)
+		return ;
+	overwrite_env(env_index, crt_path, env_list);
 }
 
 bool	is_accessible(char *input_path)
 {
 	if (access(input_path, X_OK) != 0)
 	{
-		printf("minishell: cd : %s:Permission denied\n", input_path);
+		ft_putstr_fd("minishell: cd", STDERR_FILENO);
+		perror("");
 		return (false);
 	}
 	else
@@ -62,24 +91,20 @@ bool	is_directory(char *input_path)
 	stat_info = (struct stat *)malloc(sizeof(struct stat) * 1);
 	if (stat_info == NULL)
 		exit(1);
-	// if (ft_strncmp(new_path, "", 1) == 0)
-	// 	return (true);
 	if (stat(input_path, stat_info) != 0)
 	{
 		if (errno == ENOENT)
 		{
-			printf("minishell : cd");
-			// fprintf(stderr, "エラーが発生しました");
-			// fflush(stdout);
-			perror(input_path);
+			ft_putstr_fd("minishell: cd:", STDERR_FILENO);
+			perror("");
 		}
 		free((void *)stat_info);
 		return (false);
 	}
 	if ((stat_info->st_mode & S_IFMT) != S_IFDIR)
 	{
-		printf("minishell: cd: %s: Not a directory\n", input_path);
-		free((void *)stat_info);
+		ft_putstr_fd("minishell: cd:", STDERR_FILENO);
+		perror("");
 		return (false);
 	}
 	else
@@ -89,76 +114,56 @@ bool	is_directory(char *input_path)
 	}
 }
 
-char	*get_new_path(char *input_path)
+char	*get_oldpwd(t_list *env_list, t_list *cmd)
 {
-	char	*crt_path;
+	t_token	*cmd_content;
+	int		cmd_index;
 	char	*new_path;
-	char	**path_part;
-	int		i;
-
-	crt_path = getcwd(NULL, 0);
-	path_part = ft_split(input_path, '/');
-	if (*path_part == NULL)
+ 
+	new_path = NULL;
+	cmd_index = 0;
+	cmd_content = (t_token *)cmd->next->content;
+	if (ft_strncmp(cmd_content->token_content, "-", 2) == 0)
 	{
-		new_path = input_path;
-	}
-	i = 0;
-	if (ft_strncmp(path_part[i], "-", ft_strlen(path_part[i]) + 1) == 0)
-	{
-		if (getenv("OLDPWD") != NULL)
+		cmd_index = is_added_env("OLDPWD", env_list);
+		if (cmd_index == -1)
 		{
-			printf("minishell : [ERROR!] :getenv\n");
-			exit(1);
+			printf("minishell: cd: OLDPWD not set\n");
+			return (NULL);
 		}
-		else
-			return (getenv("OLDPWD"));
-	}
-	while (path_part[i] != NULL)
-	{
-		if (ft_strncmp(path_part[i], "..", ft_strlen(path_part[i]) + 1) == 0)
-			new_path = trim_last_segment(crt_path);
-		else if (ft_strncmp(path_part[i], ".", 2) == 0)
-			new_path = crt_path;
-		else
-		{
-			new_path = ft_strjoin(crt_path, "/");
-			new_path = ft_strjoin(new_path, path_part[i]);
-		}
-		crt_path = new_path;
-		i++;
+		new_path = get_env_value(env_list, "OLDPWD", cmd_index);
 	}
 	return (new_path);
 }
 
-/*
-before : [/Users/hnakai/42curcus/Rank04/minishell]
-after  : [/Users/hnakai/42curcus/Rank04]
-*/
-char	*trim_last_segment(char *crt_path)
+char	*get_homedir(t_list *env_list)
 {
-	int		i;
-	int		len;
+	t_token	*cmd_content;
+	int		cmd_index;
 	char	*new_path;
 
-	i = 0;
-	new_path = malloc(sizeof(char *) * (ft_strlen(crt_path) + 1));
-	if (new_path == NULL)
-		exit(1);
-	if (ft_strncmp(crt_path, "/", 2) == 0)
+	new_path = NULL;
+	cmd_index = is_added_env("HOME", env_list);
+	if (cmd_index == -1)
 	{
-		ft_strlcpy(new_path, crt_path, i + 1);
-		return (new_path);
+		printf("minishell: cd: HOME not set\n");
+		return (NULL);
 	}
-	len = ft_strlen(crt_path);
-	i = len - 1;
-	if (crt_path[i] == '/')
-		i--;
-	while (crt_path[i] != '\0')
-	{
-		if (crt_path[i] == '/')
-			break ;
-		i--;
-	}
-	ft_strlcpy(new_path, crt_path, i + 1);
+	new_path = get_env_value(env_list, "HOME", cmd_index);
 	return (new_path);
+}
+
+char	*get_env_value(t_list *env_list, char *value_name, int cmd_index)
+{
+	t_env	*env;
+	char	*env_value;
+
+	while (cmd_index > 0)
+	{
+		env_list = env_list->next;
+		cmd_index--;
+	}
+	env = (t_env *)env_list->content;
+	env_value = ft_strdup(env->value);
+	return (env_value);
 }
