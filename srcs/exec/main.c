@@ -12,6 +12,7 @@ int	minishell(char **envp)
 	int		*pids;
 	int		**pipefds;
 	int		cmd_index;
+	int		i;
 
 	// struct sigaction	sa;
 	line = NULL;
@@ -19,16 +20,14 @@ int	minishell(char **envp)
 	init_shell_list(&shell_list);
 	while (1)
 	{
+		i = 0;
 		cmd_index = 0;
 		check_signal();
-		// printf("[%d]PASS\n", __LINE__);
 		line = readline("\033[32m$>\033[0m ");
-		// printf("line : %s\n", line);
-		// printf("[%d]PASS\n", __LINE__);
 		if (line == NULL)
 		{
+			printf("exit\n");
 			line = ft_strdup("exit");
-			// exit(1);
 		}
 		tokens = lexer(line); // free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list);
@@ -42,11 +41,11 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			// printf("[%d]PASS\n", __LINE__);
-			// is_signal_received();
+			check_signal_for_child(pids[i]);
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list, shell_list);
 			cmd_index++;
 			tmp = tmp->next;
+			i++;
 		}
 		wait_for_child_and_store_status(shell_list, pids, cmd_index);
 		add_history(line);
