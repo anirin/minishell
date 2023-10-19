@@ -21,10 +21,7 @@ int	minishell(char **envp)
 	{
 		cmd_index = 0;
 		check_signal();
-		// printf("[%d]PASS\n", __LINE__);
 		line = readline("\033[32m$>\033[0m ");
-		// printf("line : %s\n", line);
-		// printf("[%d]PASS\n", __LINE__);
 		if (line == NULL)
 		{
 			line = ft_strdup("exit");
@@ -32,6 +29,7 @@ int	minishell(char **envp)
 		}
 		tokens = lexer(line); // free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list);
+			// ft_lstiter(parsed_tokens, (void *)print_parsed_token);
 		//ここでsyntax error出したい
 		if (parsed_tokens == NULL)
 			continue ;

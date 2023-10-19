@@ -103,8 +103,7 @@ int			**malloc_pipefds(t_list *parsed_list);
 void		free_pipefds(int **pipefds);
 
 // perse
-t_list		*get_greater_than_tokens(t_list *tokens);
-t_list		*get_less_than_tokens(t_list *tokens);
+t_list		*get_redirect_tokens(t_list *tokens);
 t_list		*get_cmd_tokens(t_list *tokens);
 t_list		*get_args_tokens(t_list *tokens);
 void		move_head(t_list **head);

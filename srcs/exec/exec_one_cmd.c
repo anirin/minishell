@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/19 22:04:27 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/19 22:58:51 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	close_pipefds(int **pipefds, int cmd_index)
 	}
 }
 
-void	redirect_in(t_token *token)
+bool	redirect_in(t_token *token)
 {
 	char	*line;
 	int		fd;
@@ -45,6 +45,11 @@ void	redirect_in(t_token *token)
 	if (token->status == RD_IN && token->token_content != NULL)
 	{
 		fd = open(token->token_content, O_RDONLY);
+		if (fd == -1)
+		{
+			perror("redirect in\n");
+			return (false);
+		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -52,6 +57,11 @@ void	redirect_in(t_token *token)
 	{
 		fd = open(".heardoc", O_RDWR | O_CREAT | O_TRUNC,
 				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect in\n");
+			return (false);
+		}
 		while (line != NULL)
 		{
 			line = readline("heredoc> ");
@@ -68,13 +78,10 @@ void	redirect_in(t_token *token)
 		close(fd);
 		unlink(".heardoc");
 	}
-	else
-	{
-		ft_putendl_fd("syntax error '<' \n", STDERR_FILENO);
-	}
+	return (true);
 }
 
-void	redirect_out(t_token *token)
+bool	redirect_out(t_token *token)
 {
 	int		fd;
 
@@ -82,6 +89,11 @@ void	redirect_out(t_token *token)
 	{
 		fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
 				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect out\n");
+			return (false);
+		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -89,33 +101,38 @@ void	redirect_out(t_token *token)
 	{
 		fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
 				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect out\n");
+			return (false);
+		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	else
-	{
-		ft_putendl_fd("syntax error '>' \n", STDERR_FILENO);
-	}
+	return (true);
 }
 
 void	redirect_in_out(t_list *tokens)
 {
 	t_token	*token;
 
-	token = (t_token *)tokens->content;
 	while(tokens != NULL)
 	{
+		token = (t_token *)tokens->content;
 		if (token->status == RD_IN || token->status == RD_HEAEDOC)
 		{
-			redirect_in(token);
+			if (redirect_in(token) == false)
+				break ;
 		}
 		else if (token->status == RD_OUT || token->status == RD_APPEND)
 		{
-			redirect_out(token);
+			if (redirect_out(token) == false)
+				break ;
 		}
 		else if (token->status == RD_ERROR)
 		{
-			redirect_error(token); //あとで
+			ft_putendl_fd("syntax error redirect \n", STDERR_FILENO); // 変更の余地あり
+			break ;
 		}
 		tokens = tokens->next;
 	}
@@ -199,7 +216,6 @@ static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 {
 	redirect_pipe(pipefds, cmd_index);
 	redirect_in_out(token->redirect);
-	// redirect_out(token->greater_than);
 }
 
 static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list, int check, t_parsed_token *token)
@@ -242,12 +258,13 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		if (pids[cmd_index] == 0)
 		{
 			redirect(pipefds, token, cmd_index);
+			if (token->cmd == NULL)
+				return ;
 			if (check != BT_NOTBUILTIN)
 				exec_builtin_in_child_process(env_list, shell_list, check, token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}
-
 		else
 			close_pipefds(pipefds, cmd_index);
 	}

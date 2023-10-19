@@ -59,34 +59,6 @@ void	move_tokens_and_change_status_used(t_list **tokens)
 	}
 }
 
-// t_list	*get_greater_than_tokens(t_list *tokens)
-// {
-// 	t_list	*redirect_tokens;
-// 	t_token	*token;
-// 	t_token *new;
-
-// 	greater_than_tokens = NULL;
-// 	while (tokens != NULL)
-// 	{
-// 		token = (t_token *)tokens->content;
-// 		if (token->status == TK_GREATER_THAN)
-// 		{
-// 			new = malloc(sizeof(t_token));
-// 			new->status = get_greater_than_status(token->token_content);
-// 			new->token_content = get_content(tokens->next);
-// 			ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
-// 			move_tokens_and_change_status_used(&tokens);
-// 		}
-// 		else
-// 		{
-// 			tokens = tokens->next;
-// 		}
-// 		if (token->status == TK_PIPE)
-// 			break;
-// 	}
-// 	return (greater_than_tokens);
-// }
-
 t_list	*get_redirect_tokens(t_list *tokens)
 {
 	t_list	*redirect_tokens;
@@ -135,11 +107,11 @@ t_list	*get_cmd_tokens(t_list *tokens)
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
-		if (token->status == TK_PIPE && token->status != TK_USED)
+		if (token->status == TK_PIPE)
 		{
 			break ;
 		}
-		else if (count == 0 || (count >= 1 && token != NULL && token->token_content[0] == '-'))
+		else if (token->status != TK_USED && (count == 0 || (count >= 1 && token != NULL && token->token_content[0] == '-')))
 		{
 			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
@@ -147,10 +119,6 @@ t_list	*get_cmd_tokens(t_list *tokens)
 			ft_lstadd_back(&cmd_tokens, ft_lstnew(new));
 			token->status = TK_USED;
 			count++;
-		}
-		else
-		{
-			break ;
 		}
 		tokens = tokens->next;
 	}
@@ -167,17 +135,17 @@ t_list	*get_args_tokens(t_list *tokens)
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
-		if (token->status != TK_USED && token->status != TK_PIPE)
+		if (token->status == TK_PIPE)
+		{
+			break ;
+		}
+		else if (token->status != TK_USED)
 		{
 			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;
 			ft_lstadd_back(&args_tokens, ft_lstnew(new));
 			token->status = TK_USED;
-		}
-		else if (token->status == TK_PIPE)
-		{
-			break ;
 		}
 		tokens = tokens->next;
 	}

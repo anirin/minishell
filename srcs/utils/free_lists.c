@@ -16,8 +16,7 @@ void	free_env(t_env *env)
 
 void	free_parsed_token(t_parsed_token *parsed_token)
 {
-	ft_lstclear(&parsed_token->greater_than, (void *)free_token);
-	ft_lstclear(&parsed_token->less_than, (void *)free_token);
+	ft_lstclear(&parsed_token->redirect, (void *)free_token);
 	ft_lstclear(&parsed_token->cmd, (void *)free_token);
 	ft_lstclear(&parsed_token->args, (void *)free_token);
 	free(parsed_token);

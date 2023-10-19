@@ -44,12 +44,10 @@ void	print_token(t_token *token)
 void	print_parsed_token(t_parsed_token *parsed_token)
 {
 	printf("------print_parsed_token------\n");
-	printf("   >:\n");
-	ft_lstiter(parsed_token->greater_than, (void *)print_token);
-	printf("   <:\n");
-	ft_lstiter(parsed_token->less_than, (void *)print_token);
-	printf(" cmd:\n");
+	printf("redirect:\n");
+	ft_lstiter(parsed_token->redirect, (void *)print_token);
+	printf("     cmd:\n");
 	ft_lstiter(parsed_token->cmd, (void *)print_token);
-	printf("args:\n");
+	printf("    args:\n");
 	ft_lstiter(parsed_token->args, (void *)print_token);
 }

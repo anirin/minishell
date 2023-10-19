@@ -99,6 +99,7 @@ t_list	*get_list(t_list *tokens)
 	{
 		parsed_token = malloc(sizeof(t_parsed_token));
 		parsed_token->redirect = get_redirect_tokens(head);
+			// ft_lstiter(head, (void *)print_token);
 		parsed_token->cmd = get_cmd_tokens(head);
 		parsed_token->args = get_args_tokens(head);
 		new = ft_lstnew(parsed_token);
