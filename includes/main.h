@@ -139,7 +139,7 @@ void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
 // terminate_program.c
-bool		is_signal_received(void);
+bool		check_signal(void);
 
 // shell
 void		init_shell_list(t_list **shell_list);

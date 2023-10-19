@@ -97,7 +97,6 @@ bool	is_directory(char *input_path)
 		{
 			ft_putstr_fd("minishell: cd:", STDERR_FILENO);
 			perror("");
-			// printf("minishell : cd : %s\n", strerror(errno));
 		}
 		free((void *)stat_info);
 		return (false);
@@ -120,7 +119,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 	t_token	*cmd_content;
 	int		cmd_index;
 	char	*new_path;
-
+ 
 	new_path = NULL;
 	cmd_index = 0;
 	cmd_content = (t_token *)cmd->next->content;

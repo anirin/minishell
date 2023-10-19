@@ -19,7 +19,7 @@ bool	signal_received = false;
 void	put_new_prompt(int signum);
 void	nothing_to_do(int signum);
 
-bool	is_signal_received(void)
+bool	check_signal(void)
 {
 	signal_received = false;
 	signal(SIGINT, put_new_prompt);
@@ -31,6 +31,7 @@ void	put_new_prompt(int signum)
 {
 	signal_received = true;
 	rl_on_new_line();
+	printf("\n");
 	rl_replace_line("", 0);
 	rl_redisplay();
 }

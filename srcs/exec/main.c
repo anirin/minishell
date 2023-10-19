@@ -20,12 +20,15 @@ int	minishell(char **envp)
 	while (1)
 	{
 		cmd_index = 0;
+		check_signal();
+		// printf("[%d]PASS\n", __LINE__);
 		line = readline("\033[32m$>\033[0m ");
-		if (is_signal_received() == true)
-			continue ;
+		// printf("line : %s\n", line);
+		// printf("[%d]PASS\n", __LINE__);
 		if (line == NULL)
 		{
-			exit(1);
+			line = ft_strdup("exit");
+			// exit(1);
 		}
 		tokens = lexer(line); // free ok)
 		parsed_tokens = parser(tokens, env_list, shell_list);
@@ -39,7 +42,8 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			is_signal_received();
+			// printf("[%d]PASS\n", __LINE__);
+			// is_signal_received();
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list, shell_list);
 			cmd_index++;
 			tmp = tmp->next;

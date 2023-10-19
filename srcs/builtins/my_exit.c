@@ -1,6 +1,6 @@
-#include "main.h"
-#include "libft.h"
 #include "builtins.h"
+#include "libft.h"
+#include "main.h"
 
 static int	get_min_result(const char *str)
 {
@@ -40,7 +40,7 @@ static long	get_max_result(const char *str)
 	return (OK);
 }
 
-static int is_under_long_max(char *str)
+static int	is_under_long_max(char *str)
 {
 	int		sign;
 	int		i;
@@ -60,10 +60,10 @@ static int is_under_long_max(char *str)
 		return (get_min_result(&str[i]));
 }
 
-static int is_numeric(char *str)
+static int	is_numeric(char *str)
 {
-	int		i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -71,7 +71,7 @@ static int is_numeric(char *str)
 	{
 		i++;
 	}
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (NG);
@@ -85,14 +85,14 @@ static int is_numeric(char *str)
 
 void	my_exit(t_list *env_list, t_list *shell_list, t_list *cmd, t_list *args)
 {
-	t_token	*exit_status_token;
-	int		exit_status;
-	char	*exit_status_str;
-	t_list	*tmp;
+	t_token *exit_status_token;
+	int exit_status;
+	char *exit_status_str;
+	t_list *tmp;
 
 	(void)env_list;
-	tmp = ft_lstlast(cmd); //後でfreeするために一時的に保持しておかないと都合が悪い
-	ft_lstadd_back(&cmd, args);	 //-e とかも考慮するから
+	tmp = ft_lstlast(cmd);      //後でfreeするために一時的に保持しておかないと都合が悪い
+	ft_lstadd_back(&cmd, args); //-e とかも考慮するから
 	if (cmd->next == NULL)
 	{
 		tmp->next = NULL;
@@ -110,15 +110,17 @@ void	my_exit(t_list *env_list, t_list *shell_list, t_list *cmd, t_list *args)
 	printf("exit\n");
 	exit_status = ft_atoi((char *)exit_status_token->token_content);
 	tmp->next = NULL;
-	if (is_under_long_max(exit_status_str) == OK && is_numeric(exit_status_str) == OK)
+	if (is_under_long_max(exit_status_str) == OK
+		&& is_numeric(exit_status_str) == OK)
 	{
-		exit_status = exit_status % 256; //minusも同様
+		exit_status = exit_status % 256; // minusも同様
 		printf("exit_status = %d\n", exit_status);
-		exit(exit_status); //Long max < の場合はnumeric でexitする それまでは255 ~ 0で判定している
+		exit(exit_status); // Long max < の場合はnumeric でexitする それまでは255 ~ 0で判定している
 	}
 	else
 	{
-		printf("minishell: exit: %s: numeric argument required\n", (char *)exit_status_token->token_content);
+		printf("minishell: exit: %s: numeric argument required\n",
+			(char *)exit_status_token->token_content);
 		exit(255);
 	}
 }

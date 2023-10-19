@@ -11,7 +11,8 @@ char	**parse_env(char *token) // ok
 
 	i = 0;
 	count = 0;
-	parsed_env = ft_calloc(3, sizeof(char *));
+	parsed_env = ft_calloc(4, sizeof(char *));
+	parsed_env[3] = NULL;
 	while (token[i] != '\0')
 	{
 		if (strncmp(&token[i], "+=", 2) == 0 && count != 0)
@@ -149,8 +150,15 @@ void	add_env(char **parsed_env, t_list **env_list, t_list *shell_list) // ok
 	// freeしろ
 }
 
-void	my_export(t_list **env_list, t_list *shell_list, t_list *args)
-		// export TEST =CC エラー処理
+void	print_export(void *env_list)
+{
+	t_env *env;
+
+	env = (t_env *)env_list;
+	printf("declare -x %s=\"%s\"\n", env->name, env->value);
+}
+
+void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
@@ -158,7 +166,7 @@ void	my_export(t_list **env_list, t_list *shell_list, t_list *args)
 	env_index = 0;
 	if (args == NULL)
 	{
-		ft_lstiter(*env_list, (void *)print_env);
+		ft_lstiter(*env_list, (void *)print_export);
 		return ;
 	}
 	while (args != NULL)
@@ -174,6 +182,7 @@ void	my_export(t_list **env_list, t_list *shell_list, t_list *args)
 		}
 		else
 			add_env(parsed_env, env_list, shell_list);
+		free_array(parsed_env);
 		args = args->next;
 	}
 }
