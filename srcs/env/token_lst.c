@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
-/*   Updated: 2023/09/30 12:15:03 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/21 01:29:14 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
 
+/*
 void	insort_list(t_list *token, t_list *add_lst)
 {
 	t_list *next_list;
@@ -29,4 +30,27 @@ void	insort_list(t_list *token, t_list *add_lst)
 	next_list = token->next;
 	token->next = add_lst->next;
 	ft_lstadd_back(&token, next_list);
+}
+*/
+
+void	insort_list(t_list **token, t_list *add_lst, t_list *prev)
+{
+	t_list *tmp;
+	t_list *tmp_next_next;
+
+	if (prev != NULL)
+	{
+		tmp = prev->next;
+		tmp_next_next = prev->next->next;
+		prev->next = add_lst;
+		ft_lstadd_back(&prev, tmp_next_next);
+		ft_lstdelone(tmp, (void *)free_token);
+	}
+	else //if (prev == NULL)
+	{
+		tmp = (*token)->next;
+		(*token) = add_lst;
+		ft_lstadd_back(&add_lst, tmp);
+		ft_lstdelone(tmp, (void *)free_token);
+	}
 }

@@ -30,7 +30,7 @@ int	minishell(char **envp)
 			line = ft_strdup("exit");
 		}
 		tokens = lexer(line); // free ok)
-		parsed_tokens = parser(tokens, env_list, shell_list);
+		parsed_tokens = parser(&tokens, env_list, shell_list);
 		//ここでsyntax error出したい
 		if (parsed_tokens == NULL)
 			continue ;
