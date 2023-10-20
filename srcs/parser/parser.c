@@ -108,14 +108,14 @@ t_list	*get_list(t_list *tokens)
 	return (parsed_list);
 }
 
-t_list	*parser(t_list *tokens, t_list *env_list, t_list *shell_list)
+t_list	*parser(t_list **tokens, t_list *env_list, t_list *shell_list)
 {
 	t_list *preproc_tokens;
 	t_list *ret_tokens;
 
-	ft_lstiter(tokens, trim_quote);
+	ft_lstiter(*tokens, trim_quote);
 	expand_env(tokens, env_list, shell_list);
-	preproc_tokens = preprocess_tokens(tokens);
+	preproc_tokens = preprocess_tokens(*tokens);
 	ret_tokens = get_list(preproc_tokens);
 	ft_lstclear(&preproc_tokens, (void *)free_token);
 	return (ret_tokens);

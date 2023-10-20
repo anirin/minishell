@@ -88,7 +88,7 @@ t_list		*lexer(char *line);
 
 // parser
 t_list		*preprocess_tokens(t_list *tokens);
-t_list		*parser(t_list *tokens, t_list *env_list, t_list *shell_list);
+t_list		*parser(t_list **tokens, t_list *env_list, t_list *shell_list);
 
 // print
 void		print_list(t_list *list);
@@ -99,7 +99,7 @@ t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
 
 // env expand
-void		expand_env(t_list *token, t_list *env_list, t_list *shell_list);
+void		expand_env(t_list **token, t_list *env_list, t_list *shell_list);
 
 // pipefds
 int			**malloc_pipefds(t_list *parsed_list);
@@ -122,7 +122,8 @@ void		print_parsed_token(t_parsed_token *parsed_token);
 void		print_lst(void *content);
 
 // void	insort_list(t_list **token, t_list *add_list);
-void		insort_list(t_list *token, t_list *add_list);
+// void		insort_list(t_list *token, t_list *add_list);
+void	insort_list(t_list **token, t_list *add_lst, t_list *prev);
 
 // builtin
 int			is_builtin(t_list *cmd_and_option);

@@ -54,7 +54,14 @@ static t_list	*split_by_isspace(char *str)
 	while(1)
 	{
 		if (str[i] == '\0')
+		{
+			token = malloc(sizeof(t_token));
+			token->token_content = ft_strdup(" ");
+			token->status = TK_SPACE;
+			new = ft_lstnew(token);
+			ft_lstadd_back(&splited_env, new);
 			break ;
+		}
 		count = 0;
 		while (str[i] != '\0' && ft_isspace(str[i]) == UT_SPACE)
 		{
@@ -172,30 +179,55 @@ static char	*expand_env_in_str(char *token, t_list *env_list, t_list *shell_list
 	return (ret);
 }
 
-void	expand_env(t_list *token, t_list *env_list, t_list *shell_list) //ok
+bool	is_heardoc(t_list *prev)
+{
+	t_token *token;
+
+	if (prev == NULL)
+		return (false);
+	token = (t_token *)prev->content;
+	if (ft_strncmp(token->token_content, "<<", 3) == 0)
+		return (true);
+	return (false);
+}
+
+void	expand_env(t_list **token, t_list *env_list, t_list *shell_list) //ok
 {
 	char *env_value;
 	t_list *splited_env;
 	t_token *tmp;
-	t_token *prev;
+
+	t_list *prev;
+	t_list *tmp_prev;
+
+	t_list *head;
 
 	prev = NULL;
-	while (token != NULL)
+	head = *token;
+	while (head != NULL)
 	{
-		tmp = (t_token *)token->content;
-		if (tmp->status == TK_DOLL && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) != 0)))
+		tmp = (t_token *)head->content;
+		if (tmp->status == TK_DOLL && is_heardoc(prev) == false)
 		{
 			env_value = find_env_name(tmp->token_content, env_list, shell_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
-			insort_list(token, splited_env); //ok
+			head = head->next;
+			tmp_prev = ft_lstlast(splited_env);
+			insort_list(token, splited_env, prev); //ok
+			prev = tmp_prev;
 		}
-		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && (prev == NULL || (prev != NULL && ft_strncmp(prev->token_content, "<<", 3) != 0))) 
+		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && is_heardoc(prev) == false)
 		{
 			tmp->token_content = expand_env_in_str(tmp->token_content, env_list, shell_list); //ok
 			tmp->status = TK_NORMAL;
+			prev = head;
+			head = head->next;
 		}
-		prev = (t_token *)token->content;
-		token = token->next;
+		else
+		{
+			prev = head;
+			head = head->next;
+		}
 	}
 }

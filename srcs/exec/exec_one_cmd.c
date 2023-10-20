@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/20 22:35:37 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/21 01:55:07 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ bool	redirect_in_out(t_list *tokens)
 
 	while (tokens != NULL)
 	{
+		printf("ok\n");
 		token = (t_token *)tokens->content;
 		if (token->status == RD_OUT || token->status == RD_APPEND)
 		{
@@ -248,7 +249,16 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0)
 	// cd は親で実行させる必要がある
 	{
+		int tmp_stdin;
+		int tmp_stdout;
+
+		tmp_stdin = dup(STDIN_FILENO);
+		tmp_stdout = dup(STDOUT_FILENO);
+		redirect_in_out(token->redirect);
+			printf("redirect out!\n");
 		my_execve(env_list, shell_list, check, token->cmd, token->args);
+		dup2(tmp_stdin, STDIN_FILENO);
+		dup2(tmp_stdout, STDOUT_FILENO);
 	}
 	else
 	{
@@ -263,7 +273,6 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				exit(1);
 			if (token->cmd == NULL)
 			{
-					printf("no cmd\n");
 				exit(0);
 			}
 			if (check != BT_NOTBUILTIN)
