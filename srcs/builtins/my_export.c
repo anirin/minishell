@@ -85,7 +85,7 @@ int	is_added_env(char *env_name, t_list *env_list) // ok
 	while (env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (ft_strncmp(env->name, env_name, ft_strlen(env->name)) == 0)
+		if (ft_strncmp(env->name, env_name, ft_strlen(env->name) + 1) == 0)
 			return (count);
 		env_list = env_list->next;
 		count++;
@@ -120,7 +120,6 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 	}
 	env = (t_env *)env_list->content;
 	free(env->value);
-	env->value = NULL;
 	env->value = ft_strdup(env_value);
 }
 
@@ -158,6 +157,25 @@ void	print_export(void *env_list)
 	printf("declare -x %s=\"%s\"\n", env->name, env->value);
 }
 
+bool	check_export_error(char *str, t_list *shell_list)
+{
+	int i;
+
+	i = 0;
+	while(str[i] != '\0')
+	{
+		if (ft_isspace(str[i]) == 0)
+		{
+			printf("export: not valid in this context:");
+			printf("%s\n", str);
+			modify_finish_status(shell_list, 1);
+			return (false);
+		}
+		i++;
+	}
+	return (true);
+}
+
 void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TEST =CC エラー処理
 {
 	int env_index;
@@ -172,8 +190,10 @@ void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TE
 	while (args != NULL)
 	{
 		parsed_env = parse_env(((t_token *)args->content)->token_content);
+		if (check_export_error(parsed_env[0], shell_list) == false)
+			break;
 		env_index = is_added_env(parsed_env[0], *env_list);
-		if (env_index != 0)
+		if (env_index != -1)
 		{
 			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "+=", 3) == 0)
 				append_env(env_index, parsed_env[2], *env_list);
