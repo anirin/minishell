@@ -139,8 +139,8 @@ void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
 // terminate_program.c
-void		check_signal(void);
-void		check_signal_for_child(int pids);
+void		handle_signal(t_list *shell_list);
+void		handle_signal_for_child();
 
 // shell
 void		init_shell_list(t_list **shell_list);
