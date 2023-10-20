@@ -96,6 +96,7 @@ void	my_exit(t_list *env_list, t_list *shell_list, t_list *cmd, t_list *args)
 	if (cmd->next == NULL)
 	{
 		tmp->next = NULL;
+		printf("exit\n");
 		exit(0);
 	}
 	if (cmd->next->next != NULL)

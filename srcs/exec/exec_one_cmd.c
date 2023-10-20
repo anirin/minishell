@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/20 21:27:19 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/20 22:35:37 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,10 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 			if (redirect(pipefds, token, cmd_index) == false)
 				exit(1);
 			if (token->cmd == NULL)
+			{
+					printf("no cmd\n");
 				exit(0);
+			}
 			if (check != BT_NOTBUILTIN)
 				exec_builtin_in_child_process(env_list, shell_list, check,
 					token);
