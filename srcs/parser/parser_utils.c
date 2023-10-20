@@ -8,7 +8,7 @@ int		get_greater_than_status(char *str)
 	else if (ft_strlen(str) == 2)
 		return (RD_APPEND);
 	else
-		return (RD_ERROR);
+		return (RD_OUT_ERROR);
 }
 
 int		get_less_than_status(char *str)
@@ -18,7 +18,7 @@ int		get_less_than_status(char *str)
 	else if (ft_strlen(str) == 2)
 		return (RD_HEAEDOC);
 	else
-		return (RD_ERROR);
+		return (RD_IN_ERROR);
 }
 
 char	*get_content(t_list *tokens)
@@ -59,41 +59,13 @@ void	move_tokens_and_change_status_used(t_list **tokens)
 	}
 }
 
-t_list	*get_greater_than_tokens(t_list *tokens)
+t_list	*get_redirect_tokens(t_list *tokens)
 {
-	t_list	*greater_than_tokens;
+	t_list	*redirect_tokens;
 	t_token	*token;
 	t_token *new;
 
-	greater_than_tokens = NULL;
-	while (tokens != NULL)
-	{
-		token = (t_token *)tokens->content;
-		if (token->status == TK_GREATER_THAN)
-		{
-			new = malloc(sizeof(t_token));
-			new->status = get_greater_than_status(token->token_content);
-			new->token_content = get_content(tokens->next);
-			ft_lstadd_back(&greater_than_tokens, ft_lstnew(new));
-			move_tokens_and_change_status_used(&tokens);
-		}
-		else
-		{
-			tokens = tokens->next;
-		}
-		if (token->status == TK_PIPE)
-			break;
-	}
-	return (greater_than_tokens);
-}
-
-t_list	*get_less_than_tokens(t_list *tokens)
-{
-	t_list	*less_than_tokens;
-	t_token	*token;
-	t_token *new;
-
-	less_than_tokens = NULL;
+	redirect_tokens = NULL;
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
@@ -102,7 +74,15 @@ t_list	*get_less_than_tokens(t_list *tokens)
 			new = malloc(sizeof(t_token));
 			new->status = get_less_than_status(token->token_content);
 			new->token_content = get_content(tokens->next);
-			ft_lstadd_back(&less_than_tokens, ft_lstnew(new));
+			ft_lstadd_back(&redirect_tokens, ft_lstnew(new));
+			move_tokens_and_change_status_used(&tokens);
+		}
+		else if (token->status == TK_GREATER_THAN)
+		{
+			new = malloc(sizeof(t_token));
+			new->status = get_greater_than_status(token->token_content);
+			new->token_content = get_content(tokens->next);
+			ft_lstadd_back(&redirect_tokens, ft_lstnew(new));
 			move_tokens_and_change_status_used(&tokens);
 		}
 		else
@@ -112,7 +92,7 @@ t_list	*get_less_than_tokens(t_list *tokens)
 		if (token->status == TK_PIPE)
 			break;
 	}
-	return (less_than_tokens);
+	return (redirect_tokens);
 }
 
 t_list	*get_cmd_tokens(t_list *tokens)
@@ -127,11 +107,11 @@ t_list	*get_cmd_tokens(t_list *tokens)
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
-		if (token->status == TK_PIPE && token->status != TK_USED)
+		if (token->status == TK_PIPE)
 		{
 			break ;
 		}
-		else if (count == 0 || (count >= 1 && token != NULL && token->token_content[0] == '-'))
+		else if (token->status != TK_USED && (count == 0 || (count >= 1 && token != NULL && token->token_content[0] == '-')))
 		{
 			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
@@ -159,17 +139,17 @@ t_list	*get_args_tokens(t_list *tokens)
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
-		if (token->status != TK_USED && token->status != TK_PIPE)
+		if (token->status == TK_PIPE)
+		{
+			break ;
+		}
+		else if (token->status != TK_USED)
 		{
 			new = malloc(sizeof(t_token));
 			new->token_content = ft_strdup(token->token_content);
 			new->status = TK_NORMAL;
 			ft_lstadd_back(&args_tokens, ft_lstnew(new));
 			token->status = TK_USED;
-		}
-		else if (token->status == TK_PIPE)
-		{
-			break ;
 		}
 		tokens = tokens->next;
 	}

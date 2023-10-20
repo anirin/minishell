@@ -98,8 +98,7 @@ t_list	*get_list(t_list *tokens)
 	while (head != NULL)
 	{
 		parsed_token = malloc(sizeof(t_parsed_token));
-		parsed_token->less_than = get_less_than_tokens(head);
-		parsed_token->greater_than = get_greater_than_tokens(head);
+		parsed_token->redirect = get_redirect_tokens(head);
 		parsed_token->cmd = get_cmd_tokens(head);
 		parsed_token->args = get_args_tokens(head);
 		new = ft_lstnew(parsed_token);
