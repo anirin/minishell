@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "main.h"
 
-void	modify_finish_status(t_list *shell_list, int status)
+void	modify_finish_status(t_list *data, int status)
 {
 	t_env	*shell;
 
@@ -23,10 +23,11 @@ void	init_shell_list(t_list **shell_list)
 	ft_lstadd_back(shell_list, new);
 }
 
-void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_index)
+void	wait_for_child_and_store_status(t_list *shell_list, int *pids,
+		int cmd_index)
 {
-	int 	cmd_count;
-	int		status;
+	int cmd_count;
+	int status;
 
 	cmd_count = 0;
 	while (cmd_count < cmd_index)
@@ -34,7 +35,7 @@ void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_inde
 		waitpid(pids[cmd_count], &status, 0);
 		cmd_count++;
 	}
-	while(shell_list != NULL)
+	while (shell_list != NULL)
 	{
 		if (ft_strncmp(((t_env *)shell_list->content)->name, "?", 2) == 0)
 		{
@@ -43,6 +44,6 @@ void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_inde
 			((t_env *)shell_list->content)->value = ft_itoa(status % 256);
 			break ;
 		}
-		shell_list= shell_list->next;
+		shell_list = shell_list->next;
 	}
 }

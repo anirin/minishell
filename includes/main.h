@@ -83,6 +83,8 @@ typedef struct s_parsed_token
 	t_list *args; // token
 }			t_parsed_token;
 
+extern t_list *shell_list; // または他の初期値
+
 // lexer
 t_list		*lexer(char *line);
 
@@ -138,8 +140,8 @@ void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
 // terminate_program.c
-void		handle_signal(t_list *shell_list);
-void		handle_signal_for_child();
+void		handle_signal(void);
+void		handle_signal_for_child(void);
 
 // shell
 void		init_shell_list(t_list **shell_list);
