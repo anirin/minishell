@@ -101,6 +101,7 @@ void	my_exit(t_list *env_list, t_list *shell_list, t_list *cmd, t_list *args)
 	}
 	if (cmd->next->next != NULL)
 	{
+		tmp->next = NULL;
 		printf("exit\n");
 		printf("minishell: exit: too many arguments\n");
 		modify_finish_status(shell_list, 1);
