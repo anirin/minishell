@@ -12,7 +12,8 @@ enum		e_token_status
 	TK_GREATER_THAN,
 	TK_LESS_THAN,
 	TK_SPACE,
-	TK_USED
+	TK_USED,
+	TK_ERROR
 };
 
 // builtin

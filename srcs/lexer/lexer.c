@@ -17,7 +17,16 @@ int		add_quote_token_to_list(t_list **list, char *line, int i, char c)
 	{
 		word_num++;
 		i++;
-		if(line[i] == c)
+		if (line[i] == '\0')
+		{
+			token = (t_token *)malloc(sizeof(t_token));
+			token->token_content = ft_substr(line, i - word_num + 1, word_num);
+			token->status = TK_ERROR;
+			new = ft_lstnew(token);
+			ft_lstadd_back(list, new);
+			return (word_num - 1);
+		}
+		else if(line[i] == c)
 		{
 			token = (t_token *)malloc(sizeof(t_token));
 			token->token_content = ft_substr(line, i - word_num + 1, word_num);

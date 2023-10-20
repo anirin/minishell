@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/21 01:55:07 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/21 02:03:17 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,6 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		tmp_stdin = dup(STDIN_FILENO);
 		tmp_stdout = dup(STDOUT_FILENO);
 		redirect_in_out(token->redirect);
-			printf("redirect out!\n");
 		my_execve(env_list, shell_list, check, token->cmd, token->args);
 		dup2(tmp_stdin, STDIN_FILENO);
 		dup2(tmp_stdout, STDOUT_FILENO);

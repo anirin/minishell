@@ -54,6 +54,24 @@ int		check_last_pipe(t_list *tokens, t_list *shell_list)
 	return (OK);
 }
 
+int		check_quote_syntax_error(t_list *token, t_list *shell_list)
+{
+	t_token *content;
+	
+	while (token != NULL)
+	{
+		content = (t_token *)token->content;
+		if (content->status == TK_ERROR)
+		{
+			printf("quote wo to ji ro\n");
+			modify_finish_status(shell_list, 1);
+			return (NG);
+		}
+		token = token->next;
+	}
+	return (OK);
+}
+
 int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list)
 {
 	int		flag;
@@ -65,12 +83,8 @@ int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list)
 		if (check_last_pipe(token, shell_list) == NG)
 			return (NG);
 		parsed_token = (t_parsed_token *)list->content;
-		if (parsed_token->cmd == NULL)
-		// {
-		// 	printf("minishell: syntax error near unexpected token `|'\n");
-		// 	modify_finish_status(shell_list, 258);
-		// 	return (NG);
-		// }
+		if (check_quote_syntax_error(token, shell_list) == NG)
+			return (NG);
 		if (check_redirect_syntax_error(parsed_token->redirect, shell_list) == NG)
 			return (NG);
 		list = list->next;
