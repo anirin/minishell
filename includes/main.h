@@ -39,7 +39,8 @@ enum		e_util
 
 enum		e_redirect
 {
-	RD_ERROR = 10, //回避方法
+	RD_IN_ERROR = 10, //回避方法
+	RD_OUT_ERROR,
 	RD_IN,
 	RD_OUT,
 	RD_HEAEDOC,
@@ -76,8 +77,7 @@ typedef struct s_token
 typedef struct s_parsed_token
 {
 	//リダイレクトを格納
-	t_list *greater_than; // token
-	t_list *less_than;    // token
+	t_list *redirect; // token
 	//コマンドを格納
 	t_list *cmd;  // token
 	t_list *args; // token
@@ -106,8 +106,7 @@ int			**malloc_pipefds(t_list *parsed_list);
 void		free_pipefds(int **pipefds);
 
 // perse
-t_list		*get_greater_than_tokens(t_list *tokens);
-t_list		*get_less_than_tokens(t_list *tokens);
+t_list		*get_redirect_tokens(t_list *tokens);
 t_list		*get_cmd_tokens(t_list *tokens);
 t_list		*get_args_tokens(t_list *tokens);
 void		move_head(t_list **head);

@@ -29,8 +29,10 @@ void	print_token(t_token *token)
 	if (token->status == TK_USED)
 		printf("status: [USED]\n");
 	//
-	if (token->status == RD_ERROR)
-		printf("status: [RD_ERROR]\n");
+	if (token->status == RD_IN_ERROR)
+		printf("status: [RD_IN_ERROR]\n");
+	if (token->status == RD_OUT_ERROR)
+		printf("status: [RD_OUT_ERROR]\n");
 	if (token->status == RD_IN)
 		printf("status: [RD_IN]\n");
 	if (token->status == RD_OUT)
@@ -44,10 +46,8 @@ void	print_token(t_token *token)
 void	print_parsed_token(t_parsed_token *parsed_token)
 {
 	printf("------print_parsed_token------\n");
-	printf("   >:\n");
-	ft_lstiter(parsed_token->greater_than, (void *)print_token);
-	printf("   <:\n");
-	ft_lstiter(parsed_token->less_than, (void *)print_token);
+	printf("redirect:\n");
+	ft_lstiter(parsed_token->redirect, (void *)print_token);
 	printf(" cmd:\n");
 	ft_lstiter(parsed_token->cmd, (void *)print_token);
 	printf("args:\n");

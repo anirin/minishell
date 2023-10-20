@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/18 19:31:33 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/20 21:27:19 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,77 +37,102 @@ void	close_pipefds(int **pipefds, int cmd_index)
 	}
 }
 
-void	redirect_in(t_list *tokens)
+bool	redirect_in(t_token *token)
 {
-	t_token	*token;
 	char	*line;
 	int		fd;
 
-	while (tokens != NULL)
+	if (token->status == RD_IN && token->token_content != NULL)
 	{
-		token = (t_token *)tokens->content;
-		if (token->status == RD_IN && token->token_content != NULL)
+		fd = open(token->token_content, O_RDONLY);
+		if (fd == -1)
 		{
-			fd = open(token->token_content, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			perror("redirect open");
+			return (false);
 		}
-		else if (token->status == RD_HEAEDOC && token->token_content != NULL)
-		{
-			fd = open(".heardoc", O_RDWR | O_CREAT | O_TRUNC,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			while (line != NULL)
-			{
-				line = readline("heredoc> ");
-				if (ft_strncmp(line, token->token_content,
-						ft_strlen(token->token_content)) == 0)
-					break ;
-				ft_putendl_fd(line, fd);
-				free(line);
-				//もしheardocが何個もでできたならtmpファイルは別名にする必要がある
-			}
-			close(fd);
-			open(".heardoc", O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			unlink(".heardoc");
-		}
-		else
-		{
-			ft_putendl_fd("syntax error '<' \n", STDERR_FILENO);
-		}
-		tokens = tokens->next;
+		dup2(fd, STDIN_FILENO);
+		close(fd);
 	}
+	else if (token->status == RD_HEAEDOC && token->token_content != NULL)
+	{
+		fd = open(".heardoc", O_RDWR | O_CREAT | O_TRUNC,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect open");
+			return (false);
+		}
+		while (line != NULL)
+		{
+			line = readline("heredoc> ");
+			if (ft_strncmp(line, token->token_content,
+					ft_strlen(token->token_content)) == 0)
+				break ;
+			ft_putendl_fd(line, fd);
+			free(line);
+			//もしheardocが何個もでできたならtmpファイルは別名にする必要がある
+		}
+		close(fd);
+		open(".heardoc", O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		unlink(".heardoc");
+	}
+	return (true);
 }
 
-void	redirect_out(t_list *tokens)
+bool	redirect_out(t_token *token)
+{
+	int		fd;
+
+	if (token->status == RD_OUT && token->token_content != NULL)
+	{
+		fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect open\n");
+			return (false);
+		}
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else if (token->status == RD_APPEND && token->token_content != NULL)
+	{
+		fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
+				S_IRWXU | S_IRWXG | S_IRWXO);
+		if (fd == -1)
+		{
+			perror("redirect open\n");
+			return (false);
+		}
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	return (true);
+}
+
+bool	redirect_in_out(t_list *tokens)
 {
 	t_token	*token;
-	int		fd;
 
 	while (tokens != NULL)
 	{
 		token = (t_token *)tokens->content;
-		if (token->status == RD_OUT && token->token_content != NULL)
+		if (token->status == RD_OUT || token->status == RD_APPEND)
 		{
-			fd = open(token->token_content, O_WRONLY | O_CREAT | O_TRUNC,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			if (redirect_out(token) == false)
+				return (false);
+
 		}
-		else if (token->status == RD_APPEND && token->token_content != NULL)
+		else if (token->status == RD_IN || token->status == RD_HEAEDOC)
 		{
-			fd = open(token->token_content, O_WRONLY | O_APPEND | O_CREAT,
-					S_IRWXU | S_IRWXG | S_IRWXO);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else
-		{
-			ft_putendl_fd("syntax error '>' \n", STDERR_FILENO);
+			if (redirect_in(token) == false)
+				return (false);
 		}
 		tokens = tokens->next;
 	}
+	return (true);
 }
 
 char	**split_path(t_list *env_list)
@@ -184,11 +209,12 @@ char	**get_argv(t_list *cmd, t_list *args)
 	return (ret);
 }
 
-static void	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
+static bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 {
 	redirect_pipe(pipefds, cmd_index);
-	redirect_in(token->less_than);
-	redirect_out(token->greater_than);
+	if (redirect_in_out(token->redirect) == false)
+		return (false);
+	return (true);
 }
 
 static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list,
@@ -233,14 +259,16 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		pids[cmd_index] = fork();
 		if (pids[cmd_index] == 0)
 		{
-			redirect(pipefds, token, cmd_index);
+			if (redirect(pipefds, token, cmd_index) == false)
+				exit(1);
+			if (token->cmd == NULL)
+				exit(0);
 			if (check != BT_NOTBUILTIN)
 				exec_builtin_in_child_process(env_list, shell_list, check,
 					token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}
-
 		else
 			close_pipefds(pipefds, cmd_index);
 	}
