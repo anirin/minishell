@@ -164,7 +164,7 @@ bool	check_export_error(char *str, t_list *shell_list)
 	i = 0;
 	while(str[i] != '\0')
 	{
-		if (ft_isspace(str[i]) == 0)
+		if (ft_isspace(str[i]) == 0 || ft_isdigit(str[0]) != 0)
 		{
 			printf("export: not valid in this context:");
 			printf("%s\n", str);
