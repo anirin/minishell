@@ -143,8 +143,8 @@ void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
 // terminate_program.c
-void		handle_signal(void);
-void		handle_signal_for_child(void);
+void		parent_signal_handler(void);
+void		child_signal_handler(void);
 
 // shell
 void		init_shell_list(t_list **shell_list);

@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "main.h"
 
-t_list *shell_list = NULL;
+t_list	*shell_list = NULL;
 
 int g_finish_status; // または他の初期値
 
@@ -23,11 +23,10 @@ int	minishell(char **envp)
 	{
 		i = 0;
 		cmd_index = 0;
-		handle_signal();
+		parent_signal_handler();
 		line = readline("\033[32m$>\033[0m ");
 		if (line == NULL)
 		{
-			printf("exit\n");
 			line = ft_strdup("exit");
 		}
 		tokens = lexer(line); // free ok)
@@ -42,7 +41,6 @@ int	minishell(char **envp)
 		tmp = parsed_tokens;
 		while (tmp != NULL)
 		{
-			handle_signal_for_child();
 			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
 			cmd_index++;
 			tmp = tmp->next;
