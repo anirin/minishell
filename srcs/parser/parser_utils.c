@@ -120,6 +120,10 @@ t_list	*get_cmd_tokens(t_list *tokens)
 			token->status = TK_USED;
 			count++;
 		}
+		else
+		{
+			break ;
+		}
 		tokens = tokens->next;
 	}
 	return (cmd_tokens);
