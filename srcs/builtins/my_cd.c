@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/19 21:48:24 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/21 16:00:48 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	{
 		args_content = (t_token *)args->content;
 		new_path = ft_strdup(args_content->token_content);
+		printf("new_path : %s\n", new_path);
 	}
 	overwrite_oldpwd(env_list);
 	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
@@ -119,7 +120,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 	t_token	*cmd_content;
 	int		cmd_index;
 	char	*new_path;
- 
+
 	new_path = NULL;
 	cmd_index = 0;
 	cmd_content = (t_token *)cmd->next->content;
