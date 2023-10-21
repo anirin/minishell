@@ -37,7 +37,7 @@ void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_inde
 	while(shell_list != NULL)
 	{
 		if (ft_strncmp(((t_env *)shell_list->content)->name, "?", 2) == 0)
-		{
+		{ 
 			free(((t_env *)shell_list->content)->value);
 			status = WEXITSTATUS(status);
 			((t_env *)shell_list->content)->value = ft_itoa(status % 256);

@@ -1,6 +1,8 @@
 #include "libft.h"
 #include "main.h"
 
+t_list *shell_list = NULL;
+
 int	minishell(char **envp)
 {
 	char	*line;
@@ -8,21 +10,20 @@ int	minishell(char **envp)
 	t_list	*parsed_tokens;
 	t_list	*tmp;
 	t_list	*env_list;
-	t_list	*shell_list;
 	int		*pids;
 	int		**pipefds;
 	int		cmd_index;
+	t_list	*shell_list;
 	int		i;
 
 	// struct sigaction	sa;
-	line = NULL;
 	env_list = envp_convert_to_envlist(envp);
 	init_shell_list(&shell_list);
 	while (1)
 	{
 		i = 0;
 		cmd_index = 0;
-		handle_signal(shell_list);
+		handle_signal();
 		line = readline("\033[32m$>\033[0m ");
 		if (line == NULL)
 		{
