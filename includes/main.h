@@ -83,7 +83,7 @@ typedef struct s_parsed_token
 	t_list *args; // token
 }			t_parsed_token;
 
-extern t_list *shell_list; // または他の初期値
+extern int finish_status; // または他の初期値
 
 // lexer
 t_list		*lexer(char *line);

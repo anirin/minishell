@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/20 23:57:16 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/21 15:50:58 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	quit_child_proccess(int signum);
 void	nothing_to_do(int signum);
 void	nothing_to_do_for_child(int signum);
 
-void	handle_signal(void)
+void	handle_signal()
 {
 	struct sigaction	sa;
 
@@ -33,8 +33,7 @@ void	handle_signal(void)
 
 void	put_new_prompt(int signum, siginfo_t *siginfo, void *content)
 {
-	printf("shell_list : %p\n", shell_list);
-	modify_finish_status(shell_list, 1);
+	finish_status = 1;
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
