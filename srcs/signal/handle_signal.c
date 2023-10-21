@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/21 17:33:20 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/21 21:19:03 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	parent_signal_handler(void)
 
 void	child_signal_handler(void)
 {
-	signal(SIGINT, quit_child_proccess);
+	// signal(SIGINT, quit_child_proccess);
 	signal(SIGQUIT, put_quit_massage);
 }
 
@@ -58,5 +58,5 @@ void	put_quit_massage(int signum)
 void	quit_child_proccess(int signum)
 {
 	g_finish_status = 130;
-	printf("\n");
+	// printf("\n");
 }

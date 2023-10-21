@@ -35,9 +35,29 @@ void	wait_for_child_and_store_status(int *pids, int cmd_index)
 		waitpid(pids[cmd_count], &status, 0);
 		cmd_count++;
 	}
+
+	if (WIFEXITED(status))
+	{
+		printf("exit(3), status=%d\n", WEXITSTATUS(status));
+	}
+	else if (WIFSIGNALED(status))
+	{
+		// WIFSIGNALED() が非ゼロならシグナルによる終了
+		// WTERMSIG() でシグナル番号が得られる
+		// printf("signal, sig=%d\n", WTERMSIG(status));
+		g_finish_status = WTERMSIG(status) + 128;
+	}
+	else
+	{
+		// それ以外の終了
+		printf("aborted");
+	}
+
+	/*
 	if (g_finish_status == 0)
 	{
 		status = WEXITSTATUS(status);
 		g_finish_status = status % 256;
 	}
+	*/
 }

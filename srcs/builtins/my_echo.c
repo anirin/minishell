@@ -27,11 +27,11 @@ static int	is_valid_options(t_list *options)
 	{
 		option = options->content;
 		option_str = (char *)option->token_content;
-		if (is_valid_option(option_str) == OK)
-			return (OK);
+		if (is_valid_option(option_str) == NG)
+			return (NG);
 		options = options->next;
 	}
-	return (NG);
+	return (OK);
 }
 
 static int	print_invalid_options(t_list *options)
