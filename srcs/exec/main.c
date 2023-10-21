@@ -15,13 +15,11 @@ int	minishell(char **envp)
 	int		*pids;
 	int		**pipefds;
 	int		cmd_index;
-	t_list	*shell_list;
 	int		i;
 
 	g_finish_status = 0;
 	// struct sigaction	sa;
 	env_list = envp_convert_to_envlist(envp);
-	init_shell_list(&shell_list);
 	while (1)
 	{
 		i = 0;
@@ -34,11 +32,11 @@ int	minishell(char **envp)
 			line = ft_strdup("exit");
 		}
 		tokens = lexer(line); // free ok)
-		parsed_tokens = parser(&tokens, env_list, shell_list);
+		parsed_tokens = parser(&tokens, env_list);
 		//ここでsyntax error出したい
 		if (parsed_tokens == NULL)
 			continue ;
-		if (check_syntax_error(parsed_tokens, tokens, shell_list) == NG)
+		if (check_syntax_error(parsed_tokens, tokens) == NG)
 			continue ;
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
 		pipefds = malloc_pipefds(parsed_tokens);
@@ -46,12 +44,12 @@ int	minishell(char **envp)
 		while (tmp != NULL)
 		{
 			handle_signal_for_child();
-			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list, shell_list);
+			exec_one_cmd(pids, pipefds, tmp, cmd_index, &env_list);
 			cmd_index++;
 			tmp = tmp->next;
 			i++;
 		}
-		wait_for_child_and_store_status(shell_list, pids, cmd_index);
+		wait_for_child_and_store_status(pids, cmd_index);
 		add_history(line);
 		free(line);
 		free(pids);
@@ -60,7 +58,6 @@ int	minishell(char **envp)
 		free_pipefds(pipefds);
 	}
 	ft_lstclear(&env_list, (void *)free_env);
-	ft_lstclear(&shell_list, (void *)free_env);
 	return (0);
 }
 

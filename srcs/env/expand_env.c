@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "main.h"
 
-static char	*find_env_name(char *doller_token, t_list *env_list, t_list *shell_list) //ok
+static char	*find_env_name(char *doller_token, t_list *env_list) //ok
 {
 	t_env *env;
 	t_env *shell;
@@ -157,7 +157,7 @@ static t_list	*find_dollar_and_parse(char *token)
 	return (parsed_tokens);
 }
 
-static char	*expand_env_in_str(char *token, t_list *env_list, t_list *shell_list) //ok
+static char	*expand_env_in_str(char *token, t_list *env_list) //ok
 {
 	t_list *head;
 	t_list *parsed_tokens;
@@ -171,7 +171,7 @@ static char	*expand_env_in_str(char *token, t_list *env_list, t_list *shell_list
 		if (ft_strchr(parsed_tokens->content, '$') != NULL)
 		{
 			tmp = parsed_tokens->content;
-			parsed_tokens->content = find_env_name(tmp, env_list, shell_list);
+			parsed_tokens->content = find_env_name(tmp, env_list);
 			free(tmp);
 		}
 		parsed_tokens = parsed_tokens->next;
@@ -193,7 +193,7 @@ bool	is_heardoc(t_list *prev)
 	return (false);
 }
 
-void	expand_env(t_list **token, t_list *env_list, t_list *shell_list) //ok
+void	expand_env(t_list **token, t_list *env_list) //ok
 {
 	char *env_value;
 	t_list *splited_env;
@@ -211,7 +211,7 @@ void	expand_env(t_list **token, t_list *env_list, t_list *shell_list) //ok
 		tmp = (t_token *)head->content;
 		if (tmp->status == TK_DOLL && is_heardoc(prev) == false)
 		{
-			env_value = find_env_name(tmp->token_content, env_list, shell_list);
+			env_value = find_env_name(tmp->token_content, env_list);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
 			head = head->next;
@@ -221,7 +221,7 @@ void	expand_env(t_list **token, t_list *env_list, t_list *shell_list) //ok
 		}
 		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && is_heardoc(prev) == false)
 		{
-			tmp->token_content = expand_env_in_str(tmp->token_content, env_list, shell_list); //ok
+			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
 			tmp->status = TK_NORMAL;
 			prev = head;
 			head = head->next;

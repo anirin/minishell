@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "main.h"
 
-int	check_redirect_syntax_error(t_list *less_than, t_list *shell_list)
+int	check_redirect_syntax_error(t_list *less_than)
 {
 	t_token *token;
 
@@ -13,7 +13,7 @@ int	check_redirect_syntax_error(t_list *less_than, t_list *shell_list)
 			printf("syntax error near unexpected token `");
 			printf("<"); //ここは面倒だ
 			printf("'\n");
-			modify_finish_status(shell_list, 258);
+			g_finish_status = 258;
 			return (NG);
 		}
 		else if (token->status == RD_OUT_ERROR)
@@ -21,14 +21,14 @@ int	check_redirect_syntax_error(t_list *less_than, t_list *shell_list)
 			printf("syntax error near unexpected token `");
 			printf(">"); //ここは面倒だ
 			printf("'\n");
-			modify_finish_status(shell_list, 258);
+			g_finish_status = 258;
 			return (NG);
 		}
 		else if (token->token_content == NULL)
 		{
 			printf("minishell: syntax error near unexpected token `[redirect]'\n");
 			// < > にする
-			modify_finish_status(shell_list, 258);
+			g_finish_status = 258;
 			return (NG);
 		}
 		less_than = less_than->next;
@@ -36,7 +36,7 @@ int	check_redirect_syntax_error(t_list *less_than, t_list *shell_list)
 	return (OK);
 }
 
-int		check_last_pipe(t_list *tokens, t_list *shell_list)
+int		check_last_pipe(t_list *tokens)
 {
 	t_token *last_token;
 	t_list *preproc_tokens;
@@ -46,7 +46,7 @@ int		check_last_pipe(t_list *tokens, t_list *shell_list)
 	if (last_token->status == TK_PIPE)
 	{
 		printf("minishell : syntax error close pipe `|'\n");
-		modify_finish_status(shell_list, 258);
+		g_finish_status = 258;
 		ft_lstclear(&preproc_tokens, (void *)free_token);
 		return (NG);
 	}
@@ -54,7 +54,7 @@ int		check_last_pipe(t_list *tokens, t_list *shell_list)
 	return (OK);
 }
 
-int		check_quote_syntax_error(t_list *token, t_list *shell_list)
+int		check_quote_syntax_error(t_list *token)
 {
 	t_token *content;
 	
@@ -64,7 +64,7 @@ int		check_quote_syntax_error(t_list *token, t_list *shell_list)
 		if (content->status == TK_ERROR)
 		{
 			printf("quote wo to ji ro\n");
-			modify_finish_status(shell_list, 1);
+			g_finish_status = 1;
 			return (NG);
 		}
 		token = token->next;
@@ -72,7 +72,7 @@ int		check_quote_syntax_error(t_list *token, t_list *shell_list)
 	return (OK);
 }
 
-int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list)
+int		check_syntax_error(t_list *list, t_list *token)
 {
 	int		flag;
 	t_parsed_token *parsed_token;
@@ -80,12 +80,12 @@ int		check_syntax_error(t_list *list, t_list *token, t_list *shell_list)
 	flag = OK;
 	while (list != NULL)
 	{
-		if (check_last_pipe(token, shell_list) == NG)
+		if (check_last_pipe(token) == NG)
 			return (NG);
 		parsed_token = (t_parsed_token *)list->content;
-		if (check_quote_syntax_error(token, shell_list) == NG)
+		if (check_quote_syntax_error(token) == NG)
 			return (NG);
-		if (check_redirect_syntax_error(parsed_token->redirect, shell_list) == NG)
+		if (check_redirect_syntax_error(parsed_token->redirect) == NG)
 			return (NG);
 		list = list->next;
 	}
