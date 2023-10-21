@@ -18,7 +18,6 @@ int	minishell(char **envp)
 	int		i;
 
 	g_finish_status = 0;
-	// struct sigaction	sa;
 	env_list = envp_convert_to_envlist(envp);
 	while (1)
 	{
