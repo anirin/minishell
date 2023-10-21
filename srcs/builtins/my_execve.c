@@ -2,13 +2,13 @@
 #include "libft.h"
 #include "main.h"
 
-void	my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd,
+void	my_execve(t_list **env_list, int check, t_list *cmd,
 		t_list *args)
 {
 	(void)cmd;
 	if (check == BT_EXPORT)
 	{
-		my_export(env_list, shell_list, args);
+		my_export(env_list, args);
 	}
 	if (check == BT_ECHO)
 	{
@@ -20,7 +20,7 @@ void	my_execve(t_list **env_list, t_list *shell_list, int check, t_list *cmd,
 	}
 	if (check == BT_EXIT)
 	{
-		my_exit(*env_list, shell_list, cmd, args);
+		my_exit(*env_list, cmd, args);
 	}
 	if (check == BT_PWD)
 	{

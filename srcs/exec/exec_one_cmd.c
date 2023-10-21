@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/21 02:03:17 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/21 16:24:01 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,10 +218,10 @@ static bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 	return (true);
 }
 
-static void	exec_builtin_in_child_process(t_list **env_list, t_list *shell_list,
+static void	exec_builtin_in_child_process(t_list **env_list,
 		int check, t_parsed_token *token)
 {
-	my_execve(env_list, shell_list, check, token->cmd, token->args);
+	my_execve(env_list, check, token->cmd, token->args);
 	exit(0);
 }
 
@@ -239,7 +239,7 @@ static void	exec_notbuiltin_in_parent_process(t_parsed_token *token,
 }
 
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-		int cmd_index, t_list **env_list, t_list *shell_list)
+		int cmd_index, t_list **env_list)
 {
 	t_parsed_token *token;
 	int check;
@@ -255,7 +255,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		tmp_stdin = dup(STDIN_FILENO);
 		tmp_stdout = dup(STDOUT_FILENO);
 		redirect_in_out(token->redirect);
-		my_execve(env_list, shell_list, check, token->cmd, token->args);
+		my_execve(env_list, check, token->cmd, token->args);
 		dup2(tmp_stdin, STDIN_FILENO);
 		dup2(tmp_stdout, STDOUT_FILENO);
 	}
@@ -275,7 +275,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				exit(0);
 			}
 			if (check != BT_NOTBUILTIN)
-				exec_builtin_in_child_process(env_list, shell_list, check,
+				exec_builtin_in_child_process(env_list, check,
 					token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);

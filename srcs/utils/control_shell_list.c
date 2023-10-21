@@ -23,7 +23,7 @@ void	init_shell_list(t_list **shell_list)
 	ft_lstadd_back(shell_list, new);
 }
 
-void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_index)
+void	wait_for_child_and_store_status(int *pids, int cmd_index)
 {
 	int 	cmd_count;
 	int		status;
@@ -34,15 +34,6 @@ void	wait_for_child_and_store_status(t_list *shell_list, int *pids, int cmd_inde
 		waitpid(pids[cmd_count], &status, 0);
 		cmd_count++;
 	}
-	while(shell_list != NULL)
-	{
-		if (ft_strncmp(((t_env *)shell_list->content)->name, "?", 2) == 0)
-		{ 
-			free(((t_env *)shell_list->content)->value);
-			status = WEXITSTATUS(status);
-			((t_env *)shell_list->content)->value = ft_itoa(status % 256);
-			break ;
-		}
-		shell_list= shell_list->next;
-	}
+	status = WEXITSTATUS(status);
+	g_finish_status = status % 256;
 }

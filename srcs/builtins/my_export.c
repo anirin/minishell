@@ -123,7 +123,7 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 	env->value = ft_strdup(env_value);
 }
 
-void	add_env(char **parsed_env, t_list **env_list, t_list *shell_list) // ok
+void	add_env(char **parsed_env, t_list **env_list) // ok
 {
 	char *new_env_value;
 	t_list *new_lst;
@@ -134,7 +134,7 @@ void	add_env(char **parsed_env, t_list **env_list, t_list *shell_list) // ok
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(parsed_env[0], STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		modify_finish_status(shell_list, 1);
+		g_finish_status = 1;
 		return ;
 	}
 	new_env = malloc(sizeof(t_env));
@@ -157,7 +157,7 @@ void	print_export(void *env_list)
 	printf("declare -x %s=\"%s\"\n", env->name, env->value);
 }
 
-bool	check_export_error(char *str, t_list *shell_list)
+bool	check_export_error(char *str)
 {
 	int i;
 
@@ -168,7 +168,7 @@ bool	check_export_error(char *str, t_list *shell_list)
 		{
 			printf("export: not valid in this context:");
 			printf("%s\n", str);
-			modify_finish_status(shell_list, 1);
+			g_finish_status = 1;
 			return (false);
 		}
 		i++;
@@ -176,7 +176,7 @@ bool	check_export_error(char *str, t_list *shell_list)
 	return (true);
 }
 
-void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TEST =CC エラー処理
+void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
@@ -190,7 +190,7 @@ void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TE
 	while (args != NULL)
 	{
 		parsed_env = parse_env(((t_token *)args->content)->token_content);
-		if (check_export_error(parsed_env[0], shell_list) == false)
+		if (check_export_error(parsed_env[0]) == false)
 			break;
 		env_index = is_added_env(parsed_env[0], *env_list);
 		if (env_index != -1)
@@ -201,7 +201,7 @@ void	my_export(t_list **env_list, t_list *shell_list, t_list *args) // export TE
 				overwrite_env(env_index, parsed_env[2], *env_list);
 		}
 		else
-			add_env(parsed_env, env_list, shell_list);
+			add_env(parsed_env, env_list);
 		free_array(parsed_env);
 		args = args->next;
 	}
