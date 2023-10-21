@@ -25,15 +25,19 @@ void	init_shell_list(t_list **shell_list)
 
 void	wait_for_child_and_store_status(int *pids, int cmd_index)
 {
-	int 	cmd_count;
-	int		status;
+	int cmd_count;
+	int status;
 
 	cmd_count = 0;
 	while (cmd_count < cmd_index)
 	{
+		child_signal_handler();
 		waitpid(pids[cmd_count], &status, 0);
 		cmd_count++;
 	}
-	status = WEXITSTATUS(status);
-	g_finish_status = status % 256;
+	if (g_finish_status == 0)
+	{
+		status = WEXITSTATUS(status);
+		g_finish_status = status % 256;
+	}
 }
