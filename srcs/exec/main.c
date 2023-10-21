@@ -3,6 +3,8 @@
 
 t_list *shell_list = NULL;
 
+int g_finish_status; // または他の初期値
+
 int	minishell(char **envp)
 {
 	char	*line;
@@ -16,6 +18,7 @@ int	minishell(char **envp)
 	t_list	*shell_list;
 	int		i;
 
+	g_finish_status = 0;
 	// struct sigaction	sa;
 	env_list = envp_convert_to_envlist(envp);
 	init_shell_list(&shell_list);

@@ -50,6 +50,8 @@ enum		e_redirect
 
 # define PATH_SIZE 1024
 
+extern int g_finish_status; // または他の初期値
+
 // readline
 # include "libft.h"
 # include "builtins.h"
@@ -84,7 +86,6 @@ typedef struct s_parsed_token
 	t_list *args; // token
 }			t_parsed_token;
 
-extern int finish_status; // または他の初期値
 
 // lexer
 t_list		*lexer(char *line);

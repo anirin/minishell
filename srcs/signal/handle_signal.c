@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/21 15:50:58 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/21 15:58:39 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_signal()
 
 void	put_new_prompt(int signum, siginfo_t *siginfo, void *content)
 {
-	finish_status = 1;
+	g_finish_status = 1;
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
