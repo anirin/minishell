@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/21 16:24:01 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/22 16:34:55 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 
 	token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(token->cmd);
+	pids[cmd_index] = -1;
 	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0)
 	// cd は親で実行させる必要がある
 	{
