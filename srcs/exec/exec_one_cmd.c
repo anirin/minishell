@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/21 16:24:01 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/22 15:11:42 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,9 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 			free(ret);
 		}
 	}
+	printf("minishell: %s: command not found\n", cmd);
 	free_array(paths);
-	return (NULL);
+	exit(127);
 }
 
 char	**get_argv(t_list *cmd, t_list *args)

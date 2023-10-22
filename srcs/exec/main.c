@@ -35,7 +35,13 @@ int	minishell(char **envp)
 		if (parsed_tokens == NULL)
 			continue ;
 		if (check_syntax_error(parsed_tokens, tokens) == NG)
+		{
+			add_history(line);
+			ft_lstclear(&tokens, (void *)free_token);
+			ft_lstclear(&parsed_tokens, (void *)free_parsed_token);
+			free(line);
 			continue ;
+		}
 		pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
 		pipefds = malloc_pipefds(parsed_tokens);
 		tmp = parsed_tokens;

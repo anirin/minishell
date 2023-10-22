@@ -36,14 +36,21 @@ int	check_redirect_syntax_error(t_list *less_than)
 	return (OK);
 }
 
-int		check_last_pipe(t_list *tokens)
+int		check_pipe(t_list *tokens, t_parsed_token *parsed_token)
 {
 	t_token *last_token;
 	t_list *preproc_tokens;
 
 	preproc_tokens = preprocess_tokens(tokens);
 	last_token = (t_token *)ft_lstlast(preproc_tokens)->content;
-	if (last_token->status == TK_PIPE)
+	if (parsed_token->cmd == NULL && parsed_token->redirect == NULL)
+	{
+		printf("minishell : syntax error near unexpected token `|'\n");
+		g_finish_status = 258;
+		ft_lstclear(&preproc_tokens, (void *)free_token);
+		return (NG);
+	}
+	else if (last_token->status == TK_PIPE)
 	{
 		printf("minishell : syntax error close pipe `|'\n");
 		g_finish_status = 258;
@@ -80,9 +87,9 @@ int		check_syntax_error(t_list *list, t_list *token)
 	flag = OK;
 	while (list != NULL)
 	{
-		if (check_last_pipe(token) == NG)
-			return (NG);
 		parsed_token = (t_parsed_token *)list->content;
+		if (check_pipe(token, parsed_token) == NG)
+			return (NG);
 		if (check_quote_syntax_error(token) == NG)
 			return (NG);
 		if (check_redirect_syntax_error(parsed_token->redirect) == NG)
