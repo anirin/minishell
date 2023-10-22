@@ -195,9 +195,9 @@ void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処�
 		env_index = is_added_env(parsed_env[0], *env_list);
 		if (env_index != -1)
 		{
-			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "+=", 3) == 0)
+			if (parsed_env[1] != NULL && ft_strncmp(parsed_env[1], "+=", 3) == 0)
 				append_env(env_index, parsed_env[2], *env_list);
-			if (parsed_env[1] != NULL && strncmp(parsed_env[1], "=", 2) == 0)
+			if (parsed_env[1] != NULL && ft_strncmp(parsed_env[1], "=", 2) == 0)
 				overwrite_env(env_index, parsed_env[2], *env_list);
 		}
 		else

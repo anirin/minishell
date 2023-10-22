@@ -128,7 +128,7 @@ int		add_pipe_token_to_list(t_list **list, char *line, int i)
 	(void)line; 
 	(void)i;
 	token = (t_token *)malloc(sizeof(t_token));
-	token->token_content = strdup("|");
+	token->token_content = ft_strdup("|");
 	token->status = TK_PIPE;
 	new = ft_lstnew(token);
 	ft_lstadd_back(list, new);
