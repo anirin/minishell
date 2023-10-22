@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/22 15:11:42 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/22 17:59:58 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,15 +226,39 @@ static void	exec_builtin_in_child_process(t_list **env_list,
 	exit(0);
 }
 
+char		**envlist_to_envp(t_list *env_list)
+{
+	t_env	*env;
+	char	**ret;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	ret = malloc(sizeof(char *) * (ft_lstsize(env_list) + 1));
+	while (env_list != NULL)
+	{
+		env = (t_env *)env_list->content;
+		tmp = ft_strjoin(env->name, "=");
+		ret[i] = ft_strjoin(tmp, env->value);
+		free(tmp);
+		env_list = env_list->next;
+		i++;
+	}
+	ret[i] = NULL;
+	return (ret);
+}
+
 static void	exec_notbuiltin_in_parent_process(t_parsed_token *token,
 		t_list *env_list)
 {
 	char	*path;
 	char	**argv;
+	char	**envp;
 
 	path = get_path(token->cmd, env_list);
 	argv = get_argv(token->cmd, token->args);
-	execve(path, argv, NULL);
+	envp = envlist_to_envp(env_list);
+	execve(path, argv, envp);
 	perror("execve");
 	exit(1);
 }
