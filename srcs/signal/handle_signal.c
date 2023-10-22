@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 17:25:16 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/22 18:31:30 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	put_new_prompt(int signum)
 
 void	nothing_to_do(int signum)
 {
-	g_finish_status = 127;
+	g_finish_status = 0;
 	rl_on_new_line();
 	rl_redisplay();
 	rl_replace_line("", 0);

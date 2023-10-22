@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/21 16:00:48 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/22 18:36:37 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	{
 		args_content = (t_token *)args->content;
 		new_path = ft_strdup(args_content->token_content);
-		printf("new_path : %s\n", new_path);
 	}
 	overwrite_oldpwd(env_list);
 	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
 		return ;
 	if (is_directory(new_path) == false || is_accessible(new_path) == false)
+	{
+		g_finish_status = 1;
 		return ;
+	}
 	chdir(new_path);
 	free(new_path);
 	overwrite_pwd(env_list);
@@ -130,6 +132,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 		if (cmd_index == -1)
 		{
 			printf("minishell: cd: OLDPWD not set\n");
+			g_finish_status = 1;
 			return (NULL);
 		}
 		new_path = get_env_value(env_list, "OLDPWD", cmd_index);
@@ -148,6 +151,7 @@ char	*get_homedir(t_list *env_list)
 	if (cmd_index == -1)
 	{
 		printf("minishell: cd: HOME not set\n");
+		g_finish_status = 1;
 		return (NULL);
 	}
 	new_path = get_env_value(env_list, "HOME", cmd_index);
