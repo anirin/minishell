@@ -32,19 +32,24 @@ void	wait_for_child_and_store_status(int *pids, int cmd_index)
 	while (cmd_count < cmd_index)
 	{
 		child_signal_handler();
-		waitpid(pids[cmd_count], &status, 0);
+		if (pids[cmd_count] < 0)
+		{
+			g_finish_status = 0;
+			return ;
+		}
+		else
+			waitpid(pids[cmd_count], &status, 0);
 		cmd_count++;
 	}
 
 	if (WIFEXITED(status))
 	{
-		// printf("exit(3), status=%d\n", WEXITSTATUS(status));
+		g_finish_status = WTERMSIG(status);
 	}
 	else if (WIFSIGNALED(status))
 	{
 		// WIFSIGNALED() が非ゼロならシグナルによる終了
 		// WTERMSIG() でシグナル番号が得られる
-		// printf("signal, sig=%d\n", WTERMSIG(status));
 		g_finish_status = WTERMSIG(status) + 128;
 	}
 	else

@@ -247,6 +247,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 
 	token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(token->cmd);
+	pids[cmd_index] = -1;
 	if (check != BT_NOTBUILTIN && parsed_tokens->next == NULL && cmd_index == 0)
 	// cd は親で実行させる必要がある
 	{
