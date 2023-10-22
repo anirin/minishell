@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 18:36:37 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/22 19:01:25 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ void	overwrite_pwd(t_list *env_list)
 	char	*crt_path;
 
 	crt_path = getcwd(NULL, 0);
+	if (crt_path == NULL)
+	{
+		perror("minishell :cd ");
+		return ;
+	}
 	env_index = is_added_env("PWD", env_list);
 	if (env_index == -1)
 		return ;
@@ -69,6 +74,11 @@ void	overwrite_oldpwd(t_list *env_list)
 	char	*crt_path;
 
 	crt_path = getcwd(NULL, 0);
+	if (crt_path == NULL)
+	{
+		perror("minishell :cd ");
+		return ;
+	}
 	env_index = is_added_env("OLDPWD", env_list);
 	if (env_index == -1)
 		return ;
@@ -108,6 +118,7 @@ bool	is_directory(char *input_path)
 	{
 		ft_putstr_fd("minishell: cd:", STDERR_FILENO);
 		perror("");
+		free((void *)stat_info);
 		return (false);
 	}
 	else
