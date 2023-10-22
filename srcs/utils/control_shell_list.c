@@ -38,7 +38,7 @@ void	wait_for_child_and_store_status(int *pids, int cmd_index)
 
 	if (WIFEXITED(status))
 	{
-		printf("exit(3), status=%d\n", WEXITSTATUS(status));
+		// printf("exit(3), status=%d\n", WEXITSTATUS(status));
 	}
 	else if (WIFSIGNALED(status))
 	{
