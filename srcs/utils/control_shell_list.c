@@ -34,17 +34,17 @@ void	wait_for_child_and_store_status(int *pids, int cmd_index)
 		child_signal_handler();
 		if (pids[cmd_count] < 0)
 		{
-			g_finish_status = 0;
 			return ;
 		}
 		else
+		{
 			waitpid(pids[cmd_count], &status, 0);
+		}
 		cmd_count++;
 	}
-
 	if (WIFEXITED(status))
 	{
-		g_finish_status = WTERMSIG(status);
+		g_finish_status = WEXITSTATUS(status);
 	}
 	else if (WIFSIGNALED(status))
 	{

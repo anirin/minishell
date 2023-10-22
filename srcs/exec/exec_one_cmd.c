@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
 /*   Updated: 2023/10/22 17:59:58 by atsu             ###   ########.fr       */
@@ -83,7 +83,7 @@ bool	redirect_in(t_token *token)
 
 bool	redirect_out(t_token *token)
 {
-	int		fd;
+	int	fd;
 
 	if (token->status == RD_OUT && token->token_content != NULL)
 	{
@@ -124,7 +124,6 @@ bool	redirect_in_out(t_list *tokens)
 		{
 			if (redirect_out(token) == false)
 				return (false);
-
 		}
 		else if (token->status == RD_IN || token->status == RD_HEAEDOC)
 		{
@@ -219,8 +218,8 @@ static bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 	return (true);
 }
 
-static void	exec_builtin_in_child_process(t_list **env_list,
-		int check, t_parsed_token *token)
+static void	exec_builtin_in_child_process(t_list **env_list, int check,
+		t_parsed_token *token)
 {
 	my_execve(env_list, check, token->cmd, token->args);
 	exit(0);
@@ -301,12 +300,13 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				exit(0);
 			}
 			if (check != BT_NOTBUILTIN)
-				exec_builtin_in_child_process(env_list, check,
-					token);
+				exec_builtin_in_child_process(env_list, check, token);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}
 		else
+		{
 			close_pipefds(pipefds, cmd_index);
+		}
 	}
 }
