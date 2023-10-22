@@ -22,6 +22,7 @@ FILES = \
 # DEBUG = -g
 
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
+	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEBUG) -c $< -o $@
 
 $(NAME): $(OBJS)
