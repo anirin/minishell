@@ -3,6 +3,7 @@
 		"main.h": "c",
 		"libft.h": "c",
 		"stdbool.h": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"builtins.h": "c"
 	}
 }

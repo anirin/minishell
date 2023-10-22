@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 19:01:25 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/22 20:40:20 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 		args_content = (t_token *)args->content;
 		new_path = ft_strdup(args_content->token_content);
 	}
-	overwrite_oldpwd(env_list);
+	if (overwrite_oldpwd(env_list) != SUCCESS)
+	{
+		chdir("/Users/nakaiheizou/tmp/tmp1/..");
+		return ;
+	}
 	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
 		return ;
 	if (is_directory(new_path) == false || is_accessible(new_path) == false)
@@ -47,11 +51,11 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	}
 	chdir(new_path);
 	free(new_path);
-	overwrite_pwd(env_list);
-	return ;
+	if (overwrite_pwd(env_list) != SUCCESS)
+		return ;
 }
 
-void	overwrite_pwd(t_list *env_list)
+int	overwrite_pwd(t_list *env_list)
 {
 	int		env_index;
 	char	*crt_path;
@@ -59,16 +63,19 @@ void	overwrite_pwd(t_list *env_list)
 	crt_path = getcwd(NULL, 0);
 	if (crt_path == NULL)
 	{
-		perror("minishell :cd ");
-		return ;
+		ft_putstr_fd("cd : error retrieving current directory: getcwd: cannot access parent directories",
+			STDERR_FILENO);
+		perror(":");
+		return (FAIL);
 	}
 	env_index = is_added_env("PWD", env_list);
 	if (env_index == -1)
-		return ;
+		return (SUCCESS);
 	overwrite_env(env_index, crt_path, env_list);
+	return (SUCCESS);
 }
 
-void	overwrite_oldpwd(t_list *env_list)
+int	overwrite_oldpwd(t_list *env_list)
 {
 	int		env_index;
 	char	*crt_path;
@@ -76,13 +83,16 @@ void	overwrite_oldpwd(t_list *env_list)
 	crt_path = getcwd(NULL, 0);
 	if (crt_path == NULL)
 	{
-		perror("minishell :cd ");
-		return ;
+		ft_putstr_fd("cd : error retrieving current directory: getcwd: cannot access parent directories",
+			STDERR_FILENO);
+		perror("");
+		return (FAIL);
 	}
 	env_index = is_added_env("OLDPWD", env_list);
 	if (env_index == -1)
-		return ;
+		return (SUCCESS);
 	overwrite_env(env_index, crt_path, env_list);
+	return (SUCCESS);
 }
 
 bool	is_accessible(char *input_path)
