@@ -123,7 +123,7 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 	env->value = ft_strdup(env_value);
 }
 
-void	add_env(char **parsed_env, t_list **env_list) // ok
+void	add_env(char **parsed_env, t_list **env_list)
 {
 	char *new_env_value;
 	t_list *new_lst;

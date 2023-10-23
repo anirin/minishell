@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 20:40:20 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/23 18:07:46 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,12 @@ int	overwrite_pwd(t_list *env_list)
 	}
 	env_index = is_added_env("PWD", env_list);
 	if (env_index == -1)
+	{
+		free(crt_path);
 		return (SUCCESS);
+	}
 	overwrite_env(env_index, crt_path, env_list);
+	free(crt_path);
 	return (SUCCESS);
 }
 
@@ -90,8 +94,12 @@ int	overwrite_oldpwd(t_list *env_list)
 	}
 	env_index = is_added_env("OLDPWD", env_list);
 	if (env_index == -1)
+	{
+		free(crt_path);
 		return (SUCCESS);
+	}
 	overwrite_env(env_index, crt_path, env_list);
+	free(crt_path);
 	return (SUCCESS);
 }
 

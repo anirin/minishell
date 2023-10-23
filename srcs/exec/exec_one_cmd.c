@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/22 17:59:58 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/23 18:33:50 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ bool	redirect_in(t_token *token)
 			perror("redirect open");
 			return (false);
 		}
-		while (line != NULL)
+		while (1)
 		{
+				printf("hello!\n");
 			line = readline("heredoc> ");
+			if (line == NULL)
+				break ;
 			if (ft_strncmp(line, token->token_content,
-					ft_strlen(token->token_content)) == 0)
+					ft_strlen(token->token_content) + 1) == 0)
 				break ;
 			ft_putendl_fd(line, fd);
 			free(line);
@@ -118,7 +121,6 @@ bool	redirect_in_out(t_list *tokens)
 
 	while (tokens != NULL)
 	{
-		printf("ok\n");
 		token = (t_token *)tokens->content;
 		if (token->status == RD_OUT || token->status == RD_APPEND)
 		{
@@ -170,6 +172,19 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 	paths = split_path(env_list);
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
+	else if (paths == NULL)
+	{
+		if (dddd)
+		{
+			printf("bash: Makefile: Permission denied\n");
+			exit(126);
+		}
+		else
+		{
+			printf("bash: ls: No such file or directory\n");
+			exit(127);
+		}
+	}
 	else
 	{
 		while (paths[i] != NULL)
