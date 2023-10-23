@@ -3,18 +3,19 @@
 
 # include "main.h"
 
-enum		e_Status
+enum	e_Status
 {
 	SUCCESS,
 	FAIL,
 };
 
 void	my_pwd(void);
-void	my_cd(t_list *env_list, t_list *cmd, t_list *args);
+void	my_cd(t_list *env_list, t_list *cmd, t_list *args, int *finish_status);
 void	my_echo(t_list *env_list, t_list *cmd, t_list *args);
 void	my_env(t_list *env_list, t_list *cmd, t_list *args);
-void	my_exit(t_list *env_list, t_list *cmd, t_list *args);
-void	my_export(t_list **env_list, t_list *args);
+void	my_exit(t_list *env_list, t_list *cmd, t_list *args,
+			int *finish_status);
+void	my_export(t_list **env_list, t_list *args, int *finish_status);
 void	my_unset(t_list **env_list, t_list *args);
 
 //=my_export.c===

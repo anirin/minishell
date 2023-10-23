@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 18:31:30 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/23 23:11:14 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	put_quit_massage(int signum);
 void	nothing_to_do(int signum);
 void	quit_child_proccess(int signum);
 
-void	parent_signal_handler(void)
+void	parent_signal_handler(int *finish_status)
 {
 	signal(SIGINT, put_new_prompt);
 	signal(SIGQUIT, nothing_to_do);
@@ -34,7 +34,7 @@ void	child_signal_handler(void)
 
 void	put_new_prompt(int signum)
 {
-	g_finish_status = 1;
+	signal_flag = PARENT_SIGINT;
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
@@ -43,7 +43,7 @@ void	put_new_prompt(int signum)
 
 void	nothing_to_do(int signum)
 {
-	g_finish_status = 0;
+	signal_flag = PARENT_SIGQUIT;
 	rl_on_new_line();
 	rl_redisplay();
 	rl_replace_line("", 0);
@@ -62,4 +62,14 @@ void	quit_child_proccess(int signum)
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
+}
+
+void	change_finish_status(int signal_flag, int *finish_status)
+{
+	if (signal_flag == PARENT_SIGINT)
+		*finish_status = 1;
+	else if (signal_flag == PARENT_SIGQUIT)
+		*finish_status = 0;
+	else
+		;
 }

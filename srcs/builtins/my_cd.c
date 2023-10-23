@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 20:40:20 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/23 22:38:54 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 bool	is_accessible(char *input_path);
 bool	is_directory(char *input_path);
 char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
-char	*get_oldpwd(t_list *env_list, t_list *cmd);
-char	*get_homedir(t_list *env_list);
+char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status);
+char	*get_homedir(t_list *env_list, int *finish_status);
 
-void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
+void	my_cd(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 {
 	char	*new_path;
 	t_token	*args_content;
@@ -28,9 +28,9 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	if (args == NULL)
 	{
 		if (cmd != NULL && cmd->next != NULL)
-			new_path = get_oldpwd(env_list, cmd);
+			new_path = get_oldpwd(env_list, cmd,finish_status);
 		else
-			new_path = get_homedir(env_list);
+			new_path = get_homedir(env_list,finish_status);
 	}
 	else
 	{
@@ -39,14 +39,14 @@ void	my_cd(t_list *env_list, t_list *cmd, t_list *args)
 	}
 	if (overwrite_oldpwd(env_list) != SUCCESS)
 	{
-		chdir("/Users/nakaiheizou/tmp/tmp1/..");
+		// chdir("/Users/nakaiheizou/tmp/tmp1/..");
 		return ;
 	}
 	if (new_path == NULL || ft_strncmp(new_path, "", 1) == 0)
 		return ;
 	if (is_directory(new_path) == false || is_accessible(new_path) == false)
 	{
-		g_finish_status = 1;
+		*finish_status = 1;
 		return ;
 	}
 	chdir(new_path);
@@ -138,7 +138,7 @@ bool	is_directory(char *input_path)
 	}
 }
 
-char	*get_oldpwd(t_list *env_list, t_list *cmd)
+char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status)
 {
 	t_token	*cmd_content;
 	int		cmd_index;
@@ -153,7 +153,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 		if (cmd_index == -1)
 		{
 			printf("minishell: cd: OLDPWD not set\n");
-			g_finish_status = 1;
+			*finish_status = 1;
 			return (NULL);
 		}
 		new_path = get_env_value(env_list, "OLDPWD", cmd_index);
@@ -161,7 +161,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd)
 	return (new_path);
 }
 
-char	*get_homedir(t_list *env_list)
+char	*get_homedir(t_list *env_list, int *finish_status)
 {
 	t_token	*cmd_content;
 	int		cmd_index;
@@ -172,7 +172,7 @@ char	*get_homedir(t_list *env_list)
 	if (cmd_index == -1)
 	{
 		printf("minishell: cd: HOME not set\n");
-		g_finish_status = 1;
+		*finish_status = 1;
 		return (NULL);
 	}
 	new_path = get_env_value(env_list, "HOME", cmd_index);

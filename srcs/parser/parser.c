@@ -10,7 +10,8 @@ void	trim_quote(void *content)
 	tmp = token->token_content;
 	if (token->status == TK_SINGLE_QUOTE)
 	{
-		token->token_content = ft_strtrim((const char *)tmp, "\'"); //""""のようなケースはないのでOK
+		token->token_content = ft_strtrim((const char *)tmp, "\'");
+			//""""のようなケースはないのでOK
 		token->status = TK_SINGLE_QUOTE;
 		free(tmp);
 	}
@@ -29,15 +30,18 @@ char	*get_new_content(t_list **tokens)
 	t_token	*token;
 
 	token = (t_token *)(*tokens)->content;
-	if (token->status != TK_NORMAL && token->status != TK_DOUBLE_QUOTE && token->status != TK_SINGLE_QUOTE)
+	if (token->status != TK_NORMAL && token->status != TK_DOUBLE_QUOTE
+		&& token->status != TK_SINGLE_QUOTE)
 	{
-			new_content = ft_strdup(token->token_content);
-			*tokens = (*tokens)->next;
+		new_content = ft_strdup(token->token_content);
+		*tokens = (*tokens)->next;
 	}
 	else
 	{
 		new_content = ft_strdup("");
-		while ((*tokens) != NULL && token != NULL && (token->status == TK_NORMAL || token->status == TK_DOUBLE_QUOTE || token->status == TK_SINGLE_QUOTE))
+		while ((*tokens) != NULL && token != NULL && (token->status == TK_NORMAL
+				|| token->status == TK_DOUBLE_QUOTE
+				|| token->status == TK_SINGLE_QUOTE))
 		{
 			tmp = new_content;
 			new_content = ft_strjoin(tmp, token->token_content);
@@ -50,7 +54,7 @@ char	*get_new_content(t_list **tokens)
 	return (new_content);
 }
 
-int		get_new_status(t_list *tokens)
+int	get_new_status(t_list *tokens)
 {
 	t_token	*token;
 
@@ -61,12 +65,12 @@ int		get_new_status(t_list *tokens)
 		return (TK_NORMAL);
 }
 
-t_list	*preprocess_tokens(t_list *tokens) //ok
+t_list	*preprocess_tokens(t_list *tokens) // ok
 {
-	t_list	*prepro_tokens;
-	t_list	*new;
-	t_token	*token;
-	t_token	*new_token;
+	t_list *prepro_tokens;
+	t_list *new;
+	t_token *token;
+	t_token *new_token;
 
 	prepro_tokens = NULL;
 	while (tokens != NULL)
@@ -88,10 +92,10 @@ t_list	*preprocess_tokens(t_list *tokens) //ok
 
 t_list	*get_list(t_list *tokens)
 {
-	t_list	*parsed_list;
-	t_list	*new;
+	t_list			*parsed_list;
+	t_list			*new;
 	t_parsed_token	*parsed_token;
-	t_list	*head;
+	t_list			*head;
 
 	head = tokens;
 	parsed_list = NULL;
@@ -108,13 +112,13 @@ t_list	*get_list(t_list *tokens)
 	return (parsed_list);
 }
 
-t_list	*parser(t_list **tokens, t_list *env_list)
+t_list	*parser(t_list **tokens, t_list *env_list, int *finish_status)
 {
 	t_list *preproc_tokens;
 	t_list *ret_tokens;
 
 	ft_lstiter(*tokens, trim_quote);
-	expand_env(tokens, env_list);
+	expand_env(tokens, env_list, finish_status);
 	preproc_tokens = preprocess_tokens(*tokens);
 	ret_tokens = get_list(preproc_tokens);
 	ft_lstclear(&preproc_tokens, (void *)free_token);

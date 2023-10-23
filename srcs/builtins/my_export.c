@@ -123,7 +123,7 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list) // ok
 	env->value = ft_strdup(env_value);
 }
 
-void	add_env(char **parsed_env, t_list **env_list) // ok
+void	add_env(char **parsed_env, t_list **env_list, int *finish_status) // ok
 {
 	char *new_env_value;
 	t_list *new_lst;
@@ -134,7 +134,7 @@ void	add_env(char **parsed_env, t_list **env_list) // ok
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(parsed_env[0], STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		g_finish_status = 1;
+		*finish_status = 1;
 		return ;
 	}
 	new_env = malloc(sizeof(t_env));
@@ -151,24 +151,24 @@ void	add_env(char **parsed_env, t_list **env_list) // ok
 
 void	print_export(void *env_list)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = (t_env *)env_list;
 	printf("declare -x %s=\"%s\"\n", env->name, env->value);
 }
 
-bool	check_export_error(char *str)
+bool	check_export_error(char *str, int *finish_status)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		if (ft_isspace(str[i]) == 0 || ft_isdigit(str[0]) != 0)
 		{
 			printf("export: not valid in this context:");
 			printf("%s\n", str);
-			g_finish_status = 1;
+			*finish_status = 1;
 			return (false);
 		}
 		i++;
@@ -176,7 +176,8 @@ bool	check_export_error(char *str)
 	return (true);
 }
 
-void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処理
+void	my_export(t_list **env_list, t_list *args, int *finish_status)
+// export TEST =CC エラー処理
 {
 	int env_index;
 	char **parsed_env;
@@ -190,18 +191,19 @@ void	my_export(t_list **env_list, t_list *args) // export TEST =CC エラー処�
 	while (args != NULL)
 	{
 		parsed_env = parse_env(((t_token *)args->content)->token_content);
-		if (check_export_error(parsed_env[0]) == false)
-			break;
+		if (check_export_error(parsed_env[0], finish_status) == false)
+			break ;
 		env_index = is_added_env(parsed_env[0], *env_list);
 		if (env_index != -1)
 		{
-			if (parsed_env[1] != NULL && ft_strncmp(parsed_env[1], "+=", 3) == 0)
+			if (parsed_env[1] != NULL && ft_strncmp(parsed_env[1], "+=",
+					3) == 0)
 				append_env(env_index, parsed_env[2], *env_list);
 			if (parsed_env[1] != NULL && ft_strncmp(parsed_env[1], "=", 2) == 0)
 				overwrite_env(env_index, parsed_env[2], *env_list);
 		}
 		else
-			add_env(parsed_env, env_list);
+			add_env(parsed_env, env_list, finish_status);
 		free_array(parsed_env);
 		args = args->next;
 	}
