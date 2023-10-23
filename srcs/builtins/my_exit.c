@@ -99,7 +99,9 @@ void	my_exit(t_list *env_list, t_list *cmd, t_list *args)
 		printf("exit\n");
 		exit(0);
 	}
-	if (cmd->next->next != NULL)
+	exit_status_token = (t_token *)cmd->next->content;
+	exit_status_str = (char *)exit_status_token->token_content;
+	if (cmd->next->next != NULL && is_numeric(exit_status_str) == OK)
 	{
 		tmp->next = NULL;
 		printf("exit\n");
@@ -107,8 +109,6 @@ void	my_exit(t_list *env_list, t_list *cmd, t_list *args)
 		g_finish_status = 1;
 		return ;
 	}
-	exit_status_token = (t_token *)cmd->next->content;
-	exit_status_str = (char *)exit_status_token->token_content;
 	printf("exit\n");
 	exit_status = ft_atoi((char *)exit_status_token->token_content);
 	tmp->next = NULL;
@@ -116,7 +116,6 @@ void	my_exit(t_list *env_list, t_list *cmd, t_list *args)
 		&& is_numeric(exit_status_str) == OK)
 	{
 		exit_status = exit_status % 256; // minusも同様
-		printf("exit_status = %d\n", exit_status);
 		exit(exit_status); // Long max < の場合はnumeric でexitする それまでは255 ~ 0で判定している
 	}
 	else
