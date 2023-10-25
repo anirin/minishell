@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/23 23:05:43 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/25 16:08:08 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	redirect_in(t_token *token)
 		}
 		while (1)
 		{
-				printf("hello!\n");
+			printf("hello!\n");
 			line = readline("heredoc> ");
 			if (line == NULL)
 			{
@@ -159,13 +159,13 @@ char	**split_path(t_list *env_list)
 
 char	*get_path(t_list *cmd_list, t_list *env_list)
 {
-	t_token	*token;
-	char	*cmd;
-	char	*ret;
-	char	**paths;
-	int		i;
-	char	*tmp;
-	struct stat st;
+	t_token		*token;
+	char		*cmd;
+	char		*ret;
+	char		**paths;
+	int			i;
+	char		*tmp;
+	struct stat	st;
 
 	if (cmd_list == NULL || env_list == NULL)
 		return (NULL);
@@ -292,6 +292,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	t_parsed_token *token;
 	int check;
 
+	*finish_status = 0;
 	token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(token->cmd);
 	pids[cmd_index] = -1;
