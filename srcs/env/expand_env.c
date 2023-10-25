@@ -20,15 +20,6 @@ static char	*find_env_name(char *doller_token, t_list *env_list) //ok
 
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
-	// while(shell_list != NULL)
-	// {
-	// 	shell = (t_env *)shell_list->content;
-	// 	if (shell->value != NULL && ft_strncmp(&doller_token[1], shell->name, ft_strlen(shell->name) + 1) == 0) //[0] は $
-	// 	{
-	// 		return (ft_strdup(shell->value));
-	// 	}
-	// 	shell_list = shell_list->next;
-	// }
 	if (ft_strncmp(&doller_token[1], "?", 2) == 0)
 		return (ft_itoa(g_finish_status));
 	while(env_list != NULL)
@@ -59,7 +50,7 @@ static t_list	*split_by_isspace(char *str)
 		{
 			token = malloc(sizeof(t_token));
 			token->token_content = ft_strdup(" ");
-			token->status = TK_SPACE;
+			token->status = TK_ENV_SPACE;
 			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
 			break ;

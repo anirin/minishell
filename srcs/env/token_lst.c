@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
-/*   Updated: 2023/10/21 01:29:14 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:52:42 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	insort_list(t_list *token, t_list *add_lst)
 void	insort_list(t_list **token, t_list *add_lst, t_list *prev)
 {
 	t_list *tmp;
+	t_list *tmp_next;
 	t_list *tmp_next_next;
 
 	if (prev != NULL)
@@ -48,9 +49,10 @@ void	insort_list(t_list **token, t_list *add_lst, t_list *prev)
 	}
 	else //if (prev == NULL)
 	{
-		tmp = (*token)->next;
+		tmp = (*token);
+		tmp_next = (*token)->next;
 		(*token) = add_lst;
-		ft_lstadd_back(&add_lst, tmp);
+		ft_lstadd_back(&add_lst, tmp_next);
 		ft_lstdelone(tmp, (void *)free_token);
 	}
 }
