@@ -1,12 +1,14 @@
 #include "libft.h"
 #include "main.h"
 
-void	wait_for_child_and_store_status(int *pids, int cmd_index)
+void	wait_for_child_and_store_status(int *pids, int cmd_index,
+		int *finish_status)
 {
 	int cmd_count;
 	int status;
 
 	cmd_count = 0;
+	// *finish_status = 0;
 	while (cmd_count < cmd_index)
 	{
 		child_signal_handler();
@@ -22,11 +24,11 @@ void	wait_for_child_and_store_status(int *pids, int cmd_index)
 	}
 	if (WIFEXITED(status))
 	{
-		g_finish_status = WEXITSTATUS(status);
+		*finish_status = WEXITSTATUS(status);
 	}
 	else if (WIFSIGNALED(status))
 	{
-		g_finish_status = WTERMSIG(status) + 128;
+		*finish_status = WTERMSIG(status) + 128;
 	}
 	else
 	{

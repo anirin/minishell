@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/25 14:23:45 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/23 23:05:43 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ bool	redirect_in(t_token *token)
 				printf("hello!\n");
 			line = readline("heredoc> ");
 			if (line == NULL)
-				break ;
+			{
+				exit(1);
+			}
 			if (ft_strncmp(line, token->token_content,
 					ft_strlen(token->token_content) + 1) == 0)
 				break ;
@@ -241,13 +243,13 @@ static bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 }
 
 static void	exec_builtin_in_child_process(t_list **env_list, int check,
-		t_parsed_token *token)
+		t_parsed_token *token, int *finish_status)
 {
-	my_execve(env_list, check, token->cmd, token->args);
+	my_execve(env_list, check, token->cmd, token->args, finish_status);
 	exit(0);
 }
 
-char		**envlist_to_envp(t_list *env_list)
+char	**envlist_to_envp(t_list *env_list)
 {
 	t_env	*env;
 	char	**ret;
@@ -285,7 +287,7 @@ static void	exec_notbuiltin_in_parent_process(t_parsed_token *token,
 }
 
 void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-		int cmd_index, t_list **env_list)
+		int cmd_index, t_list **env_list, int *finish_status)
 {
 	t_parsed_token *token;
 	int check;
@@ -302,7 +304,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		tmp_stdin = dup(STDIN_FILENO);
 		tmp_stdout = dup(STDOUT_FILENO);
 		redirect_in_out(token->redirect);
-		my_execve(env_list, check, token->cmd, token->args);
+		my_execve(env_list, check, token->cmd, token->args, finish_status);
 		dup2(tmp_stdin, STDIN_FILENO);
 		dup2(tmp_stdout, STDOUT_FILENO);
 	}
@@ -322,7 +324,8 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				exit(0);
 			}
 			if (check != BT_NOTBUILTIN)
-				exec_builtin_in_child_process(env_list, check, token);
+				exec_builtin_in_child_process(env_list, check, token,
+					finish_status);
 			else
 				exec_notbuiltin_in_parent_process(token, *env_list);
 		}

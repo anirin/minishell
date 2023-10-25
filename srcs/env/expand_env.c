@@ -13,30 +13,24 @@
 #include "libft.h"
 #include "main.h"
 
-static char	*find_env_name(char *doller_token, t_list *env_list) //ok
+// 終了ステータスはfinish_statusに格納する
+static char	*find_env_name(char *doller_token, t_list *env_list,
+							int *finish_status) // ok
 {
 	t_env *env;
 	t_env *shell;
 
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
-	// while(shell_list != NULL)
-	// {
-	// 	shell = (t_env *)shell_list->content;
-	// 	if (shell->value != NULL && ft_strncmp(&doller_token[1], shell->name, ft_strlen(shell->name) + 1) == 0) //[0] は $
-	// 	{
-	// 		return (ft_strdup(shell->value));
-	// 	}
-	// 	shell_list = shell_list->next;
-	// }
 	if (ft_strncmp(&doller_token[1], "?", 2) == 0)
-		return (ft_itoa(g_finish_status));
-	while(env_list != NULL)
+		return (ft_itoa(*finish_status));
+	while (env_list != NULL)
 	{
 		env = (t_env *)env_list->content;
-		if (env->value != NULL && ft_strncmp(&doller_token[1], env->name, ft_strlen(env->name) + 1) == 0) //[0] は $
+		if (env->value != NULL && ft_strncmp(&doller_token[1], env->name,
+				ft_strlen(env->name) + 1) == 0)
 		{
-				return (ft_strdup(env->value));
+			return (ft_strdup(env->value));
 		}
 		env_list = env_list->next;
 	}
@@ -45,15 +39,15 @@ static char	*find_env_name(char *doller_token, t_list *env_list) //ok
 
 static t_list	*split_by_isspace(char *str)
 {
-	t_list *splited_env;
-	t_list *new;
-	t_token *token;
-	int i;
-	int count;
+	t_list	*splited_env;
+	t_list	*new;
+	t_token	*token;
+	int		i;
+	int		count;
 
 	i = 0;
 	splited_env = NULL;
-	while(1)
+	while (1)
 	{
 		if (str[i] == '\0')
 		{
@@ -96,10 +90,10 @@ static t_list	*split_by_isspace(char *str)
 	return (splited_env);
 }
 
-static char *parsed_tokens_to_str(t_list *parsed_tokens)
+static char	*parsed_tokens_to_str(t_list *parsed_tokens)
 {
-	char *ret;
-	char *tmp;
+	char	*ret;
+	char	*tmp;
 
 	ret = NULL;
 	while (parsed_tokens != NULL)
@@ -114,18 +108,18 @@ static char *parsed_tokens_to_str(t_list *parsed_tokens)
 
 static t_list	*find_dollar_and_parse(char *token)
 {
-	int i;
-	int count;
-	t_list *parsed_tokens;
-	t_list *new;
-	char *str;
+	int		i;
+	int		count;
+	t_list	*parsed_tokens;
+	t_list	*new;
+	char	*str;
 
 	i = 0;
 	parsed_tokens = NULL;
 	while (token[i] != '\0')
 	{
 		count = 0;
-		while(token[i] != '\0' && token[i] != '$')
+		while (token[i] != '\0' && token[i] != '$')
 		{
 			count++;
 			i++;
@@ -141,7 +135,8 @@ static t_list	*find_dollar_and_parse(char *token)
 		{
 			i++;
 			count++;
-			while(token[i] != '\0' && ft_isspace(token[i]) == UT_NOT_SPACE && token[i] != '\'' && token[i] != '\"')
+			while (token[i] != '\0' && ft_isspace(token[i]) == UT_NOT_SPACE
+				&& token[i] != '\'' && token[i] != '\"')
 			{
 				count++;
 				i++;
@@ -157,7 +152,8 @@ static t_list	*find_dollar_and_parse(char *token)
 	return (parsed_tokens);
 }
 
-static char	*expand_env_in_str(char *token, t_list *env_list) //ok
+static char	*expand_env_in_str(char *token, t_list *env_list, int *finish_status)
+// ok
 {
 	t_list *head;
 	t_list *parsed_tokens;
@@ -171,7 +167,8 @@ static char	*expand_env_in_str(char *token, t_list *env_list) //ok
 		if (ft_strchr(parsed_tokens->content, '$') != NULL)
 		{
 			tmp = parsed_tokens->content;
-			parsed_tokens->content = find_env_name(tmp, env_list);
+			parsed_tokens->content = find_env_name(tmp, env_list,
+					finish_status);
 			free(tmp);
 		}
 		parsed_tokens = parsed_tokens->next;
@@ -183,7 +180,7 @@ static char	*expand_env_in_str(char *token, t_list *env_list) //ok
 
 bool	is_heardoc(t_list *prev)
 {
-	t_token *token;
+	t_token	*token;
 
 	if (prev == NULL)
 		return (false);
@@ -193,7 +190,7 @@ bool	is_heardoc(t_list *prev)
 	return (false);
 }
 
-void	expand_env(t_list **token, t_list *env_list) //ok
+void	expand_env(t_list **token, t_list *env_list, int *finish_status) // ok
 {
 	char *env_value;
 	t_list *splited_env;
@@ -211,17 +208,20 @@ void	expand_env(t_list **token, t_list *env_list) //ok
 		tmp = (t_token *)head->content;
 		if (tmp->status == TK_DOLL && is_heardoc(prev) == false)
 		{
-			env_value = find_env_name(tmp->token_content, env_list);
+			env_value = find_env_name(tmp->token_content, env_list,
+					finish_status);
 			splited_env = split_by_isspace(env_value);
 			free(env_value);
 			head = head->next;
 			tmp_prev = ft_lstlast(splited_env);
-			insort_list(token, splited_env, prev); //ok
+			insort_list(token, splited_env, prev); // ok
 			prev = tmp_prev;
 		}
-		else if (ft_strchr(tmp->token_content, '$') && tmp->status == TK_DOUBLE_QUOTE && is_heardoc(prev) == false)
+		else if (ft_strchr(tmp->token_content, '$')
+			&& tmp->status == TK_DOUBLE_QUOTE && is_heardoc(prev) == false)
 		{
-			tmp->token_content = expand_env_in_str(tmp->token_content, env_list); //ok
+			tmp->token_content = expand_env_in_str(tmp->token_content, env_list,
+					finish_status); // ok
 			tmp->status = TK_NORMAL;
 			prev = head;
 			head = head->next;

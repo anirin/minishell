@@ -48,9 +48,17 @@ enum		e_redirect
 	RD_APPEND,
 };
 
+enum		e_signal
+{
+	PARENT_SIGINT,
+	PARENT_SIGQUIT,
+	CHILD_SIGINT,
+	CHILD_SIGQUIT,
+};
+
 # define PATH_SIZE 1024
 
-extern int g_finish_status; // または他の初期値
+extern int signal_flag; // または他の初期値
 
 // readline
 # include "libft.h"
@@ -86,13 +94,12 @@ typedef struct s_parsed_token
 	t_list *args; // token
 }			t_parsed_token;
 
-
 // lexer
 t_list		*lexer(char *line);
 
 // parser
 t_list		*preprocess_tokens(t_list *tokens);
-t_list		*parser(t_list **tokens, t_list *env_list);
+t_list		*parser(t_list **tokens, t_list *env_list, int *finish_status);
 
 // print
 void		print_list(t_list *list);
@@ -103,7 +110,7 @@ t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
 
 // env expand
-void		expand_env(t_list **token, t_list *env_list);
+void		expand_env(t_list **token, t_list *env_list, int *finish_status);
 
 // pipefds
 int			**malloc_pipefds(t_list *parsed_list);
@@ -117,7 +124,7 @@ void		move_head(t_list **head);
 
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-				int cmd_index, t_list **env_list);
+				int cmd_index, t_list **env_list, int *finish_status);
 
 // util
 void		print_env(t_env *env);
@@ -127,14 +134,14 @@ void		print_lst(void *content);
 
 // void	insort_list(t_list **token, t_list *add_list);
 // void		insort_list(t_list *token, t_list *add_list);
-void	insort_list(t_list **token, t_list *add_lst, t_list *prev);
+void		insort_list(t_list **token, t_list *add_lst, t_list *prev);
 
 // builtin
 int			is_builtin(t_list *cmd_and_option);
 
 // my_execve
-void		my_execve(t_list **env_list, int check,
-				t_list *cmd, t_list *args);
+void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args,
+				int *finish_status);
 
 // free
 void		free_env(t_env *env);
@@ -143,16 +150,17 @@ void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
 // terminate_program.c
-void		parent_signal_handler(void);
+void		parent_signal_handler(int *finish_status);
 void		child_signal_handler(void);
 
 // shell
 void		init_shell_list(t_list **shell_list);
-void		wait_for_child_and_store_status(int *pids,
-				int cmd_index);
+void		wait_for_child_and_store_status(int *pids, int cmd_index,
+				int *finish_status);
 
 // syntax
-int			check_syntax_error(t_list *list, t_list *token);
+int			check_syntax_error(t_list *list, t_list *token, int *finish_status);
 
+void		change_finish_status(int signal_flag, int *finish_status);
 
 #endif

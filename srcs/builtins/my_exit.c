@@ -83,7 +83,7 @@ static int	is_numeric(char *str)
 	return (OK);
 }
 
-void	my_exit(t_list *env_list, t_list *cmd, t_list *args)
+void	my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 {
 	t_token *exit_status_token;
 	int exit_status;
@@ -106,7 +106,7 @@ void	my_exit(t_list *env_list, t_list *cmd, t_list *args)
 		tmp->next = NULL;
 		printf("exit\n");
 		printf("minishell: exit: too many arguments\n");
-		g_finish_status = 1;
+		*finish_status = 1;
 		return ;
 	}
 	printf("exit\n");
