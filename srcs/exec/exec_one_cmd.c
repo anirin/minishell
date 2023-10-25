@@ -158,13 +158,13 @@ char	**split_path(t_list *env_list)
 
 char	*get_path(t_list *cmd_list, t_list *env_list)
 {
-	t_token	*token;
-	char	*cmd;
-	char	*ret;
-	char	**paths;
-	int		i;
-	char	*tmp;
-	struct stat st;
+	t_token		*token;
+	char		*cmd;
+	char		*ret;
+	char		**paths;
+	int			i;
+	char		*tmp;
+	struct stat	st;
 
 	if (cmd_list == NULL || env_list == NULL)
 		return (NULL);
