@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/25 16:08:08 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/25 16:40:49 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ bool	redirect_in(t_token *token)
 		}
 		while (1)
 		{
-			printf("hello!\n");
 			line = readline("heredoc> ");
 			if (line == NULL)
 			{
