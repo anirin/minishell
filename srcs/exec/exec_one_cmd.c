@@ -6,7 +6,7 @@
 /*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/23 23:28:12 by atsu             ###   ########.fr       */
+/*   Updated: 2023/10/25 14:23:45 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,12 +171,14 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 	token = (t_token *)cmd_list->content;
 	cmd = token->token_content;
 	paths = split_path(env_list);
+	stat(cmd, &st);
+	if ((st.st_mode & S_IFMT) == S_IFDIR)
+	{
+		printf("minishell: %s: is a directory\n", cmd);
+		exit(126);
+	}
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));
-	else if (stat(cmd, st)) //directory
-	{
-		aaaaaaaa
-	}
 	else if (paths == NULL)
 	{
 		if (access(cmd, F_OK) == 0)
