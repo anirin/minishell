@@ -6,14 +6,11 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/25 15:54:13 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/25 16:03:22 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-// #include <readline/history.h>
-// #include <readline/readline.h>
 
 void	put_new_prompt(int signum);
 void	put_quit_massage(int signum);

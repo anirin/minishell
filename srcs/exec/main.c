@@ -41,6 +41,7 @@ int	minishell(char **envp)
 			ft_lstclear(&parsed_tokens, (void *)free_parsed_token);
 			free(line);
 			continue ;
+		}
 		if (check_syntax_error(parsed_tokens, tokens, finish_status) == NG)
 		{
 			add_history(line);
