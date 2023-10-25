@@ -53,7 +53,7 @@ static t_list	*split_by_isspace(char *str)
 		{
 			token = malloc(sizeof(t_token));
 			token->token_content = ft_strdup(" ");
-			token->status = TK_SPACE;
+			token->status = TK_ENV_SPACE;
 			new = ft_lstnew(token);
 			ft_lstadd_back(&splited_env, new);
 			break ;
