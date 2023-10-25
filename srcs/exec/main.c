@@ -16,7 +16,7 @@ int	minishell(char **envp)
 	int		*finish_status;
 	int		i;
 
-	finish_status = (int *)malloc(sizeof(int) * 2);
+	finish_status = (int *)malloc(sizeof(int) * 1);
 	*finish_status = 0;
 	signal_flag = -1;
 	env_list = envp_convert_to_envlist(envp);
@@ -62,6 +62,7 @@ int	minishell(char **envp)
 			i++;
 		}
 		wait_for_child_and_store_status(pids, cmd_index, finish_status);
+			printf("	finish stat [%d]\n", *finish_status);
 		add_history(line);
 		free(line);
 		free(pids);
@@ -70,6 +71,7 @@ int	minishell(char **envp)
 		free_pipefds(pipefds);
 	}
 	ft_lstclear(&env_list, (void *)free_env);
+	free(finish_status);
 	return (0);
 }
 
