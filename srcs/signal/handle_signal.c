@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/25 16:03:22 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/25 17:09:22 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	quit_child_proccess(int signum)
 	printf("\n");
 	rl_replace_line("", 0);
 }
+
 
 void	change_finish_status(int signal_flag, int *finish_status)
 {
