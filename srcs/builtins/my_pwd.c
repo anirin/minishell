@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 22:09:10 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/22 20:26:59 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/23 18:05:09 by atsu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,8 @@ void	my_pwd(void)
 
 	pwd = getcwd(NULL, 0);
 	if (pwd != NULL)
-		printf("%s\n", getcwd(NULL, 0));
+	{
+		printf("%s\n", pwd);
+		free(pwd);
+	}
 }
