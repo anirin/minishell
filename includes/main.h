@@ -109,6 +109,7 @@ void		print_arr(char **arr);
 // env
 t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
+void		update_env_end(char *path, t_list **env_list);
 
 // env expand
 void		expand_env(t_list **token, t_list *env_list, int *finish_status);
@@ -163,5 +164,6 @@ void		wait_for_child_and_store_status(int *pids, int cmd_index,
 int			check_syntax_error(t_list *list, t_list *token, int *finish_status);
 
 void		change_finish_status(int signal_flag, int *finish_status);
+
 
 #endif

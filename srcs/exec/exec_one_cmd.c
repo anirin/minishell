@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atsu <atsu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/23 23:05:43 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/26 21:36:59 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,10 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 		exit(126);
 	}
 	if (access(cmd, X_OK) == 0)
+	{
+		free_array(paths);
 		return (ft_strdup(cmd));
+	}
 	else if (paths == NULL)
 	{
 		if (access(cmd, F_OK) == 0)
@@ -205,6 +208,7 @@ char	*get_path(t_list *cmd_list, t_list *env_list)
 			i++;
 			if (access(ret, X_OK) == 0)
 			{
+				free_array(paths);
 				return (ret);
 			}
 			free(ret);
@@ -271,16 +275,16 @@ char	**envlist_to_envp(t_list *env_list)
 	return (ret);
 }
 
-static void	exec_notbuiltin_in_parent_process(t_parsed_token *token,
-		t_list *env_list)
+static void	exec_not_builtin_in_child(t_parsed_token *token,
+		t_list **env_list)
 {
 	char	*path;
 	char	**argv;
 	char	**envp;
 
-	path = get_path(token->cmd, env_list);
+	path = get_path(token->cmd, *env_list);
 	argv = get_argv(token->cmd, token->args);
-	envp = envlist_to_envp(env_list);
+	envp = envlist_to_envp(*env_list);
 	execve(path, argv, envp);
 	perror("execve");
 	exit(1);
@@ -327,10 +331,18 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				exec_builtin_in_child_process(env_list, check, token,
 					finish_status);
 			else
-				exec_notbuiltin_in_parent_process(token, *env_list);
+				exec_not_builtin_in_child(token, env_list);
 		}
 		else
 		{
+			if (check == BT_NOTBUILTIN)
+			{
+				char	*path;
+
+				path = get_path(token->cmd, *env_list);
+				update_env_end(path, env_list);
+				free(path);
+			}
 			close_pipefds(pipefds, cmd_index);
 		}
 	}

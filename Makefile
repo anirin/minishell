@@ -9,7 +9,7 @@ OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 LDFLAGS = -Llibft -lft -L $(shell brew --prefix readline)/lib -lreadline
 LDLIBS = -lft
 INCLUDES = -I ./includes -I ./libft/includes -I $(shell brew --prefix readline)/include
-DEBUG = -g -fsanitize=address
+#DEBUG = -g -fsanitize=address
 #DEBUG = -g
 CFLAGS = -Wall -Wextra -Werror
 RED=\033[31m
@@ -56,5 +56,8 @@ git:
 	git add .
 	git commit -m "$(m)"
 	git push origin $(b)
+
+leak:
+	while [ 1 ]; do leaks minishell; sleep 2; done
 
 .PHONY: git_commit_push

@@ -22,9 +22,8 @@ char	**parse_env(char *token) // ok
 			if (token[i + 2] != '\0')
 			{
 				tmp = ft_strdup(&token[i + 2]);
-				tmp = ft_strtrim(tmp, "\""); //ここはシビや
-				// free
-				parsed_env[2] = tmp;
+				parsed_env[2] = ft_strtrim(tmp, "\""); //ここはシビや
+				free(tmp);
 			}
 			else
 				parsed_env[2] = ft_strdup("");
@@ -176,6 +175,14 @@ bool	check_export_error(char *str, int *finish_status)
 	return (true);
 }
 
+void	update_env_end(char *path, t_list **env_list)
+{
+	int env_index;
+
+	env_index = is_added_env("_", *env_list);
+	overwrite_env(env_index, path, *env_list);
+}
+
 void	my_export(t_list **env_list, t_list *args, int *finish_status)
 // export TEST =CC エラー処理
 {
@@ -203,7 +210,9 @@ void	my_export(t_list **env_list, t_list *args, int *finish_status)
 				overwrite_env(env_index, parsed_env[2], *env_list);
 		}
 		else
+		{
 			add_env(parsed_env, env_list, finish_status);
+		}
 		free_array(parsed_env);
 		args = args->next;
 	}
