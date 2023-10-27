@@ -22,7 +22,8 @@ void	my_unset(t_list **env_list, t_list *args);
 int		is_added_env(char *env_name, t_list *env_list);
 void	overwrite_env(int env_index, char *env_value, t_list *env_list);
 //=my_cd_utils.c==
-int		overwrite_pwd(t_list *env_list);
-void	to_homedir(t_list *env_list);
-int		overwrite_oldpwd(t_list *env_list);
+// int		overwrite_oldpwd(t_list *env_list);
+// int		overwrite_pwd(t_list *env_list);
+// char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
+
 #endif
