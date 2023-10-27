@@ -4,7 +4,7 @@ OBJSDIR = objs
 SRCS = \
 	srcs/builtins/is_builtin.c srcs/builtins/my_cd_utils.c srcs/builtins/my_cd.c srcs/builtins/my_echo.c srcs/builtins/my_env.c srcs/builtins/my_execve.c srcs/builtins/my_exit.c srcs/builtins/my_export.c srcs/builtins/my_pwd.c srcs/builtins/my_unset.c\
 	srcs/env/expand_env.c srcs/env/token_lst.c srcs/error/check_syntax_error.c srcs/error/print_err.c srcs/exec/exec_one_cmd.c srcs/exec/main.c srcs/exec/pipefds.c srcs/lexer/lexer.c srcs/parser/parser.c srcs/parser/parser_utils.c\
-	srcs/signal/handle_signal.c srcs/utils/change_finish_stat.c srcs/utils/free_array.c srcs/utils/free_lists.c srcs/utils/print_arr.c srcs/utils/print_list.c srcs/utils/utils_print_list.c
+	srcs/signal/handle_signal.c srcs/signal/handle_signal_utils.c srcs/utils/change_finish_stat.c srcs/utils/free_array.c srcs/utils/free_lists.c srcs/utils/print_arr.c srcs/utils/print_list.c srcs/utils/utils_print_list.c
 OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
 LDFLAGS = -Llibft -lft -L $(shell brew --prefix readline)/lib -lreadline
 LDLIBS = -lft

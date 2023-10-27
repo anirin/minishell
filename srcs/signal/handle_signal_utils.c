@@ -1,47 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_signal.c                                    :+:      :+:    :+:   */
+/*   handle_signal_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/27 17:45:16 by nakaiheizou      ###   ########.fr       */
+/*   Created: 2023/10/27 17:44:47 by nakaiheizou       #+#    #+#             */
+/*   Updated: 2023/10/27 17:46:59 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "main.h"
 
-void	put_new_prompt(int signum);
-void	put_quit_massage(int signum);
-void	nothing_to_do(int signum);
-void	quit_child_proccess(int signum);
-
-void	parent_signal_handler(int *finish_status)
+void	change_finish_status(int signal_flag, int *finish_status)
 {
-	signal(SIGINT, put_new_prompt);
-	signal(SIGQUIT, nothing_to_do);
+	if (signal_flag == PARENT_SIGINT)
+		*finish_status = 1;
+	else if (signal_flag == PARENT_SIGQUIT)
+		*finish_status = 0;
 }
 
-void	child_signal_handler(void)
+void	put_quit_massage(int signum)
 {
-	signal(SIGINT, quit_child_proccess);
-	signal(SIGQUIT, put_quit_massage);
-}
-
-void	put_new_prompt(int signum)
-{
-	signal_flag = PARENT_SIGINT;
+	ft_putstr_fd("Quit: 3", STDOUT_FILENO);
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);
-	rl_redisplay();
 }
 
-void	nothing_to_do(int signum)
+void	quit_child_proccess(int signum)
 {
-	signal_flag = PARENT_SIGQUIT;
 	rl_on_new_line();
-	rl_redisplay();
+	printf("\n");
 	rl_replace_line("", 0);
 }
