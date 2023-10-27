@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/27 17:12:18 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/27 17:17:56 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	overwrite_pwd(t_list *env_list)
 	char	*crt_path;
 
 	crt_path = getcwd(NULL, 0);
-	crt_path = NULL;
 	if (crt_path == NULL)
 	{
 		ft_putstr_fd("error retrieving current directory:getcwd: "
