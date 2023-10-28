@@ -11,7 +11,6 @@ void	trim_quote(void *content)
 	if (token->status == TK_SINGLE_QUOTE)
 	{
 		token->token_content = ft_strtrim((const char *)tmp, "\'");
-			//""""のようなケースはないのでOK
 		token->status = TK_SINGLE_QUOTE;
 		free(tmp);
 	}
@@ -54,7 +53,7 @@ char	*get_new_content(t_list **tokens)
 	return (new_content);
 }
 
-int	get_new_status(t_list *tokens)
+static int	get_new_status(t_list *tokens)
 {
 	t_token	*token;
 
@@ -65,7 +64,7 @@ int	get_new_status(t_list *tokens)
 		return (TK_NORMAL);
 }
 
-t_list	*preprocess_tokens(t_list *tokens) // ok
+static t_list	*preprocess_tokens(t_list *tokens) // ok
 {
 	t_list *prepro_tokens;
 	t_list *new;
@@ -90,7 +89,7 @@ t_list	*preprocess_tokens(t_list *tokens) // ok
 	return (prepro_tokens);
 }
 
-t_list	*get_list(t_list *tokens)
+static t_list	*get_list(t_list *tokens)
 {
 	t_list			*parsed_list;
 	t_list			*new;

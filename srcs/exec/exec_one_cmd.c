@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/26 21:36:59 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 08:51:10 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,14 +335,14 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		}
 		else
 		{
-			if (check == BT_NOTBUILTIN)
-			{
-				char	*path;
+			// if (check == BT_NOTBUILTIN)
+			// {
+			// 	char	*path;
 
-				path = get_path(token->cmd, *env_list);
-				update_env_end(path, env_list);
-				free(path);
-			}
+			// 	path = get_path(token->cmd, *env_list);
+			// 	update_env_end(path, env_list);
+			// 	free(path);
+			// }
 			close_pipefds(pipefds, cmd_index);
 		}
 	}
