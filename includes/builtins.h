@@ -1,6 +1,7 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
+# include "stdbool.h"
 # include "main.h"
 
 enum	e_Status
@@ -25,4 +26,16 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list);
 int		overwrite_pwd(t_list *env_list);
 void	to_homedir(t_list *env_list);
 int		overwrite_oldpwd(t_list *env_list);
+//exit
+int	is_numeric(char *str);
+int	is_under_long_max(char *str);
+
+//export
+bool	check_export_error(char *str, int *finish_status);
+void	append_env(int env_index, char *env_content, t_list *env_list);
+void	overwrite_env(int env_index, char *env_value, t_list *env_list);
+void	add_env(char **parsed_env, t_list **env_list, int *finish_status);
+char	**parse_env(char *token);
+t_list	*envp_convert_to_envlist(char **envp);
+
 #endif

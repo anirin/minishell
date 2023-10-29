@@ -13,9 +13,8 @@
 #include "libft.h"
 #include "main.h"
 
-// 終了ステータスはfinish_statusに格納する
 static char	*find_env_name(char *doller_token, t_list *env_list,
-							int *finish_status) // ok
+							int *finish_status)
 {
 	t_env *env;
 	t_env *shell;

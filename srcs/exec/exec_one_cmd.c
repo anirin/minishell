@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 09:39:25 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 10:30:57 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ static bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index)
 static void	exec_builtin_in_child_process(t_list **env_list, int check,
 		t_parsed_token *token, int *finish_status)
 {
-	my_execve(env_list, check, token->cmd, token->args, finish_status);
+	my_execve(env_list, check, token, finish_status);
 	exit(0);
 }
 
@@ -307,7 +307,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 		tmp_stdin = dup(STDIN_FILENO);
 		tmp_stdout = dup(STDOUT_FILENO);
 		redirect_in_out(token->redirect);
-		my_execve(env_list, check, token->cmd, token->args, finish_status);
+		my_execve(env_list, check, token, finish_status);
 		dup2(tmp_stdin, STDIN_FILENO);
 		dup2(tmp_stdout, STDOUT_FILENO);
 	}

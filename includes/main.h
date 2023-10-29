@@ -132,7 +132,7 @@ void		insort_list(t_list **token, t_list *add_lst, t_list *prev);
 int			is_builtin(t_list *cmd_and_option);
 
 // my_execve
-void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args,
+void		my_execve(t_list **env_list, int check, t_parsed_token *token,
 				int *finish_status);
 
 // free
