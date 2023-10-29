@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:44:27 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:36:34 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:15:25 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	is_under_long_max(char *str)
 {
 	int		sign;
 	int		i;
-	long	result;
 
 	sign = 1;
 	i = 0;

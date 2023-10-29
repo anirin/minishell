@@ -17,7 +17,6 @@ static char	*find_env_name(char *doller_token, t_list *env_list,
 							int *finish_status)
 {
 	t_env *env;
-	t_env *shell;
 
 	if (strlen(doller_token) == 1)
 		return (ft_strdup("$"));
@@ -152,7 +151,6 @@ static t_list	*find_dollar_and_parse(char *token)
 }
 
 static char	*expand_env_in_str(char *token, t_list *env_list, int *finish_status)
-// ok
 {
 	t_list *head;
 	t_list *parsed_tokens;
@@ -173,7 +171,6 @@ static char	*expand_env_in_str(char *token, t_list *env_list, int *finish_status
 		parsed_tokens = parsed_tokens->next;
 	}
 	ret = parsed_tokens_to_str(head);
-	// ft_lstclear(&head, free);
 	return (ret);
 }
 
@@ -213,14 +210,14 @@ void	expand_env(t_list **token, t_list *env_list, int *finish_status) // ok
 			free(env_value);
 			head = head->next;
 			tmp_prev = ft_lstlast(splited_env);
-			insort_list(token, splited_env, prev); // ok
+			insort_list(token, splited_env, prev);
 			prev = tmp_prev;
 		}
 		else if (ft_strchr(tmp->token_content, '$')
 			&& tmp->status == TK_DOUBLE_QUOTE && is_heardoc(prev) == false)
 		{
 			tmp->token_content = expand_env_in_str(tmp->token_content, env_list,
-					finish_status); // ok
+					finish_status);
 			tmp->status = TK_NORMAL;
 			prev = head;
 			head = head->next;

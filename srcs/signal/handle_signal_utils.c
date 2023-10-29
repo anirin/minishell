@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_signal_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:44:47 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/27 17:46:59 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/29 21:17:31 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	change_finish_status(int signal_flag, int *finish_status)
 
 void	put_quit_massage(int signum)
 {
+	(void)signum;
 	ft_putstr_fd("Quit: 3", STDOUT_FILENO);
 	rl_on_new_line();
 	printf("\n");
@@ -31,6 +32,7 @@ void	put_quit_massage(int signum)
 
 void	quit_child_proccess(int signum)
 {
+	(void)signum;
 	rl_on_new_line();
 	printf("\n");
 	rl_replace_line("", 0);

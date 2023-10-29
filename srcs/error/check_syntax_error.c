@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_syntax_error.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/29 21:05:02 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 21:10:45 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "main.h"
 
@@ -8,26 +20,15 @@ int	check_redirect_syntax_error(t_list *less_than, int *finish_status)
 	while (less_than != NULL)
 	{
 		token = (t_token *)less_than->content;
-		if (token->status == RD_IN_ERROR)
+		if (token->status == RD_IN_ERROR || token->status == RD_OUT_ERROR
+			|| token->token_content == NULL)
 		{
-			printf("syntax error near unexpected token `");
-			printf("<"); //ここは面倒だ
-			printf("'\n");
-			*finish_status = 258;
-			return (NG);
-		}
-		else if (token->status == RD_OUT_ERROR)
-		{
-			printf("syntax error near unexpected token `");
-			printf(">"); //ここは面倒だ
-			printf("'\n");
-			*finish_status = 258;
-			return (NG);
-		}
-		else if (token->token_content == NULL)
-		{
-			printf("minishell: syntax error near unexpected token `[redirect]'\n");
-			// < > にする
+			if (token->status == RD_IN_ERROR)
+				printf("syntax error near unexpected token `<'\n");
+			else if (token->status == RD_OUT_ERROR)
+				printf("syntax error near unexpected token `>'\n");
+			else if (token->token_content == NULL)
+				printf("minishell: syntax error near unexpected token `[<>]'\n");
 			*finish_status = 258;
 			return (NG);
 		}
@@ -81,8 +82,8 @@ int	check_quote_syntax_error(t_list *token, int *finish_status)
 
 int	check_syntax_error(t_list *list, t_list *token, int *finish_status)
 {
-	int flag;
-	t_parsed_token *parsed_token;
+	int				flag;
+	t_parsed_token	*parsed_token;
 
 	flag = OK;
 	while (list != NULL)

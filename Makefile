@@ -16,7 +16,7 @@ RESET=\033[0m
 
 $(OBJSDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(@D)
-	@$(CC) -c $< $(DEBUG) $(INCLUDES) -o $@
+	@$(CC) -c $< $(DEBUG) $(CFLAGS) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
 	@make -C ./libft

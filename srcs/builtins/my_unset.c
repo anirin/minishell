@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:02:41 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/27 17:32:40 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/29 21:15:39 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ bool	is_env_var(t_list *env_list, char *str_arg)
 void	delete_env_var(t_list **data, char *str_arg)
 {
 	t_env	*env;
-	t_list	*tmp;
 	t_list	*env_list;
 
 	env_list = *data;

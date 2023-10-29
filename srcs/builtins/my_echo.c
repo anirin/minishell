@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:11:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:18:24 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:14:37 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ static void	print_args(t_list *args)
 
 void	my_echo(t_list *env_list, t_list *cmd, t_list *args)
 {
-	t_token	*cmd_option;
-
 	(void)env_list;
 	if (cmd->next == NULL)
 	{

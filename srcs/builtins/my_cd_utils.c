@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/27 17:17:56 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/29 21:14:09 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ char	*get_env_value(t_list *env_list, char *value_name, int cmd_index)
 	t_env	*env;
 	char	*env_value;
 
+	(void)value_name;
 	while (cmd_index > 0)
 	{
 		env_list = env_list->next;

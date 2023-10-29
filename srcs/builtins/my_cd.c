@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/27 17:07:11 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/29 21:13:17 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status)
 
 char	*get_homedir(t_list *env_list, int *finish_status)
 {
-	t_token	*cmd_content;
 	int		cmd_index;
 	char	*new_path;
 
