@@ -1,12 +1,24 @@
-#include "main.h"
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   my_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/29 10:11:22 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 10:18:24 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
+#include "libft.h"
+#include "main.h"
 
 static int	is_valid_option(char *option)
 {
 	int	i;
 
-	i = 1; // -n なので、先頭の'-'は無視する
+	i = 1;
 	if (ft_strlen(option) == 1)
 		return (NG);
 	while (option[i] != '\0')
@@ -48,7 +60,7 @@ static int	print_invalid_options(t_list *options)
 			options = options->next;
 		}
 		else
-			break;
+			break ;
 	}
 	while (options != NULL)
 	{
@@ -88,7 +100,7 @@ void	my_echo(t_list *env_list, t_list *cmd, t_list *args)
 	}
 	else
 	{
-		if (print_invalid_options(cmd->next) == OK && args != NULL) //echo は無視
+		if (print_invalid_options(cmd->next) == OK && args != NULL)
 		{
 			printf(" ");
 		}

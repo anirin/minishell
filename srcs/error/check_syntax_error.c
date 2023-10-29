@@ -70,7 +70,7 @@ int	check_quote_syntax_error(t_list *token, int *finish_status)
 		content = (t_token *)token->content;
 		if (content->status == TK_ERROR)
 		{
-			printf("quote wo to ji ro\n");
+			printf("close quote!\n");
 			*finish_status = 1;
 			return (NG);
 		}

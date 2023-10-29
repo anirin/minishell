@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_env.c                                           :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/29 10:27:06 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:27:22 by atokamot         ###   ########.fr       */
+/*   Created: 2023/10/29 08:08:53 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 08:11:24 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LEXER_H
+#define LEXER_H
+
 #include "libft.h"
 #include "main.h"
-#include "builtins.h"
 
-void	my_env(t_list *env_list, t_list *cmd, t_list *args)
-{
-	t_env	*env;
+int	add_colon_token_to_list(t_list **list, char *line, int i);
+int	add_dollar_token_to_list(t_list **list, char *line, int i);
+int	add_pipe_token_to_list(t_list **list, char *line, int i);
+int	add_redirect_token_to_list(t_list **list, char *line, int i);
+int	add_quote_token_to_list(t_list **list, char *line, int i, char c);
 
-	(void)cmd;
-	(void)args;
-	while (env_list != NULL)
-	{
-		env = (t_env *)env_list->content;
-		if (env->value != NULL)
-			printf("%s=%s\n", (char *)env->name, (char *)env->value);
-		env_list = env_list->next;
-	}
-}
+#endif

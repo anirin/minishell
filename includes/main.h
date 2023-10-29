@@ -88,11 +88,9 @@ typedef struct s_token
 
 typedef struct s_parsed_token
 {
-	//リダイレクトを格納
-	t_list *redirect; // token
-	//コマンドを格納
-	t_list *cmd;  // token
-	t_list *args; // token
+	t_list *redirect;
+	t_list *cmd;
+	t_list *args;
 }			t_parsed_token;
 
 // lexer
@@ -109,6 +107,7 @@ void		print_arr(char **arr);
 // env
 t_list		*envp_convert_to_envlist(char **envp);
 void		print_list(t_list *list);
+void		update_env_end(char *path, t_list **env_list);
 
 // env expand
 void		expand_env(t_list **token, t_list *env_list, int *finish_status);
@@ -116,12 +115,6 @@ void		expand_env(t_list **token, t_list *env_list, int *finish_status);
 // pipefds
 int			**malloc_pipefds(t_list *parsed_list);
 void		free_pipefds(int **pipefds);
-
-// perse
-t_list		*get_redirect_tokens(t_list *tokens);
-t_list		*get_cmd_tokens(t_list *tokens);
-t_list		*get_args_tokens(t_list *tokens);
-void		move_head(t_list **head);
 
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
@@ -133,15 +126,13 @@ void		print_token(t_token *token);
 void		print_parsed_token(t_parsed_token *parsed_token);
 void		print_lst(void *content);
 
-// void	insort_list(t_list **token, t_list *add_list);
-// void		insort_list(t_list *token, t_list *add_list);
 void		insort_list(t_list **token, t_list *add_lst, t_list *prev);
 
 // builtin
 int			is_builtin(t_list *cmd_and_option);
 
 // my_execve
-void		my_execve(t_list **env_list, int check, t_list *cmd, t_list *args,
+void		my_execve(t_list **env_list, int check, t_parsed_token *token,
 				int *finish_status);
 
 // free
@@ -166,5 +157,6 @@ void		change_finish_status(int signal_flag, int *finish_status);
 
 // error
 void		print_err(char *cmd);
+
 
 #endif

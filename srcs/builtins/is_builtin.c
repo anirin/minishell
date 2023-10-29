@@ -1,10 +1,22 @@
-#include "main.h"
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_builtin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/29 10:12:08 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 10:12:39 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int		is_builtin(t_list *cmd_and_option)
+#include "libft.h"
+#include "main.h"
+
+int	is_builtin(t_list *cmd_and_option)
 {
-	t_token *token_cmd;
-	char *str;
+	t_token	*token_cmd;
+	char	*str;
 
 	if (cmd_and_option == NULL)
 		return (BT_NOTBUILTIN);

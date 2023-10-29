@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_env.c                                           :+:      :+:    :+:   */
+/*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/29 10:27:06 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:27:22 by atokamot         ###   ########.fr       */
+/*   Created: 2023/10/29 10:44:02 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 20:22:28 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "exec.h"
 #include "libft.h"
 #include "main.h"
-#include "builtins.h"
 
-void	my_env(t_list *env_list, t_list *cmd, t_list *args)
+void	redirect_pipe(int **pipefds, int cmd_index)
 {
-	t_env	*env;
-
-	(void)cmd;
-	(void)args;
-	while (env_list != NULL)
+	if (pipefds[cmd_index] != NULL)
 	{
-		env = (t_env *)env_list->content;
-		if (env->value != NULL)
-			printf("%s=%s\n", (char *)env->name, (char *)env->value);
-		env_list = env_list->next;
+		close(pipefds[cmd_index][0]);
+		dup2(pipefds[cmd_index][1], STDOUT_FILENO);
+	}
+	if (cmd_index - 1 >= 0)
+		dup2(pipefds[cmd_index - 1][0], STDIN_FILENO);
+}
+
+void	close_pipefds(int **pipefds, int cmd_index)
+{
+	if (pipefds[cmd_index] != NULL)
+	{
+		close(pipefds[cmd_index][1]);
+	}
+	if (cmd_index - 1 >= 0)
+	{
+		close(pipefds[cmd_index - 1][0]);
 	}
 }
