@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 20:23:31 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:32:24 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:58:24 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	minishell(char **envp)
 	{
 		if (exec_one_line(&env_list, finish_status) == -1)
 			continue ;
-
 	}
 	ft_lstclear(&env_list, (void *)free_env);
 	free(finish_status);

@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:42:39 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:31:54 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:01:11 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,12 @@ static char	*search_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
-static char	*help_get_path(char **paths, char *cmd)
+static char	*help_get_path(char **paths, char *cmd, int flag)
 {
 	char	*ret;
 
 	ret = search_paths(paths, cmd);
-	if (!ret)
+	if (!ret && flag == CHILD)
 	{
 		printf("minishell: %s: command not found\n", cmd);
 		exit(127);
@@ -82,9 +82,10 @@ static char	*help_get_path(char **paths, char *cmd)
 	{
 		return (ret);
 	}
+	return (NULL);
 }
 
-char	*get_path(t_list *p_cmd_list, t_list *p_env_list)
+char	*get_path(t_list *p_cmd_list, t_list *p_env_list, int flag)
 {
 	t_token	*token;
 	char	*cmd;
@@ -107,7 +108,7 @@ char	*get_path(t_list *p_cmd_list, t_list *p_env_list)
 		perror("minishell: ");
 		exit(126);
 	}
-	ret = help_get_path(paths, cmd);
+	ret = help_get_path(paths, cmd, flag);
 	free_array(paths);
 	return (ret);
 }

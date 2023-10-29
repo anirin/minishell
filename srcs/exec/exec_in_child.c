@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 11:01:00 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:22:42 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:52:35 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	exec_not_builtin_in_child(t_parsed_token *token,
 	char	**argv;
 	char	**envp;
 
-	path = get_path(token->cmd, *env_list);
+	path = get_path(token->cmd, *env_list, CHILD);
 	argv = get_argv(token->cmd, token->args);
 	envp = envlist_to_envp(*env_list);
 	execve(path, argv, envp);

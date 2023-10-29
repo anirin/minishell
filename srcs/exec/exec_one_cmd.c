@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:24:29 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:02:18 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,12 @@ static void	handle_parent_process(int check, t_parsed_token *token,
 
 	if (check == BT_NOTBUILTIN)
 	{
-		path = get_path(token->cmd, *env_list);
-		update_env_end(path, env_list);
-		free(path);
+		path = get_path(token->cmd, *env_list, PARENT);
+		if (path != NULL)
+		{
+			update_env_end(path, env_list);
+			free(path);
+		}
 	}
 	close_pipefds(pipefds, cmd_index);
 }

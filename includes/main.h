@@ -121,10 +121,10 @@ void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				int cmd_index, t_list **env_list, int *finish_status);
 
 // util
-void		print_env(t_env *env);
-void		print_token(t_token *token);
-void		print_parsed_token(t_parsed_token *parsed_token);
-void		print_lst(void *content);
+// void		print_env(t_env *env);
+// void		print_token(t_token *token);
+// void		print_parsed_token(t_parsed_token *parsed_token);
+// void		print_lst(void *content);
 
 void		insort_list(t_list **token, t_list *add_lst, t_list *prev);
 
