@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 21:02:18 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:46:10 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static void	handle_child_process(int **pipefds, t_list **env_list,
 		exit(0);
 	if (check != BT_NOTBUILTIN)
 		exec_builtin_in_child_process(env_list, check, token, finish_status);
-
 	else
 		exec_not_builtin_in_child(token, env_list);
 }
