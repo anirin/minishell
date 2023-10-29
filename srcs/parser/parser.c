@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/29 09:21:50 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 09:38:30 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "main.h"
+#include "parser.h"
 
-void	trim_quote(void *content)
+static void	trim_quote(void *content)
 {
 	char	*tmp;
 	t_token	*token;
@@ -22,54 +35,12 @@ void	trim_quote(void *content)
 	}
 }
 
-char	*get_new_content(t_list **tokens)
+t_list	*preprocess_tokens(t_list *tokens)
 {
-	char	*new_content;
-	char	*tmp;
+	t_list	*prepro_tokens;
+	t_list	*new;
 	t_token	*token;
-
-	token = (t_token *)(*tokens)->content;
-	if (token->status != TK_NORMAL && token->status != TK_DOUBLE_QUOTE
-		&& token->status != TK_SINGLE_QUOTE)
-	{
-		new_content = ft_strdup(token->token_content);
-		*tokens = (*tokens)->next;
-	}
-	else
-	{
-		new_content = ft_strdup("");
-		while ((*tokens) != NULL && token != NULL && (token->status == TK_NORMAL
-				|| token->status == TK_DOUBLE_QUOTE
-				|| token->status == TK_SINGLE_QUOTE))
-		{
-			tmp = new_content;
-			new_content = ft_strjoin(tmp, token->token_content);
-			free(tmp);
-			*tokens = (*tokens)->next;
-			if (*tokens != NULL)
-				token = (t_token *)(*tokens)->content;
-		}
-	}
-	return (new_content);
-}
-
-static int	get_new_status(t_list *tokens)
-{
-	t_token	*token;
-
-	token = (t_token *)tokens->content;
-	if (token->status != TK_DOUBLE_QUOTE && token->status != TK_SINGLE_QUOTE)
-		return (token->status);
-	else
-		return (TK_NORMAL);
-}
-
-static t_list	*preprocess_tokens(t_list *tokens) // ok
-{
-	t_list *prepro_tokens;
-	t_list *new;
-	t_token *token;
-	t_token *new_token;
+	t_token	*new_token;
 
 	prepro_tokens = NULL;
 	while (tokens != NULL)
@@ -113,8 +84,8 @@ static t_list	*get_list(t_list *tokens)
 
 t_list	*parser(t_list **tokens, t_list *env_list, int *finish_status)
 {
-	t_list *preproc_tokens;
-	t_list *ret_tokens;
+	t_list	*preproc_tokens;
+	t_list	*ret_tokens;
 
 	ft_lstiter(*tokens, trim_quote);
 	expand_env(tokens, env_list, finish_status);

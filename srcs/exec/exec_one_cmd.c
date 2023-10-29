@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 08:51:10 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 09:39:25 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ bool	redirect_in(t_token *token)
 		}
 		while (1)
 		{
-				printf("hello!\n");
 			line = readline("heredoc> ");
 			if (line == NULL)
 			{

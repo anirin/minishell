@@ -1,30 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/29 09:31:09 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/29 09:33:51 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "main.h"
-
-int		get_greater_than_status(char *str)
-{
-	if (ft_strlen(str) == 1)
-		return (RD_OUT);
-	else if (ft_strlen(str) == 2)
-		return (RD_APPEND);
-	else
-		return (RD_OUT_ERROR);
-}
-
-int		get_less_than_status(char *str)
-{
-	if (ft_strlen(str) == 1)
-		return (RD_IN);
-	else if (ft_strlen(str) == 2)
-		return (RD_HEAEDOC);
-	else
-		return (RD_IN_ERROR);
-}
+#include "parser.h"
 
 char	*get_content(t_list *tokens)
 {
 	t_token	*token;
-	char *ret;
+	char	*ret;
 
 	if (tokens == NULL)
 		return (NULL);
@@ -57,103 +50,6 @@ void	move_tokens_and_change_status_used(t_list **tokens)
 			*tokens = (*tokens)->next;
 		}
 	}
-}
-
-t_list	*get_redirect_tokens(t_list *tokens)
-{
-	t_list	*redirect_tokens;
-	t_token	*token;
-	t_token *new;
-
-	redirect_tokens = NULL;
-	while (tokens != NULL)
-	{
-		token = (t_token *)tokens->content;
-		if (token->status == TK_LESS_THAN)
-		{
-			new = malloc(sizeof(t_token));
-			new->status = get_less_than_status(token->token_content);
-			new->token_content = get_content(tokens->next);
-			ft_lstadd_back(&redirect_tokens, ft_lstnew(new));
-			move_tokens_and_change_status_used(&tokens);
-		}
-		else if (token->status == TK_GREATER_THAN)
-		{
-			new = malloc(sizeof(t_token));
-			new->status = get_greater_than_status(token->token_content);
-			new->token_content = get_content(tokens->next);
-			ft_lstadd_back(&redirect_tokens, ft_lstnew(new));
-			move_tokens_and_change_status_used(&tokens);
-		}
-		else
-		{
-			tokens = tokens->next;
-		}
-		if (token->status == TK_PIPE)
-			break;
-	}
-	return (redirect_tokens);
-}
-
-t_list	*get_cmd_tokens(t_list *tokens)
-{
-	t_list	*cmd_tokens;
-	t_token	*token;
-	t_token *new;
-	int		count;
-	
-	count = 0;
-	cmd_tokens = NULL;
-	while (tokens != NULL)
-	{
-		token = (t_token *)tokens->content;
-		if (token->status == TK_PIPE)
-		{
-			break ;
-		}
-		else if (token->status != TK_USED && (count == 0 || (count >= 1 && token != NULL && token->token_content[0] == '-')))
-		{
-			new = malloc(sizeof(t_token));
-			new->token_content = ft_strdup(token->token_content);
-			new->status = TK_NORMAL;
-			ft_lstadd_back(&cmd_tokens, ft_lstnew(new));
-			token->status = TK_USED;
-			count++;
-		}
-		else
-		{
-			break ;
-		}
-		tokens = tokens->next;
-	}
-	return (cmd_tokens);
-}
-
-t_list	*get_args_tokens(t_list *tokens)
-{
-	t_list	*args_tokens;
-	t_token	*token;
-	t_token *new;
-	
-	args_tokens = NULL;
-	while (tokens != NULL)
-	{
-		token = (t_token *)tokens->content;
-		if (token->status == TK_PIPE)
-		{
-			break ;
-		}
-		else if (token->status != TK_USED)
-		{
-			new = malloc(sizeof(t_token));
-			new->token_content = ft_strdup(token->token_content);
-			new->status = TK_NORMAL;
-			ft_lstadd_back(&args_tokens, ft_lstnew(new));
-			token->status = TK_USED;
-		}
-		tokens = tokens->next;
-	}
-	return (args_tokens);
 }
 
 void	move_head(t_list **head)

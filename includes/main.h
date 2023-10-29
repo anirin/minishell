@@ -88,11 +88,9 @@ typedef struct s_token
 
 typedef struct s_parsed_token
 {
-	//リダイレクトを格納
-	t_list *redirect; // token
-	//コマンドを格納
-	t_list *cmd;  // token
-	t_list *args; // token
+	t_list *redirect;
+	t_list *cmd;
+	t_list *args;
 }			t_parsed_token;
 
 // lexer
@@ -117,12 +115,6 @@ void		expand_env(t_list **token, t_list *env_list, int *finish_status);
 // pipefds
 int			**malloc_pipefds(t_list *parsed_list);
 void		free_pipefds(int **pipefds);
-
-// perse
-t_list		*get_redirect_tokens(t_list *tokens);
-t_list		*get_cmd_tokens(t_list *tokens);
-t_list		*get_args_tokens(t_list *tokens);
-void		move_head(t_list **head);
 
 // exec
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
