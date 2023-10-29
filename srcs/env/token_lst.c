@@ -6,10 +6,11 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 14:51:48 by atsu              #+#    #+#             */
-/*   Updated: 2023/10/29 21:11:41 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:35:16 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "expand_env.h"
 #include "libft.h"
 #include "main.h"
 

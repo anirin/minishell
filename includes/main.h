@@ -120,14 +120,6 @@ void		free_pipefds(int **pipefds);
 void		exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 				int cmd_index, t_list **env_list, int *finish_status);
 
-// util
-// void		print_env(t_env *env);
-// void		print_token(t_token *token);
-// void		print_parsed_token(t_parsed_token *parsed_token);
-// void		print_lst(void *content);
-
-void		insort_list(t_list **token, t_list *add_lst, t_list *prev);
-
 // builtin
 int			is_builtin(t_list *cmd_and_option);
 
@@ -146,13 +138,11 @@ void		parent_signal_handler(int *finish_status);
 void		child_signal_handler(void);
 
 // shell
-void		init_shell_list(t_list **shell_list);
 void		wait_for_child_and_store_status(int *pids, int cmd_index,
 				int *finish_status);
 
 // syntax
 int			check_syntax_error(t_list *list, t_list *token, int *finish_status);
-
 void		change_finish_status(int signal_flag, int *finish_status);
 
 // error
