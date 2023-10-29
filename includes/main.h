@@ -155,5 +155,8 @@ int			check_syntax_error(t_list *list, t_list *token, int *finish_status);
 
 void		change_finish_status(int signal_flag, int *finish_status);
 
+// error
+void		print_err(char *cmd);
+
 
 #endif

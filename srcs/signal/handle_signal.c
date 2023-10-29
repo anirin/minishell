@@ -6,7 +6,7 @@
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 18:08:15 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/25 16:03:22 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/10/27 17:45:16 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,4 @@ void	nothing_to_do(int signum)
 	rl_on_new_line();
 	rl_redisplay();
 	rl_replace_line("", 0);
-}
-
-void	put_quit_massage(int signum)
-{
-	ft_putstr_fd("Quit: 3", STDOUT_FILENO);
-	rl_on_new_line();
-	printf("\n");
-	rl_replace_line("", 0);
-}
-
-void	quit_child_proccess(int signum)
-{
-	rl_on_new_line();
-	printf("\n");
-	rl_replace_line("", 0);
-}
-
-void	change_finish_status(int signal_flag, int *finish_status)
-{
-	if (signal_flag == PARENT_SIGINT)
-		*finish_status = 1;
-	else if (signal_flag == PARENT_SIGQUIT)
-		*finish_status = 0;
-	else
-		;
 }

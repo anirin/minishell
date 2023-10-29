@@ -87,8 +87,10 @@ int	minishell(char **envp)
 	{
 		if (exec_one_line(&env_list, finish_status) == -1)
 			continue ;
+
 	}
 	ft_lstclear(&env_list, (void *)free_env);
+	free(finish_status);
 	return (0);
 }
 

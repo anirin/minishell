@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_lists.c                                       :+:      :+:    :+:   */
+/*   handle_signal_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/27 17:53:05 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/27 17:57:31 by nakaiheizou      ###   ########.fr       */
+/*   Created: 2023/10/27 17:44:47 by nakaiheizou       #+#    #+#             */
+/*   Updated: 2023/10/27 17:46:59 by nakaiheizou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
 
-void	free_token(t_token *token)
+void	change_finish_status(int signal_flag, int *finish_status)
 {
-	free(token->token_content);
-	free(token);
+	if (signal_flag == PARENT_SIGINT)
+		*finish_status = 1;
+	else if (signal_flag == PARENT_SIGQUIT)
+		*finish_status = 0;
 }
 
-void	free_env(t_env *env)
+void	put_quit_massage(int signum)
 {
-	free(env->name);
-	free(env->value);
-	free(env);
+	ft_putstr_fd("Quit: 3", STDOUT_FILENO);
+	rl_on_new_line();
+	printf("\n");
+	rl_replace_line("", 0);
 }
 
-void	free_parsed_token(t_parsed_token *parsed_token)
+void	quit_child_proccess(int signum)
 {
-	ft_lstclear(&parsed_token->redirect, (void *)free_token);
-	ft_lstclear(&parsed_token->cmd, (void *)free_token);
-	ft_lstclear(&parsed_token->args, (void *)free_token);
-	free(parsed_token);
+	rl_on_new_line();
+	printf("\n");
+	rl_replace_line("", 0);
 }

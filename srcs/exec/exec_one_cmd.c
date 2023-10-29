@@ -39,6 +39,7 @@ static void	handle_child_process(int **pipefds, t_list **env_list,
 		exit(0);
 	if (check != BT_NOTBUILTIN)
 		exec_builtin_in_child_process(env_list, check, token, finish_status);
+
 	else
 		exec_not_builtin_in_child(token, env_list);
 }
@@ -63,6 +64,7 @@ void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
 	t_parsed_token	*token;
 	int				check;
 
+	*finish_status = 0;
 	token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(token->cmd);
 	pids[cmd_index] = -1;

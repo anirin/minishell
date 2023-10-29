@@ -26,6 +26,10 @@ void	overwrite_env(int env_index, char *env_value, t_list *env_list);
 int		overwrite_pwd(t_list *env_list);
 void	to_homedir(t_list *env_list);
 int		overwrite_oldpwd(t_list *env_list);
+// int		overwrite_oldpwd(t_list *env_list);
+// int		overwrite_pwd(t_list *env_list);
+// char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
+
 //exit
 int	is_numeric(char *str);
 int	is_under_long_max(char *str);
