@@ -6,7 +6,7 @@
 /*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 15:10:45 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 17:11:01 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/30 17:15:30 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,6 @@ int					check_syntax_error(t_list *list, t_list *token,
 void				change_finish_status(int g_signal_flag, int *finish_status);
 
 // error
-void				print_err(char *cmd,char *str);
+void				print_err(char *cmd, char *str);
 
 #endif
