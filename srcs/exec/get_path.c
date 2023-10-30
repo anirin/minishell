@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:42:39 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 21:01:11 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:26:12 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ static char	**split_path(t_list *env_list)
 	return (ret);
 }
 
-static char	*check_cmd_directory(char *cmd)
+static char	*check_cmd_directory(char *cmd, int flag)
 {
 	struct stat	st;
 
 	stat(cmd, &st);
-	if ((st.st_mode & S_IFMT) == S_IFDIR)
+	if ((st.st_mode & S_IFMT) == S_IFDIR && flag == CHILD)
 	{
 		printf("minishell: %s: is a directory\n", cmd);
 		exit(126);
@@ -97,7 +97,7 @@ char	*get_path(t_list *p_cmd_list, t_list *p_env_list, int flag)
 	token = (t_token *)p_cmd_list->content;
 	cmd = token->token_content;
 	paths = split_path(p_env_list);
-	ret = check_cmd_directory(cmd);
+	ret = check_cmd_directory(cmd, flag);
 	if (ret != NULL)
 	{
 		free_array(paths);
