@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 08:04:33 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 08:05:23 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:16:02 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	add_dollar_token_to_list(t_list **list, char *line, int i)
 		if (ft_strncmp(&line[i - 1], "$$", 2) == 0)
 		{
 			word_num++;
-			add_to_token_list(list, line, i - 2, 2);
+			add_to_token_list(list, line, i - 1, 2);
 			return (word_num);
 		}
 		if (check_special_characters(line[i]))
