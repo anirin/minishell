@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 21:46:10 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:55:14 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,57 +30,53 @@ static int	handle_builtin(t_list **env_list, int check, t_parsed_token *token,
 	return (1);
 }
 
-static void	handle_child_process(int **pipefds, t_list **env_list,
-		t_parsed_token *token, int check, int *finish_status, int cmd_index)
+static void	handle_child_process(t_exec *data, int check, int *finish_status)
 {
-	if (redirect(pipefds, token, cmd_index) == false)
+	if (redirect(data->pipefds, data->token, data->cmd_index) == false)
 		exit(1);
-	if (token->cmd == NULL)
+	if (!data->token->cmd)
 		exit(0);
 	if (check != BT_NOTBUILTIN)
-		exec_builtin_in_child_process(env_list, check, token, finish_status);
+		exec_builtin_in_child_process(data->env_list, check, data->token,
+			finish_status);
 	else
-		exec_not_builtin_in_child(token, env_list);
+		exec_not_builtin_in_child(data->token, data->env_list);
 }
 
-static void	handle_parent_process(int check, t_parsed_token *token,
-		t_list **env_list, int **pipefds, int cmd_index)
+static void	handle_parent_process(t_exec *data, int check)
 {
 	char	*path;
 
 	if (check == BT_NOTBUILTIN)
 	{
-		path = get_path(token->cmd, *env_list, PARENT);
-		if (path != NULL)
+		path = get_path(data->token->cmd, *data->env_list, PARENT);
+		if (path)
 		{
-			update_env_end(path, env_list);
+			update_env_end(path, data->env_list);
 			free(path);
 		}
 	}
-	close_pipefds(pipefds, cmd_index);
+	close_pipefds(data->pipefds, data->cmd_index);
 }
 
-void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-		int cmd_index, t_list **env_list, int *finish_status)
+void	exec_one_cmd(t_exec *data, t_list *parsed_tokens, int *finish_status)
 {
-	t_parsed_token	*token;
-	int				check;
+	int	check;
 
 	*finish_status = 0;
-	token = (t_parsed_token *)parsed_tokens->content;
-	check = is_builtin(token->cmd);
-	pids[cmd_index] = -1;
-	if (check != BT_NOTBUILTIN && !parsed_tokens->next && !cmd_index)
-		handle_builtin(env_list, check, token, finish_status);
+	data->token = (t_parsed_token *)parsed_tokens->content;
+	check = is_builtin(data->token->cmd);
+	data->pids[data->cmd_index] = -1;
+	if (check != BT_NOTBUILTIN && !parsed_tokens->next && !data->cmd_index)
+		handle_builtin(data->env_list, check, data->token, finish_status);
 	else
 	{
 		if (parsed_tokens->next)
-			pipe(pipefds[cmd_index]);
-		pids[cmd_index] = fork();
-		if (pids[cmd_index] == 0)
-			handle_child_process(pipefds, env_list, token, check, finish_status,
-				cmd_index);
+			pipe(data->pipefds[data->cmd_index]);
+		data->pids[data->cmd_index] = fork();
+		if (data->pids[data->cmd_index] == 0)
+			handle_child_process(data, check, finish_status);
 		else
-			handle_parent_process(check, token, env_list, pipefds, cmd_index);
+			handle_parent_process(data, check);
 	}
 }

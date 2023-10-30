@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 12:38:43 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 15:12:31 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:10:49 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	exec_builtin_in_child_process(t_list **env_list, int check,
 			t_parsed_token *token, int *finish_status);
 void	exec_not_builtin_in_child(t_parsed_token *token,
 			t_list **env_list);
-void	exec_one_cmd(int *pids, int **pipefds, t_list *parsed_tokens,
-			int cmd_index, t_list **env_list, int *finish_status);
 char	*get_path(t_list *p_cmd_list, t_list *p_env_list, int flag);
 void	redirect_pipe(int **pipefds, int cmd_index);
 void	close_pipefds(int **pipefds, int cmd_index);

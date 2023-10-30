@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 20:23:31 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 15:13:41 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:06:29 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	exec_cmd(t_list *parsed_tokens, t_list **env_list,
 	int		**pipefds;
 	t_list	*tmp;
 	int		cmd_index;
+	t_exec	data;
 
 	cmd_index = 0;
 	pids = malloc(sizeof(int) * ft_lstsize(parsed_tokens));
@@ -39,7 +40,11 @@ static void	exec_cmd(t_list *parsed_tokens, t_list **env_list,
 	tmp = parsed_tokens;
 	while (tmp != NULL)
 	{
-		exec_one_cmd(pids, pipefds, tmp, cmd_index, env_list, finish_status);
+		data.env_list = env_list;
+		data.cmd_index = cmd_index;
+		data.pids = pids;
+		data.pipefds = pipefds;
+		exec_one_cmd(&data, tmp, finish_status);
 		cmd_index++;
 		tmp = tmp->next;
 	}
@@ -75,11 +80,13 @@ static int	exec_one_line(t_list **env_list, int *finish_status)
 	return (0);
 }
 
-int	minishell(char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_list	*env_list;
 	int		finish_status[2];
 
+	(void)argc;
+	(void)argv;
 	finish_status[0] = 0;
 	g_signal_flag = -1;
 	env_list = envp_convert_to_envlist(envp);
@@ -89,13 +96,5 @@ int	minishell(char **envp)
 			continue ;
 	}
 	ft_lstclear(&env_list, (void *)free_env);
-	free(finish_status);
 	return (0);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	minishell(envp);
 }

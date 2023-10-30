@@ -6,13 +6,14 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 15:10:36 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 15:10:37 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:23:29 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
+# include "libft.h"
 # include "main.h"
 # include "stdbool.h"
 
