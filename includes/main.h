@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 15:10:45 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 16:21:59 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:15:30 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
-# include "builtins.h"
 # include "libft.h"
+# include "builtins.h"
 # include <ctype.h>
 # include <libc.h>
 # include <readline/history.h>
@@ -169,6 +169,6 @@ int					check_syntax_error(t_list *list, t_list *token,
 void				change_finish_status(int g_signal_flag, int *finish_status);
 
 // error
-void				print_err(char *cmd);
+void				print_err(char *cmd, char *str);
 
 #endif
