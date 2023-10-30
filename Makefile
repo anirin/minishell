@@ -1,18 +1,26 @@
 NAME = minishell
-SRCDIR = ./srcs/
-FILES = main.c lexer.c print_list.c print_arr.c perxer.c exec.c
-SRCS = $(addprefix $(SRCDIR),$(FILES)) 
-OBJS = ${SRCS:.c=.o}
-CFLAGS = -lreadline -Llibft -lft
-INCLUDES = -I ./includes -I ./libft
-DEBUG = -g -fsanitize=address
+SRCDIR = srcs
+OBJSDIR = objs
+SRCS = \
+	srcs/builtins/is_builtin.c srcs/builtins/my_cd.c srcs/builtins/my_cd_utils.c srcs/builtins/my_echo.c srcs/builtins/my_env.c srcs/builtins/my_execve.c srcs/builtins/my_exit.c srcs/builtins/my_exit_help.c srcs/builtins/my_export.c srcs/builtins/my_export_error.c srcs/builtins/my_export_modify_env_value.c srcs/builtins/my_export_to_string_parse_token.c srcs/builtins/my_pwd.c srcs/builtins/my_unset.c srcs/env/expand_env.c srcs/env/expand_utils.c srcs/env/find_doller_and_parse.c srcs/env/split_by_isspace.c srcs/env/token_lst.c srcs/error/check_syntax_error.c srcs/error/print_err.c srcs/exec/envlist_to_envp.c srcs/exec/exec_in_child.c srcs/exec/exec_one_cmd.c srcs/exec/get_path.c srcs/exec/main.c srcs/exec/pipe.c srcs/exec/pipefds.c srcs/exec/redirect.c srcs/exec/redirect_in.c srcs/exec/redirect_out.c srcs/lexer/add_colon_doll_token.c srcs/lexer/add_pipe_redirect_token.c srcs/lexer/add_quote_token.c srcs/lexer/lexer.c srcs/parser/get_cmd_args.c srcs/parser/get_redirect.c srcs/parser/parser.c srcs/parser/parser_utils.c srcs/parser/set_stat_content.c srcs/signal/handle_signal.c srcs/signal/handle_signal_utils.c srcs/utils/change_finish_stat.c srcs/utils/free_array.c srcs/utils/free_lists.c srcs/utils/print_arr.c srcs/utils/print_list.c
+OBJS := $(patsubst srcs/%.c, objs/%.o, $(SRCS))
+LDFLAGS = -Llibft -lft -L $(shell brew --prefix readline)/lib -lreadline
+LDLIBS = -lft
+INCLUDES = -I ./includes -I ./libft/includes -I $(shell brew --prefix readline)/include
+#DEBUG = -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
+RED=\033[31m
+GREEN=\033[32m
+RESET=\033[0m
 
-%.o : %.c
-	@$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $@
+$(OBJSDIR)/%.o : $(SRCDIR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) -c $< $(DEBUG) $(CFLAGS) $(INCLUDES) -o $@
 
 $(NAME) : $(OBJS)
-	@make bonus -C ./libft
-	@$(CC) $^ $(CFLAGS) $(DEBUG) $(INCLUDES) -o $@
+	@make -C ./libft
+	@$(CC) $^ $(LDFLAGS) $(DEBUG) $(INCLUDES) -o $@
+	@echo "$(GREEN)	✅ $(NAME) created$(RESET)"
 
 all : $(NAME)
 
@@ -24,11 +32,29 @@ fclean : clean
 	@make fclean -C ./libft
 	@rm -rf $(NAME)
 
+echo :
+	# @echo $(SRCS)
+	# @echo $(OBJS)
+	echo $(LDFLAGS)
+
 re : fclean all
 
-add :
-	git add srcs/*.c includes/*.h libft/* Makefile README
+# ifndef branch
+# 	$(error branch is not defined.)
+# endif
 
-echo :
-	echo $(OBJS)
-	echo $(SRCS)
+# ifndef message
+# 	$(error message is not defined.)
+# endif
+
+#useage make git b=<branch_name> m=<commit_message>
+
+# git:
+# 	git add .
+# 	git commit -m "$(m)"
+# 	git push origin $(b)
+
+leak:
+	while [ 1 ]; do leaks minishell; sleep 2; done
+
+.PHONY: git_commit_push
