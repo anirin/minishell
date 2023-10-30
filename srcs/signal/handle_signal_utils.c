@@ -6,18 +6,18 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:44:47 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/29 21:17:31 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:13:41 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "main.h"
 
-void	change_finish_status(int signal_flag, int *finish_status)
+void	change_finish_status(int g_signal_flag, int *finish_status)
 {
-	if (signal_flag == PARENT_SIGINT)
+	if (g_signal_flag == PARENT_SIGINT)
 		*finish_status = 1;
-	else if (signal_flag == PARENT_SIGQUIT)
+	else if (g_signal_flag == PARENT_SIGQUIT)
 		*finish_status = 0;
 }
 

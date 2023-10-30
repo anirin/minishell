@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 20:23:31 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:58:24 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:13:41 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "main.h"
 
-int			signal_flag = 0;
+int			g_signal_flag = 0;
 
 static void	add_history_and_free(char *line, t_list *tokens,
 		t_list *parsed_tokens)
@@ -54,10 +54,10 @@ static int	exec_one_line(t_list **env_list, int *finish_status)
 	t_list	*parsed_tokens;
 	char	*line;
 
-	signal_flag = -1;
+	g_signal_flag = -1;
 	parent_signal_handler(finish_status);
 	line = readline("\033[32m$>\033[0m ");
-	change_finish_status(signal_flag, finish_status);
+	change_finish_status(g_signal_flag, finish_status);
 	if (line == NULL)
 	{
 		line = ft_strdup("exit");
@@ -81,7 +81,7 @@ int	minishell(char **envp)
 	int		finish_status[2];
 
 	finish_status[0] = 0;
-	signal_flag = -1;
+	g_signal_flag = -1;
 	env_list = envp_convert_to_envlist(envp);
 	while (1)
 	{

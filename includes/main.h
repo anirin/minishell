@@ -1,5 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/30 15:10:45 by atokamot          #+#    #+#             */
+/*   Updated: 2023/10/30 15:13:59 by atokamot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAIN_H
 # define MAIN_H
+
+# include "builtins.h"
+# include "libft.h"
+# include <ctype.h>
+# include <libc.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/errno.h>
+
+extern int	g_signal_flag;
 
 // token
 enum		e_token_status
@@ -41,7 +67,7 @@ enum		e_util
 
 enum		e_redirect
 {
-	RD_IN_ERROR = 10, //回避方法
+	RD_IN_ERROR = 10,
 	RD_OUT_ERROR,
 	RD_IN,
 	RD_OUT,
@@ -59,21 +85,6 @@ enum		e_signal
 
 # define PATH_SIZE 1024
 
-extern int signal_flag; // または他の初期値
-
-// readline
-# include "libft.h"
-# include "builtins.h"
-# include <ctype.h>
-# include <libc.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/errno.h>
-
 typedef struct s_env
 {
 	char	*name;
@@ -88,9 +99,9 @@ typedef struct s_token
 
 typedef struct s_parsed_token
 {
-	t_list *redirect;
-	t_list *cmd;
-	t_list *args;
+	t_list	*redirect;
+	t_list	*cmd;
+	t_list	*args;
 }			t_parsed_token;
 
 // lexer
@@ -133,7 +144,7 @@ void		free_token(t_token *token);
 void		free_parsed_token(t_parsed_token *parsed_token);
 void		free_array(char **array);
 
-// terminate_program.c
+// terminate
 void		parent_signal_handler(int *finish_status);
 void		child_signal_handler(void);
 
@@ -143,10 +154,9 @@ void		wait_for_child_and_store_status(int *pids, int cmd_index,
 
 // syntax
 int			check_syntax_error(t_list *list, t_list *token, int *finish_status);
-void		change_finish_status(int signal_flag, int *finish_status);
+void		change_finish_status(int g_signal_flag, int *finish_status);
 
 // error
 void		print_err(char *cmd);
-
 
 #endif

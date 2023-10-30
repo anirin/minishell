@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:07:31 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:11:05 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:08:10 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ char	**parse_env(char *token)
 	parsed_env[3] = NULL;
 	while (token[i] != '\0')
 	{
-		if (strncmp(&token[i], "+=", 2) == 0 && count != 0)
+		if (ft_strncmp(&token[i], "+=", 2) == 0 && count != 0)
 			return (handle_append_case(parsed_env, token, count));
-		else if (strncmp(&token[i], "=", 1) == 0 && count != 0)
+		else if (ft_strncmp(&token[i], "=", 1) == 0 && count != 0)
 			return (handle_assignment_case(parsed_env, token, count));
 		count++;
 		i++;
