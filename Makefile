@@ -8,7 +8,6 @@ LDFLAGS = -Llibft -lft -L $(shell brew --prefix readline)/lib -lreadline
 LDLIBS = -lft
 INCLUDES = -I ./includes -I ./libft/includes -I $(shell brew --prefix readline)/include
 #DEBUG = -g -fsanitize=address
-#DEBUG = -g
 CFLAGS = -Wall -Wextra -Werror
 RED=\033[31m
 GREEN=\033[32m
@@ -40,20 +39,20 @@ echo :
 
 re : fclean all
 
-ifndef branch
-	$(error branch is not defined.)
-endif
+# ifndef branch
+# 	$(error branch is not defined.)
+# endif
 
-ifndef message
-	$(error message is not defined.)
-endif
+# ifndef message
+# 	$(error message is not defined.)
+# endif
 
 #useage make git b=<branch_name> m=<commit_message>
 
-git:
-	git add .
-	git commit -m "$(m)"
-	git push origin $(b)
+# git:
+# 	git add .
+# 	git commit -m "$(m)"
+# 	git push origin $(b)
 
 leak:
 	while [ 1 ]; do leaks minishell; sleep 2; done

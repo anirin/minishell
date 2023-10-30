@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/29 21:14:09 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:37:31 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	overwrite_pwd(t_list *env_list)
 	if (crt_path == NULL)
 	{
 		ft_putstr_fd("error retrieving current directory:getcwd: "
-			"cannot access parent directories",
+			"cannot access parent directories\n",
 			STDERR_FILENO);
 		return (FAIL);
 	}
@@ -50,7 +50,7 @@ int	overwrite_oldpwd(t_list *env_list)
 	if (crt_path == NULL)
 	{
 		ft_putstr_fd("error retrieving current directory: "
-			"getcwd: cannot access parent directories",
+			"getcwd: cannot access parent directories\n",
 			STDERR_FILENO);
 		return (FAIL);
 	}
