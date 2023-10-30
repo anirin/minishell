@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 23:00:13 by hnakai            #+#    #+#             */
-/*   Updated: 2023/10/29 21:13:17 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:11:21 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "libft.h"
 #include "main.h"
 
-bool	is_cd_error(char *new_path, int *finish_status);
-bool	is_accessible(char *input_path, int *finish_status);
-bool	is_directory(char *input_path, int *finish_status);
-char	*get_homedir(t_list *env_list, int *finish_status);
-char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status);
-int		overwrite_oldpwd(t_list *env_list);
-int		overwrite_pwd(t_list *env_list);
-char	*get_env_value(t_list *env_list, char *value_name, int cmd_index);
+bool		is_cd_error(char *new_path, int *finish_status);
+bool		is_accessible(char *input_path, int *finish_status);
+bool		is_directory(char *input_path, int *finish_status);
+static char	*get_homedir(t_list *env_list, int *finish_status);
+static char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status);
+int			overwrite_oldpwd(t_list *env_list);
+int			overwrite_pwd(t_list *env_list);
+char		*get_env_value(t_list *env_list, char *value_name, int cmd_index);
 
 void	my_cd(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 {
@@ -56,7 +56,7 @@ bool	is_accessible(char *input_path, int *finish_status)
 {
 	if (access(input_path, X_OK) != 0)
 	{
-		print_err("cd");
+		print_err("cd", input_path);
 		*finish_status = 1;
 		return (false);
 	}
@@ -74,14 +74,14 @@ bool	is_directory(char *input_path, int *finish_status)
 	if (stat(input_path, stat_info) != 0)
 	{
 		if (errno == ENOENT)
-			print_err("cd");
+			print_err("cd", input_path);
 		*finish_status = 1;
 		free((void *)stat_info);
 		return (false);
 	}
 	if ((stat_info->st_mode & S_IFMT) != S_IFDIR)
 	{
-		print_err("cd");
+		print_err("cd", input_path);
 		*finish_status = 1;
 		free((void *)stat_info);
 		return (false);
@@ -93,7 +93,7 @@ bool	is_directory(char *input_path, int *finish_status)
 	}
 }
 
-char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status)
+static char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status)
 {
 	t_token	*cmd_content;
 	int		cmd_index;
@@ -116,7 +116,7 @@ char	*get_oldpwd(t_list *env_list, t_list *cmd, int *finish_status)
 	return (new_path);
 }
 
-char	*get_homedir(t_list *env_list, int *finish_status)
+static char	*get_homedir(t_list *env_list, int *finish_status)
 {
 	int		cmd_index;
 	char	*new_path;

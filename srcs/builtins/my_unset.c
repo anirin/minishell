@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:02:41 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/29 21:15:39 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:05:49 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "libft.h"
 #include "main.h"
 
-bool	is_env_var(t_list *env_list, char *str_arg);
-void	delete_env_var(t_list **env_list, char *str_arg);
-void	delete_first_env(t_list **data, t_env *env);
-void	delete_after_first_env(t_list *env_list, t_env *env);
+static bool	is_env_var(t_list *env_list, char *str_arg);
+static void	delete_env_var(t_list **env_list, char *str_arg);
+static void	delete_first_env(t_list **data, t_env *env);
+static void	delete_after_first_env(t_list *env_list, t_env *env);
 
 void	my_unset(t_list **env_list, t_list *args)
 {
@@ -41,7 +41,7 @@ void	my_unset(t_list **env_list, t_list *args)
 	}
 }
 
-bool	is_env_var(t_list *env_list, char *str_arg)
+static bool	is_env_var(t_list *env_list, char *str_arg)
 {
 	t_env	*env;
 
@@ -55,7 +55,7 @@ bool	is_env_var(t_list *env_list, char *str_arg)
 	return (false);
 }
 
-void	delete_env_var(t_list **data, char *str_arg)
+static void	delete_env_var(t_list **data, char *str_arg)
 {
 	t_env	*env;
 	t_list	*env_list;
@@ -81,7 +81,7 @@ void	delete_env_var(t_list **data, char *str_arg)
 	}
 }
 
-void	delete_first_env(t_list **data, t_env *env)
+static void	delete_first_env(t_list **data, t_env *env)
 {
 	t_list	*tmp;
 
@@ -91,7 +91,7 @@ void	delete_first_env(t_list **data, t_env *env)
 	free(tmp);
 }
 
-void	delete_after_first_env(t_list *env_list, t_env *env)
+static void	delete_after_first_env(t_list *env_list, t_env *env)
 {
 	t_list	*tmp;
 
