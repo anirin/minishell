@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:07:34 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:35:44 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:31:06 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ static void	handle_args(t_list *args, t_list **env_list, int *finish_status)
 	{
 		parsed_env = parse_env(((t_token *)args->content)->token_content);
 		if (!check_export_error(parsed_env[0], finish_status))
+		{
+			free_array(parsed_env);
 			break ;
+		}
 		env_index = is_added_env(parsed_env[0], *env_list);
 		if (env_index != -1)
 		{
