@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:51:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:13:25 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:21:27 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	handle_valid_exit_status(t_token *exit_status_token)
 	}
 }
 
-void	my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
+int		my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 {
 	t_token	*exit_status_token;
 	t_list	*tmp;
@@ -39,21 +39,21 @@ void	my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 	(void)env_list;
 	tmp = ft_lstlast(cmd);
 	ft_lstadd_back(&cmd, args);
-	if (!cmd->next
-		|| !is_numeric(((t_token *)cmd->next->content)->token_content))
+	if (cmd->next == NULL)
 	{
 		tmp->next = NULL;
 		printf("exit\n");
-		exit(0);
+		exit(*finish_status);
+	}
+	if (cmd->next->next != NULL)
+	{
+		printf("exit\nminishell: exit: too many arguments\n");
+		*finish_status = 1;
+		tmp->next = NULL;
+		return (1);
 	}
 	exit_status_token = (t_token *)cmd->next->content;
-	tmp->next = NULL;
-	if (cmd->next->next)
-	{
-		printf("exit\n");
-		printf("minishell: exit: too many arguments\n");
-		*finish_status = 1;
-		return ;
-	}
 	handle_valid_exit_status(exit_status_token);
+	tmp->next = NULL;
+	return (0);
 }

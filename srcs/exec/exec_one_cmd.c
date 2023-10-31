@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 15:55:14 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:19:40 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	exec_one_cmd(t_exec *data, t_list *parsed_tokens, int *finish_status)
 {
 	int	check;
 
-	*finish_status = 0;
 	data->token = (t_parsed_token *)parsed_tokens->content;
 	check = is_builtin(data->token->cmd);
 	data->pids[data->cmd_index] = -1;
