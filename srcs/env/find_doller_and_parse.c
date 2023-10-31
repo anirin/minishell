@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:27:34 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 13:56:01 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 19:42:38 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	add_token_with_dollar(char *token, int *i, t_list **parsed_tokens)
 	(*i)++;
 	count = 1;
 	while (token[*i] != '\0' && ft_isspace(token[*i]) == UT_NOT_SPACE
-		&& token[*i] != '\'' && token[*i] != '\"')
+		&& token[*i] != '\'' && token[*i] != '\"' && token[*i] != '$')
 	{
 		count++;
 		(*i)++;
