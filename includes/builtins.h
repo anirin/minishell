@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 15:10:36 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 16:23:29 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:22:34 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	my_pwd(void);
 void	my_cd(t_list *env_list, t_list *cmd, t_list *args, int *finish_status);
 void	my_echo(t_list *env_list, t_list *cmd, t_list *args);
 void	my_env(t_list *env_list, t_list *cmd, t_list *args);
-void	my_exit(t_list *env_list, t_list *cmd, t_list *args,
+int		my_exit(t_list *env_list, t_list *cmd, t_list *args,
 			int *finish_status);
 void	my_export(t_list **env_list, t_list *args, int *finish_status);
 void	my_unset(t_list **env_list, t_list *args);

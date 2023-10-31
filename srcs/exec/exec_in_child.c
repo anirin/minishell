@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 11:01:00 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:52:35 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:08:31 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static char	**get_argv(t_list *cmd, t_list *args)
 void	exec_builtin_in_child_process(t_list **env_list, int check,
 		t_parsed_token *token, int *finish_status)
 {
+	if (check)
 	my_execve(env_list, check, token, finish_status);
 	exit(0);
 }

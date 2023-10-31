@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:26:08 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 10:26:29 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:28:28 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ bool	check_export_error(char *str, int *finish_status)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (ft_isspace(str[i]) == 0 || ft_isdigit(str[0]) != 0)
+		if (ft_isspace(str[i]) == 0 || ft_isdigit(str[0]) != 0
+			|| str[i] == '-' || str[i] == '+')
 		{
 			printf("export: not valid in this context:");
 			printf("%s\n", str);
