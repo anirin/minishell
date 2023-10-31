@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 21:53:18 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 21:56:24 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 22:01:56 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ char	*is_regular_file(char *path, int flag)
 		exit(127);
 	}
 	else
-		return (strdup(path));
+		return (ft_strdup(path));
 	return (NULL);
 }
