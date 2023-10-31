@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:19:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 16:22:08 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 19:50:00 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 		else
 			*finish_status = 0;
 	}
+	else 
+		*finish_status = 0;
 	if (check == BT_EXPORT)
 		my_export(env_list, args, finish_status);
 	if (check == BT_ECHO)
