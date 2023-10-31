@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:51:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 16:21:27 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:34:03 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	handle_valid_exit_status(t_token *exit_status_token)
 	}
 }
 
-int		my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
+int	my_exit(t_list *env_list, t_list *cmd, t_list *args, int *finish_status)
 {
 	t_token	*exit_status_token;
 	t_list	*tmp;

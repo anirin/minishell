@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_in_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 11:01:00 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 16:08:31 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:32:17 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,11 @@ void	exec_builtin_in_child_process(t_list **env_list, int check,
 		t_parsed_token *token, int *finish_status)
 {
 	if (check)
-	my_execve(env_list, check, token, finish_status);
+		my_execve(env_list, check, token, finish_status);
 	exit(0);
 }
 
-void	exec_not_builtin_in_child(t_parsed_token *token,
-								t_list **env_list)
+void	exec_not_builtin_in_child(t_parsed_token *token, t_list **env_list)
 {
 	char	*path;
 	char	**argv;
