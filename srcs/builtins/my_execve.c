@@ -6,7 +6,7 @@
 /*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:19:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 19:50:00 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/10/31 20:18:35 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 		else
 			*finish_status = 0;
 	}
-	else 
+	else
 		*finish_status = 0;
 	if (check == BT_EXPORT)
 		my_export(env_list, args, finish_status);
@@ -43,5 +43,4 @@ void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 		my_cd(*env_list, cmd, args, finish_status);
 	if (check == BT_UNSET)
 		my_unset(env_list, args);
-	return ;
 }
