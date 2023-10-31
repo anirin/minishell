@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:27:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 17:16:24 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:46:36 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*find_env_name(char *doller_token, t_list *env_list,
 {
 	t_env	*env;
 
-	if (strlen(doller_token) == 1)
+	if (ft_strlen(doller_token) == 1)
 		return (ft_strdup("$"));
 	else if (ft_strncmp(doller_token, "$$", 2) == 0)
 		return (ft_strdup("[PID]"));
