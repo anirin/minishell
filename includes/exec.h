@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 12:38:43 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 16:10:49 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 21:56:35 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ bool	redirect(int **pipefds, t_parsed_token *token, int cmd_index);
 bool	redirect_in_out(t_list *tokens);
 void	close_pipefds(int **pipefds, int cmd_index);
 void	redirect_pipe(int **pipefds, int cmd_index);
+char	*is_regular_file(char *path, int flag);
 
 #endif

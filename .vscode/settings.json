@@ -4,6 +4,7 @@
 		"libft.h": "c",
 		"stdbool.h": "c",
 		"readline.h": "c",
-		"builtins.h": "c"
+		"builtins.h": "c",
+		"exec.h": "c"
 	}
 }
