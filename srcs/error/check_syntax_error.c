@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax_error.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:05:02 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 21:10:45 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:23:05 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,8 @@ int	check_quote_syntax_error(t_list *token, int *finish_status)
 
 int	check_syntax_error(t_list *list, t_list *token, int *finish_status)
 {
-	int				flag;
 	t_parsed_token	*parsed_token;
 
-	flag = OK;
 	while (list != NULL)
 	{
 		parsed_token = (t_parsed_token *)list->content;

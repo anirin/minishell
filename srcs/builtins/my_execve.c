@@ -3,16 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   my_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:19:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 16:22:08 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:40:37 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "libft.h"
 #include "main.h"
+
+static void	process_exit(t_list **env_list, t_list *cmd, t_list *args,
+				int *finish_status);
+
+static void	process_exit(t_list **env_list, t_list *cmd, t_list *args,
+		int *finish_status)
+{
+	if (my_exit(*env_list, cmd, args, finish_status) == 1)
+		*finish_status = 1;
+	else
+		*finish_status = 0;
+}
 
 void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 		int *finish_status)
@@ -23,12 +35,9 @@ void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 	cmd = token->cmd;
 	args = token->args;
 	if (check == BT_EXIT)
-	{
-		if (my_exit(*env_list, cmd, args, finish_status) == 1)
-			*finish_status = 1;
-		else
-			*finish_status = 0;
-	}
+		process_exit(env_list, cmd, args, finish_status);
+	else
+		*finish_status = 0;
 	if (check == BT_EXPORT)
 		my_export(env_list, args, finish_status);
 	if (check == BT_ECHO)
@@ -41,5 +50,4 @@ void	my_execve(t_list **env_list, int check, t_parsed_token *token,
 		my_cd(*env_list, cmd, args, finish_status);
 	if (check == BT_UNSET)
 		my_unset(env_list, args);
-	return ;
 }

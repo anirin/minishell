@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_export_to_string_parse_token.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:07:31 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 15:08:10 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:22:48 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,9 @@ static char	**handle_assignment_case(char **parsed_env, char *token, int count)
 char	**parse_env(char *token)
 {
 	char	**parsed_env;
-	char	*tmp;
 	int		count;
 	int		i;
 
-	tmp = NULL;
 	count = 0;
 	i = 0;
 	parsed_env = ft_calloc(4, sizeof(char *));

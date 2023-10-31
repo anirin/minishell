@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_colon_doll_token.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 08:04:33 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 17:16:02 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/10/31 20:31:52 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	add_dollar_token_to_list(t_list **list, char *line, int i)
 	{
 		word_num++;
 		i++;
-		if (ft_strncmp(&line[i - 1], "$$", 2) == 0)
+		if (ft_strncmp(&line[i - 1], "$$", 2) == 0 || ft_strncmp(&line[i - 1],
+				"$?", 2) == 0)
 		{
 			word_num++;
 			add_to_token_list(list, line, i - 1, 2);
