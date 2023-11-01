@@ -1,4 +1,6 @@
 *.o
 *.a
 minishell
-
+a.out
+test.c
+ls

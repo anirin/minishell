@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:42:39 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 22:47:32 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/01 13:11:20 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,6 @@ static char	**split_path(t_list *env_list)
 	return (ret);
 }
 
-static void	check_cmd_directory(char *cmd, int flag)
-{
-	struct stat	st;
-
-	stat(cmd, &st);
-	if ((st.st_mode & S_IFMT) == S_IFDIR && flag == CHILD)
-	{
-		printf("minishell: %s: is a directory\n", cmd);
-		exit(126);
-	}
-}
-
 static char	*search_paths(char **paths, char *cmd)
 {
 	int		i;
@@ -62,6 +50,30 @@ static char	*search_paths(char **paths, char *cmd)
 		free(ret);
 		i++;
 	}
+	if (access(cmd, X_OK) == 0 && is_regular_file(cmd) == false)
+		return (ft_strdup(cmd));
+	return (NULL);
+}
+
+static char *check_current_path_check(char *cmd, int flag)
+{
+	struct stat	st;
+
+	if (ft_strncmp(cmd, "./", 2) != 0)
+		return (NULL);
+	stat(cmd, &st);
+	if ((st.st_mode & S_IFMT) == S_IFDIR && flag == CHILD)
+	{
+		printf("minishell: %s: is a directory\n", cmd);
+		exit(126);
+	}
+	if (access(cmd, X_OK) != 0 && flag == CHILD)
+	{
+		printf("minishell: %s: Permission denied\n", cmd);
+		exit(126);
+	}
+	else
+		return (ft_strdup(cmd));
 	return (NULL);
 }
 
@@ -69,15 +81,12 @@ static char	*help_get_path(char **paths, char *cmd, int flag)
 {
 	char	*ret;
 
-	check_cmd_directory_current(cmd, flag);
-	if (ft_strncmp(cmd, "./", 2) == 0 && access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
+	ret = check_current_path_check(cmd, flag);
+	if (ret != NULL)
+		return (ret);
 	ret = search_paths(paths, cmd);
-	if (ret == NULL)
-	{
-		check_cmd_directory(cmd, flag);
-		ret = is_regular_file(cmd, flag);
-	}
+	if (ret != NULL)
+		return (ret);
 	if (ret == NULL && flag == CHILD)
 	{
 		printf("minishell: %s: command not found\n", cmd);
