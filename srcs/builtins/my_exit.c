@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:51:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 16:48:15 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 17:09:57 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_numeric_error(t_token *exit_status_token)
 	exit(255);
 }
 
-int		print_too_many_error(int *finish_status, t_list *tmp)
+int	print_too_many_error(int *finish_status, t_list *tmp)
 {
 	printf("exit\nminishell: exit: too many arguments\n");
 	*finish_status = 1;
@@ -33,7 +33,7 @@ int	my_exit(t_list *cmd, t_list *args, int *finish_status)
 {
 	t_token	*exit_status_token;
 	t_list	*tmp;
-	int	exit_status;
+	int		exit_status;
 
 	tmp = ft_lstlast(cmd);
 	ft_lstadd_back(&cmd, args);
