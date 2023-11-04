@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_help.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 21:53:18 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/01 13:14:47 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 16:27:26 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	check_cmd_directory_current(char *cmd, int flag)
 	struct stat	st;
 
 	stat(cmd, &st);
-	if ((st.st_mode & S_IFMT) == S_IFDIR && flag == CHILD && ft_strncmp(cmd, "./", 2) == 0)
+	if ((st.st_mode & S_IFMT) == S_IFDIR && flag == CHILD && ft_strncmp(cmd,
+			"./", 2) == 0)
 	{
 		printf("minishell: %s: is a directory\n", cmd);
 		exit(126);

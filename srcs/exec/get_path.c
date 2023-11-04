@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:42:39 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/01 13:11:20 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 16:27:14 by hnakai           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*search_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
-static char *check_current_path_check(char *cmd, int flag)
+static char	*check_current_path_check(char *cmd, int flag)
 {
 	struct stat	st;
 
