@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:44:56 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:32:56 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:09:15 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool	normal_in(t_token *token)
 	fd = open(token->token_content, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("redirect open");
+		perror("redirect open ");
 		return (false);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -47,7 +47,7 @@ static bool	heardoc_in(t_token *token)
 			S_IRWXU | S_IRWXG | S_IRWXO);
 	if (fd == -1)
 	{
-		perror("redirect open");
+		perror("redirect open ");
 		return (false);
 	}
 	while (1)

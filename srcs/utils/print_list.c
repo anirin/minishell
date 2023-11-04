@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakaiheizou <nakaiheizou@student.42.fr>    +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:53:14 by nakaiheizou       #+#    #+#             */
-/*   Updated: 2023/10/27 17:55:06 by nakaiheizou      ###   ########.fr       */
+/*   Updated: 2023/11/04 16:15:33 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
