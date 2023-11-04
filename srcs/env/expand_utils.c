@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:27:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 17:08:01 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 17:26:04 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,20 @@ char	*parsed_tokens_to_str(t_list *parsed_tokens)
 	return (ret);
 }
 
-bool	is_heardoc(t_list *prev)
+bool	is_heardoc(t_list *prev, t_list *prev_prev)
 {
 	t_token	*token;
+	t_token	*perv_prev_token;
 
 	if (prev == NULL)
 		return (false);
 	token = (t_token *)prev->content;
 	if (ft_strncmp(token->token_content, "<<", 3) == 0)
+		return (true);
+	if (prev_prev == NULL)
+		return (false);
+	perv_prev_token = (t_token *)prev_prev->content;
+	if (ft_strncmp(perv_prev_token->token_content, "<<", 3) == 0)
 		return (true);
 	return (false);
 }
