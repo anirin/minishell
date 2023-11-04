@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:27:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 16:12:37 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 17:08:01 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*find_env_name(char *doller_token, t_list *env_list,
 		}
 		env_list = env_list->next;
 	}
-		printf("hello\n");
 	return (ft_strdup(""));
 }
 
