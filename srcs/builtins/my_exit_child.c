@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:51:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 17:42:23 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 17:54:31 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	print_numeric_error(t_token *exit_status_token)
 
 static void	print_too_many_error(int *finish_status, t_list *tmp)
 {
+	(void)finish_status;
+	(void)tmp;
 	printf("minishell: exit: too many arguments\n");
 	exit(1);
 }
