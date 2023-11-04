@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_exit.c                                          :+:      :+:    :+:   */
+/*   my_exit_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:51:22 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 16:48:15 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 16:58:57 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,20 @@
 #include "libft.h"
 #include "main.h"
 
-void	print_numeric_error(t_token *exit_status_token)
+static void	print_numeric_error(t_token *exit_status_token)
 {
 	printf("minishell: exit: %s: numeric argument required\n",
 		exit_status_token->token_content);
 	exit(255);
 }
 
-int		print_too_many_error(int *finish_status, t_list *tmp)
+static void	print_too_many_error(int *finish_status, t_list *tmp)
 {
-	printf("exit\nminishell: exit: too many arguments\n");
-	*finish_status = 1;
-	tmp->next = NULL;
-	return (1);
+	printf("minishell: exit: too many arguments\n");
+	exit(1);
 }
 
-int	my_exit(t_list *cmd, t_list *args, int *finish_status)
+int	my_exit_child(t_list *cmd, t_list *args, int *finish_status)
 {
 	t_token	*exit_status_token;
 	t_list	*tmp;
@@ -39,7 +37,6 @@ int	my_exit(t_list *cmd, t_list *args, int *finish_status)
 	ft_lstadd_back(&cmd, args);
 	if (cmd->next == NULL)
 	{
-		printf("exit\n");
 		exit(*finish_status);
 	}
 	exit_status_token = (t_token *)cmd->next->content;
@@ -48,11 +45,8 @@ int	my_exit(t_list *cmd, t_list *args, int *finish_status)
 		|| is_under_long_max(exit_status_token->token_content) == NG)
 		print_numeric_error(exit_status_token);
 	else if (cmd->next->next != NULL)
-		return (print_too_many_error(finish_status, tmp));
+		print_too_many_error(finish_status, tmp);
 	else
-	{
-		printf("exit\n");
 		exit(exit_status);
-	}
 	return (0);
 }
