@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:39:32 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 19:43:17 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 16:14:32 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static char	*expand_env_in_str(char *token, t_list *env_list,
 	char	*ret;
 
 	parsed_tokens = find_dollar_and_parse(token);
+	ret = NULL;
 	head = parsed_tokens;
 	while (parsed_tokens != NULL)
 	{
@@ -36,6 +37,8 @@ static char	*expand_env_in_str(char *token, t_list *env_list,
 		parsed_tokens = parsed_tokens->next;
 	}
 	ret = parsed_tokens_to_str(head);
+	print_list(head);
+	ft_lstclear(&head, free);
 	return (ret);
 }
 
@@ -62,10 +65,13 @@ static void	handle_double_quote(t_list **head, t_list *env_list, t_list **prev,
 		int *finish_status)
 {
 	t_token	*tmp;
+	char	*tmp_str;
 
 	tmp = (t_token *)(*head)->content;
+	tmp_str = tmp->token_content;
 	tmp->token_content = expand_env_in_str(tmp->token_content, env_list,
 			finish_status);
+	free(tmp_str);
 	tmp->status = TK_NORMAL;
 	*prev = *head;
 	*head = (*head)->next;

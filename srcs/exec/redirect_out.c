@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:45:02 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/29 20:33:45 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:09:26 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	normal_out(t_token *token)
 			S_IRWXU | S_IRWXG | S_IRWXO);
 	if (fd == -1)
 	{
-		perror("redirect open\n");
+		perror("redirect open ");
 		return (false);
 	}
 	dup2(fd, STDOUT_FILENO);
@@ -38,7 +38,7 @@ static bool	append_out(t_token *token)
 			S_IRWXU | S_IRWXG | S_IRWXO);
 	if (fd == -1)
 	{
-		perror("redirect open\n");
+		perror("redirect open ");
 		return (false);
 	}
 	dup2(fd, STDOUT_FILENO);

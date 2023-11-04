@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 20:41:52 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/31 16:19:40 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:05:42 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,16 @@ static int	handle_builtin(t_list **env_list, int check, t_parsed_token *token,
 
 	tmp_stdin = dup(STDIN_FILENO);
 	tmp_stdout = dup(STDOUT_FILENO);
-	redirect_in_out(token->redirect);
-	my_execve(env_list, check, token, finish_status);
-	dup2(tmp_stdin, STDIN_FILENO);
-	dup2(tmp_stdout, STDOUT_FILENO);
+	if (redirect_in_out(token->redirect) == false)
+	{
+		*finish_status = 1;
+	}
+	else
+	{
+		my_execve(env_list, check, token, finish_status);
+		dup2(tmp_stdin, STDIN_FILENO);
+		dup2(tmp_stdout, STDOUT_FILENO);
+	}
 	return (1);
 }
 

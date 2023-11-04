@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnakai <hnakai@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:27:23 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 17:46:36 by hnakai           ###   ########.fr       */
+/*   Updated: 2023/11/04 16:12:37 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*find_env_name(char *doller_token, t_list *env_list,
 		}
 		env_list = env_list->next;
 	}
+		printf("hello\n");
 	return (ft_strdup(""));
 }
 
@@ -43,7 +44,7 @@ char	*parsed_tokens_to_str(t_list *parsed_tokens)
 	char	*ret;
 	char	*tmp;
 
-	ret = NULL;
+	ret = ft_strdup("");
 	while (parsed_tokens != NULL)
 	{
 		tmp = ret;
