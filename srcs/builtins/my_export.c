@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:07:34 by atokamot          #+#    #+#             */
-/*   Updated: 2023/10/30 17:31:06 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 18:49:40 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	update_env_end(char *path, t_list **env_list)
 	int	env_index;
 
 	env_index = is_added_env("_", *env_list);
-	overwrite_env(env_index, path, *env_list);
+	if (env_index != -1)
+		overwrite_env(env_index, path, *env_list);
 }
 
 static void	handle_args(t_list *args, t_list **env_list, int *finish_status)

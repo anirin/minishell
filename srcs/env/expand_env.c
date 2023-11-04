@@ -6,7 +6,7 @@
 /*   By: atokamot <atokamot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 21:39:32 by atokamot          #+#    #+#             */
-/*   Updated: 2023/11/04 17:36:56 by atokamot         ###   ########.fr       */
+/*   Updated: 2023/11/04 18:37:50 by atokamot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	expand_env(t_list **token, t_list *env_list, int *finish_status)
 	expand_data.env_list = env_list;
 	expand_data.finish_status = finish_status;
 	prev = NULL;
+	prev_prev = NULL;
 	head = *token;
 	while (head)
 	{
